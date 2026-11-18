@@ -103,7 +103,7 @@ export default function HeroGridSection() {
               "aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto lg:h-[420px] xl:h-[460px]",
               "rounded-xl sm:rounded-2xl overflow-hidden",
               "border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900",
-              "cursor-pointer block"
+              "cursor-pointer block group"
             )}
             title="Explore Fragrance Catalog"
           >
@@ -139,6 +139,16 @@ export default function HeroGridSection() {
                   : "opacity-0 z-0 pointer-events-none"
               )}
             />
+
+            {/* Soft Ambient Bottom Gradient Vignette */}
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none z-[15]" />
+
+            {/* Explore Now Button Overlay (Bottom-Left Corner) */}
+            <div className="absolute bottom-5 left-5 sm:bottom-7 sm:left-7 z-20 pointer-events-none">
+              <span className="inline-flex items-center justify-center px-6 py-2.5 sm:px-7 sm:py-3 rounded-full text-xs sm:text-sm font-normal tracking-wide text-zinc-950 bg-white/90 group-hover:bg-white group-hover:scale-[1.03] shadow-lg shadow-black/15 backdrop-blur-md border border-white/70 transition-all duration-300">
+                Explore Now
+              </span>
+            </div>
           </Link>
 
           {/* ======================================================== */}
