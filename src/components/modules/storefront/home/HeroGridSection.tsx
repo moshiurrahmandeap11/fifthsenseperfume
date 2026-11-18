@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-// Top Carousel Images (High-res Luxury Perfumes)
-const TOP_CAROUSEL_IMAGES = [
+// Top Slider Images (High-res Luxury Perfumes)
+const TOP_SLIDER_IMAGES = [
   {
     url: "https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=1200&auto=format&fit=crop",
     alt: "Obsidian Noire Extrait de Parfum",
@@ -21,8 +21,8 @@ const TOP_CAROUSEL_IMAGES = [
   },
 ];
 
-// Bottom Carousel Images (High-res Luxury Perfumes)
-const BOTTOM_CAROUSEL_IMAGES = [
+// Bottom Slider Images (High-res Luxury Perfumes)
+const BOTTOM_SLIDER_IMAGES = [
   {
     url: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=1200&auto=format&fit=crop",
     alt: "Smoked Crystal Edition",
@@ -41,19 +41,19 @@ export default function HeroGridSection() {
   const [topIndex, setTopIndex] = useState(0);
   const [bottomIndex, setBottomIndex] = useState(0);
 
-  // Auto-advance Top Carousel every 4 seconds
+  // Auto-slide Top Carousel horizontally every 3.8 seconds
   useEffect(() => {
     const timer = setInterval(() => {
-      setTopIndex((prev) => (prev + 1) % TOP_CAROUSEL_IMAGES.length);
-    }, 4000);
+      setTopIndex((prev) => (prev + 1) % TOP_SLIDER_IMAGES.length);
+    }, 3800);
     return () => clearInterval(timer);
   }, []);
 
-  // Auto-advance Bottom Carousel every 4.8 seconds (staggered for organic rhythm)
+  // Auto-slide Bottom Carousel horizontally every 4.6 seconds (staggered timing)
   useEffect(() => {
     const timer = setInterval(() => {
-      setBottomIndex((prev) => (prev + 1) % BOTTOM_CAROUSEL_IMAGES.length);
-    }, 4800);
+      setBottomIndex((prev) => (prev + 1) % BOTTOM_SLIDER_IMAGES.length);
+    }, 4600);
     return () => clearInterval(timer);
   }, []);
 
@@ -88,12 +88,12 @@ export default function HeroGridSection() {
           </Link>
 
           {/* ======================================================== */}
-          {/* 2. RIGHT SIDE: 2 STACKED IMAGE CAROUSELS (CLICK TO /products) */}
+          {/* 2. RIGHT SIDE: 2 HORIZONTAL SLIDERS (CLICK TO /products) */}
           {/* ======================================================== */}
           <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-4 sm:gap-6">
             
             {/* ---------------------------------------------------- */}
-            {/* BOX 1 (TOP): PURE PERFUME IMAGE CAROUSEL */}
+            {/* BOX 1 (TOP): HORIZONTAL SLIDING PERFUME CAROUSEL */}
             {/* ---------------------------------------------------- */}
             <Link
               href="/products"
@@ -105,28 +105,28 @@ export default function HeroGridSection() {
               )}
               title="Explore Fragrances"
             >
-              {TOP_CAROUSEL_IMAGES.map((item, idx) => (
-                <div
-                  key={idx}
-                  className={cn(
-                    "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-                    idx === topIndex ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-                  )}
-                >
-                  <Image
-                    src={item.url}
-                    alt={item.alt}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 35vw"
-                    priority={idx === 0}
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                </div>
-              ))}
+              {/* Horizontal Slider Track */}
+              <div
+                className="flex h-full w-full transition-transform duration-700 ease-in-out"
+                style={{ transform: `translateX(-${topIndex * 100}%)` }}
+              >
+                {TOP_SLIDER_IMAGES.map((item, idx) => (
+                  <div key={idx} className="relative h-full w-full shrink-0">
+                    <Image
+                      src={item.url}
+                      alt={item.alt}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 35vw"
+                      priority={idx === 0}
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                  </div>
+                ))}
+              </div>
             </Link>
 
             {/* ---------------------------------------------------- */}
-            {/* BOX 2 (BOTTOM): PURE PERFUME IMAGE CAROUSEL */}
+            {/* BOX 2 (BOTTOM): HORIZONTAL SLIDING PERFUME CAROUSEL */}
             {/* ---------------------------------------------------- */}
             <Link
               href="/products"
@@ -138,24 +138,24 @@ export default function HeroGridSection() {
               )}
               title="Explore Fragrances"
             >
-              {BOTTOM_CAROUSEL_IMAGES.map((item, idx) => (
-                <div
-                  key={idx}
-                  className={cn(
-                    "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-                    idx === bottomIndex ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-                  )}
-                >
-                  <Image
-                    src={item.url}
-                    alt={item.alt}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 35vw"
-                    priority={idx === 0}
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                </div>
-              ))}
+              {/* Horizontal Slider Track */}
+              <div
+                className="flex h-full w-full transition-transform duration-700 ease-in-out"
+                style={{ transform: `translateX(-${bottomIndex * 100}%)` }}
+              >
+                {BOTTOM_SLIDER_IMAGES.map((item, idx) => (
+                  <div key={idx} className="relative h-full w-full shrink-0">
+                    <Image
+                      src={item.url}
+                      alt={item.alt}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 35vw"
+                      priority={idx === 0}
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                  </div>
+                ))}
+              </div>
             </Link>
 
           </div>
