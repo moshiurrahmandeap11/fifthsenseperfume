@@ -59,8 +59,8 @@ export default function HeroGridSection() {
 
   return (
     <section className="relative w-full py-2 sm:py-4 lg:py-6 bg-white dark:bg-zinc-950">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Compact Clean Responsive Grid Layout (No Shadow, No Hover Scale) */}
+      <div className="container mx-auto px-4 sm:px-6">
+        {/* Full-width Container Responsive Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
           
           {/* ======================================================== */}
