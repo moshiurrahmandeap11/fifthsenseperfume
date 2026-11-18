@@ -3,59 +3,13 @@ import Image from "next/image";
 import { ArrowRight, Sparkles, Flame, Droplets } from "lucide-react";
 import { DUMMY_PRODUCTS } from "@/data/dummyProducts";
 import ProductCard from "@/components/modules/storefront/catalog/ProductCard";
+import HeroGridSection from "@/components/modules/storefront/home/HeroGridSection";
 
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* 1. Hero Section: Haute Parfumerie */}
-      <section className="relative overflow-hidden border-b border-zinc-200 dark:border-zinc-800 bg-black text-white">
-        {/* Background Visual Texture - Luxury Fragrance Atmosphere */}
-        <div className="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none">
-          <Image
-            src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=1600&auto=format&fit=crop"
-            alt="Fifth Sense Haute Parfumerie"
-            fill
-            priority
-            className="object-cover object-center filter brightness-60"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-
-        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40 flex flex-col items-center text-center space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-xs font-mono tracking-widest uppercase">
-            <span className="size-2 rounded-full bg-white animate-pulse" />
-            <span>Limited Artisanal Batch &bull; Haute Parfumerie</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight font-heading max-w-4xl text-balance">
-            THE ARCHITECTURE OF SCENT.
-          </h1>
-
-          <p className="max-w-2xl text-base sm:text-lg text-zinc-300 font-light leading-relaxed">
-            Formulated in micro-batches with pure Grasse absolutes, 15-year aged
-            Cambodian oud, and warm amber resins. Concentrated up to 35% pure perfume
-            oil for room-filling projection and 14+ hour longevity.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 h-13 px-8 rounded-2xl bg-white text-black hover:bg-zinc-200 font-semibold text-sm tracking-wide shadow-xl transition-all duration-200 hover:scale-105"
-            >
-              <span>Explore All Fragrances</span>
-              <ArrowRight className="size-4" />
-            </Link>
-
-            <Link
-              href="/products?collection=winter"
-              className="inline-flex items-center gap-2 h-13 px-8 rounded-2xl border border-white/30 text-white bg-black/40 hover:bg-white/10 backdrop-blur-md font-medium text-sm transition-all"
-            >
-              <Flame className="size-4 text-amber-400" />
-              <span>Winter Collection</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* 1. Cinematic Hero Grid: Video on Left + 2 Perfume Carousels on Right */}
+      <HeroGridSection />
 
       {/* 2. Olfactory Family Banners */}
       <section className="py-12 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
