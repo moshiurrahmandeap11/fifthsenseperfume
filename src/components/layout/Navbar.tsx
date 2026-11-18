@@ -39,14 +39,11 @@ export default function Navbar() {
     }
   };
 
-  // Pure Luxury Typographic Brand Logo (No image icon, normal font)
+  // Pure Luxury Typographic Brand Logo (No image icon, normal font, clean compact spacing)
   const Logo = (
-    <Link href="/" className="flex flex-col group shrink-0 select-none">
-      <span className="font-normal tracking-[0.25em] text-lg sm:text-xl text-zinc-900 dark:text-zinc-100 leading-none">
-        FIFTH SENSE
-      </span>
-      <span className="text-[9px] uppercase font-normal tracking-[0.35em] text-zinc-400 leading-tight mt-1.5">
-        Haute Parfumerie
+    <Link href="/" className="flex items-center group shrink-0 select-none">
+      <span className="font-normal tracking-tight text-lg sm:text-xl text-zinc-900 dark:text-zinc-100 leading-none">
+        Fifth Sense
       </span>
     </Link>
   );
@@ -80,7 +77,7 @@ export default function Navbar() {
           {/* Search Text Link */}
           <Link
             href="/products"
-            className="text-xs uppercase tracking-widest font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
+            className="text-xs font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
             title="Search Fragrances"
           >
             Search
@@ -89,7 +86,7 @@ export default function Navbar() {
           {/* Cart Text Link with Counter */}
           <Link
             href="/cart"
-            className="text-xs uppercase tracking-widest font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
+            className="text-xs font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
             title="Fragrance Bag"
           >
             Bag (0)
@@ -101,7 +98,7 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="h-8 px-4 rounded-full text-xs font-normal uppercase tracking-widest leading-none text-[#fff8ea] bg-[#29170e] hover:bg-[#3f2214] border border-[#d97706]/35 transition-all duration-300 select-none inline-flex items-center justify-center shadow-xs"
+              className="h-8 px-4 rounded-full text-xs font-normal leading-none text-[#fff8ea] bg-[#29170e] hover:bg-[#3f2214] border border-[#d97706]/35 transition-all duration-300 select-none inline-flex items-center justify-center shadow-xs"
             >
               Try It
             </Link>

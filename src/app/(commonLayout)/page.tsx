@@ -10,21 +10,18 @@ export default function HomePage() {
       <HeroGridSection />
 
       {/* 2. Curated Fragrances Showcase */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6">
+      <section className="pt-6 sm:pt-8 pb-14 sm:pb-16 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-5">
             <div>
-              <div className="text-xs font-mono uppercase tracking-[0.2em] text-zinc-400 mb-1 font-normal">
-                Haute Parfumerie Archive
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-normal tracking-[0.15em] uppercase font-heading text-zinc-950 dark:text-white">
+              <h2 className="text-2xl sm:text-3xl font-normal tracking-tight font-heading text-zinc-950 dark:text-white">
                 Curated Artisanal Elixirs
               </h2>
             </div>
 
             <Link
               href="/products"
-              className="inline-flex items-center text-xs uppercase tracking-widest font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white underline font-mono transition-colors"
+              className="inline-flex items-center text-sm font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white underline transition-colors"
             >
               View All Fragrances
             </Link>
