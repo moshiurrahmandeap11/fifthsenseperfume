@@ -3,6 +3,7 @@
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { logoutUser } from "@/services/auth.services";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
@@ -39,12 +40,17 @@ export default function Navbar() {
     }
   };
 
-  // Pure Luxury Typographic Brand Logo (No image icon, normal font, clean compact spacing)
+  // Brand Logo: Fifth Sense Brand Image from /navbar/fifthsenselogo.png
   const Logo = (
     <Link href="/" className="flex items-center group shrink-0 select-none">
-      <span className="font-normal tracking-tight text-lg sm:text-xl text-zinc-900 dark:text-zinc-100 leading-none">
-        Fifth Sense
-      </span>
+      <Image
+        src="/navbar/fifthsenselogo.png"
+        alt="Fifth Sense"
+        width={150}
+        height={50}
+        priority
+        className="h-8 sm:h-9 md:h-10 w-auto object-contain transition-opacity duration-200 group-hover:opacity-85 dark:invert"
+      />
     </Link>
   );
 
