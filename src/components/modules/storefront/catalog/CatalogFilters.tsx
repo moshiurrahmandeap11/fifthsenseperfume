@@ -35,20 +35,20 @@ interface CatalogFiltersProps {
 }
 
 const GENDER_OPTIONS = [
-  { label: "All", value: "ALL" },
-  { label: "Men", value: "MEN" },
-  { label: "Women", value: "WOMEN" },
-  { label: "Unisex", value: "UNISEX" },
+  { label: "All Fragrances", value: "ALL" },
+  { label: "Men / Masculine", value: "MEN" },
+  { label: "Women / Feminine", value: "WOMEN" },
+  { label: "Unisex / Shared", value: "UNISEX" },
 ];
 
 const CATEGORY_OPTIONS = [
-  { label: "All Collections", value: "ALL" },
-  { label: "Men's Formal & Casual", value: "mens-formal" },
+  { label: "All Fragrance Families", value: "ALL" },
+  { label: "Woody & Smoky Oud", value: "woody-smoky-oud" },
   { label: "Winter Collection", value: "winter-collection" },
-  { label: "Women's Boots & Slip-ons", value: "womens-boots" },
+  { label: "Floral & Sandalwood", value: "floral-sandalwood" },
 ];
 
-const SIZES = ["36", "37", "38", "39", "40", "41", "42", "43", "44"];
+const SIZES = ["50ml", "100ml"];
 
 const PRICE_RANGES = [
   { label: "All Prices", value: "ALL" },
@@ -58,9 +58,9 @@ const PRICE_RANGES = [
 ];
 
 const FIT_OPTIONS = [
-  { label: "All Fits", value: "ALL" },
-  { label: "True to Size", value: "TRUE_TO_SIZE" },
-  { label: "Runs Small (Size Up)", value: "RUNS_SMALL" },
+  { label: "All Concentrations", value: "ALL" },
+  { label: "Extrait de Parfum (35%)", value: "TRUE_TO_SIZE" },
+  { label: "Eau de Parfum Intense", value: "RUNS_SMALL" },
 ];
 
 export default function CatalogFilters({
@@ -157,11 +157,11 @@ export default function CatalogFilters({
         </div>
       </div>
 
-      {/* 3. Shoe Size Matrix Pills */}
+      {/* 3. Flacon Volume Pills */}
       <div className="space-y-2.5">
         <div className="flex items-center justify-between">
           <label className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
-            EU Shoe Size
+            Flacon Volume
           </label>
           {filters.size !== "ALL" && (
             <button
@@ -173,7 +173,7 @@ export default function CatalogFilters({
             </button>
           )}
         </div>
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="grid grid-cols-2 gap-1.5">
           {SIZES.map((size) => {
             const isSelected = filters.size === size;
             return (
@@ -225,10 +225,10 @@ export default function CatalogFilters({
         </div>
       </div>
 
-      {/* 5. Fit Type */}
+      {/* 5. Olfactory Concentration */}
       <div className="space-y-2.5">
         <label className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
-          Fit & Sizing
+          Concentration
         </label>
         <div className="space-y-1">
           {FIT_OPTIONS.map((fit) => {
@@ -257,7 +257,7 @@ export default function CatalogFilters({
       <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
         <label className="flex items-center justify-between cursor-pointer py-1">
           <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">
-            In-Stock Items Only
+            In-Stock Perfumes Only
           </span>
           <Switch
             checked={filters.inStockOnly}
@@ -270,10 +270,10 @@ export default function CatalogFilters({
       <div className="mt-4 p-3.5 rounded-xl bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-[11px] space-y-2">
         <div className="flex items-center gap-1.5 font-medium text-zinc-900 dark:text-zinc-200 font-sans">
           <Shield className="size-3.5 text-black dark:text-white" />
-          <span>Craftsmanship Guarantee</span>
+          <span>Haute Parfumerie Guarantee</span>
         </div>
         <p className="text-[10px] leading-relaxed text-zinc-500 dark:text-zinc-400">
-          Every shoe is backed by up to 365-day repair warranty and hassle-free 7-day size exchange.
+          Pure Grasse & Cambodian absolutes, macerated for 90 days. Every bottle is individually numbered with guaranteed 12+ hour longevity.
         </p>
       </div>
     </aside>

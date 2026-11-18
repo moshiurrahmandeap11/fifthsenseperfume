@@ -16,7 +16,7 @@ export default function CommonLayout({
 
       {/* Shared Footer */}
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        <p>&copy; <CurrentYear /> FIFTH SENSE / EcomBD. All rights reserved.</p>
+        <p>&copy; <CurrentYear /> FIFTH SENSE PERFUMES. All rights reserved. Haute Parfumerie &amp; Olfactory Atelier.</p>
       </footer>
     </div>
   );

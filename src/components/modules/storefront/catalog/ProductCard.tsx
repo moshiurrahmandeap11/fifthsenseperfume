@@ -8,10 +8,8 @@ import {
   Heart,
   ShoppingBag,
   Sparkles,
-  Check,
-  Ruler,
-  Eye,
-  ShieldCheck,
+  Droplets,
+  Flame,
 } from "lucide-react";
 import { IProduct } from "@/types/product.types";
 import { Badge } from "@/components/ui/badge";
@@ -39,7 +37,7 @@ export default function ProductCard({
   const secondaryImage =
     activeColor?.images?.[1] || primaryImage;
 
-  // Available sizes for the active color
+  // Available volumes for the active flacon
   const availableVariants = activeColor?.variants || [];
   const inStockSizes = availableVariants
     .filter((v) => v.stockQuantity > 0)
@@ -61,7 +59,7 @@ export default function ProductCard({
     const nextState = !isWishlisted;
     setIsWishlisted(nextState);
     if (nextState) {
-      toast.success(`Saved "${product.name}" to your wishlist.`, {
+      toast.success(`Saved "${product.name}" to your olfactory wishlist.`, {
         icon: "🤍",
         style: {
           background: "#000000",
@@ -86,16 +84,16 @@ export default function ProductCard({
     e.stopPropagation();
 
     // Pick first available size if none selected
-    const sizeToUse = selectedSize || inStockSizes[0] || "Default";
+    const sizeToUse = selectedSize || inStockSizes[0] || "100ml";
 
     setIsAddingToCart(true);
     setTimeout(() => {
       setIsAddingToCart(false);
       toast.success(
         <div className="text-xs">
-          <p className="font-semibold text-white">Added to Bag</p>
+          <p className="font-semibold text-white">Added to Fragrance Bag</p>
           <p className="text-zinc-400">
-            {product.name} &bull; EU {sizeToUse} &bull; {activeColor?.colorName}
+            {product.name} &bull; {sizeToUse} &bull; {activeColor?.colorName}
           </p>
         </div>,
         {
@@ -137,7 +135,7 @@ export default function ProductCard({
         href={`/products/${product.slug}`}
         className="relative block aspect-[4/5] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-900"
       >
-        {/* Main Product Image with Smooth Transition */}
+        {/* Main Perfume Flacon Image with Smooth Scale */}
         <Image
           src={isHovered && secondaryImage ? secondaryImage : primaryImage}
           alt={product.name}
@@ -160,7 +158,7 @@ export default function ProductCard({
               variant="default"
               className="bg-black text-white dark:bg-white dark:text-black font-semibold text-[10px] tracking-wider uppercase px-2.5 py-0.5 shadow-sm"
             >
-              Bestseller
+              Signature Scent
             </Badge>
           )}
           {product.isNewArrival && (
@@ -169,15 +167,16 @@ export default function ProductCard({
               className="bg-zinc-900/90 text-zinc-100 backdrop-blur-md border border-white/10 text-[10px] font-medium tracking-wide uppercase px-2 py-0.5"
             >
               <Sparkles className="size-2.5 mr-1 text-amber-300" />
-              New
+              New Release
             </Badge>
           )}
-          {product.categoryId === "cat-winter" && (
+          {product.categoryId === "cat-winter-amber" && (
             <Badge
               variant="outline"
-              className="bg-blue-950/80 text-blue-200 border-blue-400/30 backdrop-blur-md text-[10px] uppercase tracking-wide px-2 py-0.5"
+              className="bg-amber-950/80 text-amber-200 border-amber-400/30 backdrop-blur-md text-[10px] uppercase tracking-wide px-2 py-0.5"
             >
-              Winter Drop
+              <Flame className="size-2.5 mr-1 text-amber-400" />
+              Winter Warm
             </Badge>
           )}
           {discountPercent && (
@@ -190,7 +189,7 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* Top Right Actions (Wishlist & Quick View) */}
+        {/* Top Right Actions (Wishlist) */}
         <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
           <button
             type="button"
@@ -212,7 +211,7 @@ export default function ProductCard({
           </button>
         </div>
 
-        {/* Bottom Hover Action: Quick Shoe Size Selector Drawer */}
+        {/* Bottom Hover Action: Quick Flacon Volume Selector Drawer */}
         <div
           className={cn(
             "absolute inset-x-0 bottom-0 z-10 p-3 bg-gradient-to-t from-black/95 via-black/80 to-transparent",
@@ -224,11 +223,11 @@ export default function ProductCard({
         >
           <div className="flex items-center justify-between text-[11px] font-mono text-zinc-300 mb-2">
             <span className="flex items-center gap-1 uppercase tracking-wider text-[10px] font-sans">
-              <Ruler className="size-3 text-zinc-400" />
-              EU Sizes:
+              <Droplets className="size-3 text-zinc-400" />
+              Flacon Volume:
             </span>
             <span className="text-zinc-400 font-sans text-[10px]">
-              {selectedSize ? `EU ${selectedSize} selected` : "Select size"}
+              {selectedSize ? `${selectedSize} selected` : "Select volume"}
             </span>
           </div>
 
@@ -244,7 +243,7 @@ export default function ProductCard({
                   disabled={isOutOfStock}
                   onClick={(e) => handleSizeClick(e, variant.size)}
                   className={cn(
-                    "h-7 min-w-[32px] px-1.5 rounded-md text-[11px] font-mono font-medium transition-all duration-150 flex items-center justify-center",
+                    "h-7 min-w-[48px] px-2 rounded-md text-[11px] font-mono font-medium transition-all duration-150 flex items-center justify-center",
                     isSelected
                       ? "bg-white text-black font-bold ring-2 ring-white/50"
                       : isOutOfStock
@@ -262,7 +261,7 @@ export default function ProductCard({
 
       {/* Product Content Body */}
       <div className="flex flex-1 flex-col p-4 bg-white dark:bg-zinc-950">
-        {/* Color Palette Swatches */}
+        {/* Flacon Editions Swatches */}
         {product.colors && product.colors.length > 0 && (
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-1.5">
@@ -297,17 +296,11 @@ export default function ProductCard({
           </div>
         )}
 
-        {/* Category & Fit Type */}
+        {/* Category & Concentration */}
         <div className="flex items-center justify-between text-[11px] text-zinc-400 uppercase tracking-widest font-mono mb-1">
-          <span>{product.category?.name || "Luxury Footwear"}</span>
+          <span>{product.category?.name || "Haute Parfumerie"}</span>
           <span className="flex items-center gap-1 text-[10px] text-zinc-500">
-            {product.fitType === "RUNS_SMALL" ? (
-              <span className="text-amber-500 dark:text-amber-400 font-sans">
-                Runs Small
-              </span>
-            ) : (
-              <span className="text-zinc-400 font-sans">True to size</span>
-            )}
+            {product.heelHeight?.replace("Concentration: ", "") || "Extrait de Parfum"}
           </span>
         </div>
 
@@ -316,9 +309,9 @@ export default function ProductCard({
           <Link href={`/products/${product.slug}`}>{product.name}</Link>
         </h3>
 
-        {/* Material Specs Subtitle */}
+        {/* Olfactory Notes Subtitle */}
         <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">
-          {product.upperMaterial} &bull; {product.soleMaterial}
+          {product.upperMaterial?.replace("Top: ", "")} &bull; {product.insoleType?.replace("Base: ", "")}
         </p>
 
         {/* Spacer */}
@@ -338,7 +331,7 @@ export default function ProductCard({
               )}
             </div>
             <p className="text-[10px] text-zinc-400 uppercase font-mono tracking-wider">
-              VAT Included &bull; Free Return
+              Artisanal Batch &bull; Free Shipping
             </p>
           </div>
 

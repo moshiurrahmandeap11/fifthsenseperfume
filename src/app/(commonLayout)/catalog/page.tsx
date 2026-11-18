@@ -4,9 +4,9 @@ import CatalogView from "@/components/modules/storefront/catalog/CatalogView";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = {
-  title: "Catalog | FIFTH SENSE - EcomBD",
+  title: "Fragrance Catalog | FIFTH SENSE PERFUMES",
   description:
-    "Curated luxury footwear catalog featuring handcrafted Italian leathers, winter thermal boots, and contemporary silhouettes.",
+    "Curated luxury fragrance catalog featuring artisanal Extraits de Parfum, winter spiced amber, and bespoke olfactory creations.",
 };
 
 function CatalogSkeleton() {

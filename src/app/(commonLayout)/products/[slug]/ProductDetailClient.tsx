@@ -330,21 +330,19 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             </div>
           </div>
 
-          {/* Size Selector Matrix */}
+          {/* Flacon Volume Selector Matrix */}
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300 font-semibold uppercase tracking-wider font-mono">
                 <Ruler className="size-3.5" />
-                <span>Select EU Size</span>
+                <span>Select Flacon Volume</span>
               </div>
               <span className="text-[11px] text-zinc-500 font-sans">
-                {product.fitType === "RUNS_SMALL"
-                  ? "Runs slightly small — recommend 1 size up"
-                  : "True to EU standard size"}
+                {product.heelHeight?.replace("Concentration: ", "") || "Extrait de Parfum"}
               </span>
             </div>
 
-            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {variants.map((v) => {
                 const isSelected = selectedSize === v.size;
                 const isOut = v.stockQuantity <= 0;
@@ -363,10 +361,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                         : "bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 border-zinc-300 dark:border-zinc-800 hover:border-black dark:hover:border-white"
                     )}
                   >
-                    <span>EU {v.size}</span>
-                    {v.stockQuantity > 0 && v.stockQuantity <= 3 && (
+                    <span>{v.size} Flacon</span>
+                    {v.stockQuantity > 0 && v.stockQuantity <= 5 && (
                       <span className="text-[9px] text-amber-500 font-sans">
-                        {v.stockQuantity} left
+                        {v.stockQuantity} remaining
                       </span>
                     )}
                   </button>
@@ -387,8 +385,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <ShoppingBag className="size-4" />
               <span>
                 {selectedSize
-                  ? `Add to Bag — EU ${selectedSize}`
-                  : "Select Size to Add"}
+                  ? `Add to Bag — ${selectedSize}`
+                  : "Select Volume to Add"}
               </span>
             </Button>
 
@@ -400,47 +398,47 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 className="flex-1 h-11 rounded-xl border-zinc-200 dark:border-zinc-800 text-xs font-medium gap-2"
               >
                 <Share2 className="size-3.5" />
-                <span>Share Silhouette</span>
+                <span>Share Fragrance</span>
               </Button>
             </div>
           </div>
 
-          {/* Craftsmanship & Material Specs Grid */}
+          {/* Olfactory Pyramid & Formulation Specs Grid */}
           <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
             <h4 className="text-xs font-mono uppercase tracking-wider text-zinc-500 font-semibold">
-              Technical Specifications
+              Olfactory Pyramid & Details
             </h4>
-            <div className="grid grid-cols-2 gap-2.5 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
               <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
                 <span className="text-[10px] text-zinc-400 uppercase font-mono block">
-                  Upper Leather
+                  Top Notes
                 </span>
                 <span className="font-medium text-zinc-800 dark:text-zinc-200">
-                  {product.upperMaterial}
+                  {product.upperMaterial?.replace("Top: ", "")}
                 </span>
               </div>
               <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
                 <span className="text-[10px] text-zinc-400 uppercase font-mono block">
-                  Outsole System
+                  Heart Notes
                 </span>
                 <span className="font-medium text-zinc-800 dark:text-zinc-200">
-                  {product.soleMaterial}
+                  {product.soleMaterial?.replace("Heart: ", "")}
                 </span>
               </div>
               <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
                 <span className="text-[10px] text-zinc-400 uppercase font-mono block">
-                  Insole & Cushion
+                  Base Notes
                 </span>
                 <span className="font-medium text-zinc-800 dark:text-zinc-200">
-                  {product.insoleType}
+                  {product.insoleType?.replace("Base: ", "")}
                 </span>
               </div>
               <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
                 <span className="text-[10px] text-zinc-400 uppercase font-mono block">
-                  Warranty & Welt
+                  Concentration & Flacon
                 </span>
                 <span className="font-medium text-zinc-800 dark:text-zinc-200">
-                  {product.warrantyDays} Days Coverage
+                  {product.heelHeight}
                 </span>
               </div>
             </div>

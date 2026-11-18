@@ -254,11 +254,11 @@ export default function CatalogView() {
               </div>
               <div className="space-y-1">
                 <h3 className="text-lg font-heading font-semibold text-zinc-900 dark:text-zinc-100">
-                  No matching footwear found
+                  No matching fragrances found
                 </h3>
                 <p className="text-sm text-zinc-500 max-w-sm">
-                  We could not find any shoes matching your specific filter
-                  combination. Try clearing some filters.
+                  We could not find any perfumes matching your specific olfactory
+                  filter combination. Try clearing some filters.
                 </p>
               </div>
 
@@ -281,7 +281,7 @@ export default function CatalogView() {
                   className="rounded-xl text-xs bg-black text-white dark:bg-white dark:text-black font-medium"
                 >
                   <Sparkles className="size-3 mr-1.5" />
-                  View Winter Drop
+                  View Winter Scents
                 </Button>
               </div>
             </div>
@@ -297,11 +297,10 @@ export default function CatalogView() {
           </div>
           <div>
             <h4 className="text-sm font-semibold font-heading uppercase tracking-wide text-zinc-900 dark:text-zinc-100">
-              Complimentary White-Glove Delivery
+              White-Glove Fragrance Delivery
             </h4>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">
-              Express nationwide courier with unboxing and doorstep trial on all
-              orders across Bangladesh.
+              Express nationwide delivery in cushioned climate-protected packaging with complimentary test strips.
             </p>
           </div>
         </div>
@@ -312,11 +311,10 @@ export default function CatalogView() {
           </div>
           <div>
             <h4 className="text-sm font-semibold font-heading uppercase tracking-wide text-zinc-900 dark:text-zinc-100">
-              7-Day Perfect Fit Exchange
+              Try-Before-Opening Exchange
             </h4>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">
-              If your EU size isn&apos;t 100% comfortable, our rider swaps your
-              pair within 48 hours free of charge.
+              Test the matching sample vial first. If it does not match your skin chemistry, swap the unopened flacon within 7 days.
             </p>
           </div>
         </div>
@@ -327,11 +325,10 @@ export default function CatalogView() {
           </div>
           <div>
             <h4 className="text-sm font-semibold font-heading uppercase tracking-wide text-zinc-900 dark:text-zinc-100">
-              Handcrafted Sole & Welt Warranty
+              Pure Artisanal Maceration
             </h4>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">
-              Every shoe includes up to 365 days complimentary outsole re-crafting
-              and leather care support.
+              Formulated with up to 35% pure perfume oils, 90-day cold macerated for exceptional sillage and 14+ hour longevity.
             </p>
           </div>
         </div>

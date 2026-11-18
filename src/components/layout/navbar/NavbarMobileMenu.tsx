@@ -94,7 +94,7 @@ export default function NavbarMobileMenu({
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-900/80 border border-neutral-200/60 dark:border-neutral-800/60 text-xs text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
             >
               <Search className="size-4 text-neutral-400" />
-              <span>Search shoes, style codes, colors...</span>
+              <span>Search perfumes, notes, extrait...</span>
             </Link>
           </div>
 
@@ -219,7 +219,7 @@ export default function NavbarMobileMenu({
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700" />
               </Link>
               <p className="text-[11px] text-center text-neutral-500">
-                Sign in to view orders, saved sizes and exclusive shoe drops
+                Sign in to view orders, olfactory wishlist and exclusive perfume releases
               </p>
             </div>
           )}

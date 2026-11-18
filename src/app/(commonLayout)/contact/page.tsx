@@ -5,9 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export const metadata: Metadata = {
-  title: "Concierge & Showrooms | FIFTH SENSE",
+  title: "Perfume Concierge & Atelier | FIFTH SENSE PERFUMES",
   description:
-    "Get in touch with our master cobblers, book a bespoke shoe fitting, or visit our flagship studio in Gulshan, Dhaka.",
+    "Get in touch with our master perfumers, book a bespoke olfactory profiling session, or visit our flagship atelier in Gulshan, Dhaka.",
 };
 
 export default function ContactPage() {
@@ -17,14 +17,14 @@ export default function ContactPage() {
       <div className="text-center max-w-2xl mx-auto space-y-4">
         <div className="inline-flex items-center gap-1.5 text-xs uppercase font-mono tracking-widest text-zinc-400">
           <Sparkles className="size-3 text-amber-400" />
-          <span>Client Concierge & Showrooms</span>
+          <span>Haute Parfumerie Concierge &amp; Atelier</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-heading text-zinc-950 dark:text-white">
           AT YOUR SERVICE.
         </h1>
         <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Whether you need bespoke size consultation, leather care guidance, or
-          a private studio appointment, our master cobblers are here to assist.
+          Whether you need bespoke fragrance layering advice, personalized scent profiling,
+          or a private studio smelling appointment, our master perfumers are here to assist.
         </p>
       </div>
 
@@ -33,7 +33,7 @@ export default function ContactPage() {
         <div className="lg:col-span-5 space-y-8">
           <div className="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-6">
             <h3 className="font-heading font-bold text-lg text-zinc-950 dark:text-white uppercase tracking-wide">
-              Flagship Atelier
+              Flagship Olfactory Atelier
             </h3>
 
             <div className="space-y-4 text-xs">
@@ -88,11 +88,11 @@ export default function ContactPage() {
           <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
             <div className="flex items-center gap-2 font-semibold text-xs text-zinc-900 dark:text-zinc-100">
               <ShieldCheck className="size-4 text-emerald-500" />
-              <span>Doorstep Trial Booking</span>
+              <span>Discovery Set &amp; Sample Strip Service</span>
             </div>
             <p className="text-xs text-zinc-500 leading-relaxed">
-              Live in Dhaka? Request a trial delivery of two adjacent sizes to
-              pick your perfect fit on the spot before paying.
+              Live in Dhaka? Request a discovery set of sample vials to explore
+              our Extraits against your personal skin chemistry before committing.
             </p>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function ContactPage() {
               Send a Message
             </h2>
             <p className="text-xs text-zinc-500">
-              Our footwear consultants reply within 2 working hours.
+              Our fragrance consultants reply within 2 working hours.
             </p>
           </div>
 
@@ -147,7 +147,7 @@ export default function ContactPage() {
                 Inquiry Topic
               </label>
               <Input
-                placeholder="e.g. Size advice for Obsidian Derby / Custom order"
+                placeholder="e.g. Scent profile advice for Obsidian Noire / Bespoke order"
                 className="rounded-xl h-10 text-xs"
               />
             </div>
@@ -158,7 +158,7 @@ export default function ContactPage() {
               </label>
               <Textarea
                 rows={4}
-                placeholder="Tell us what you are looking for..."
+                placeholder="Tell us what fragrance profile or notes you are seeking..."
                 className="rounded-xl text-xs"
               />
             </div>

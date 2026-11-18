@@ -19,8 +19,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EcomBD - Premium Footwear",
-  description: "EcomBD Online Footwear Store",
+  title: "FIFTH SENSE | Luxury Niche Perfumes & Haute Parfumerie",
+  description:
+    "Artisanal fragrances crafted with pure Grasse absolutes, aged Cambodian oud, and rare Mysore sandalwood.",
 };
 
 export default function RootLayout({

@@ -6,7 +6,6 @@ import { logoutUser } from "@/services/auth.services";
 import {
   ArrowRight,
   Flame,
-  Footprints,
   Search,
   ShoppingBag,
   Sparkles,
@@ -18,6 +17,28 @@ import toast from "react-hot-toast";
 import LiquidNavLinks from "./navbar/LiquidNavLinks";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
 import NavbarUserMenu from "./navbar/NavbarUserMenu";
+
+// Luxury Perfume Flacon SVG Icon Fallback
+function PerfumeBottleIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect x="9" y="2" width="6" height="3" rx="1" />
+      <path d="M10 5v2" />
+      <path d="M14 5v2" />
+      <rect x="8" y="7" width="8" height="2" rx="0.5" />
+      <path d="M6 10a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10Z" />
+      <rect x="9" y="13" width="6" height="5" rx="0.5" strokeDasharray="2 1" />
+    </svg>
+  );
+}
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -48,7 +69,7 @@ export default function Navbar() {
     }
   };
 
-  // Reusable Logo Component with graceful fallback if .jxl isn't supported by client browser
+  // Reusable Perfume Logo Component with graceful fallback
   const Logo = (
     <Link href="/" className="flex items-center gap-2.5 group shrink-0">
       <div className="relative size-9 sm:size-10 rounded-xl overflow-hidden bg-black text-white dark:bg-white dark:text-black flex items-center justify-center p-1.5 shadow-sm group-hover:scale-105 transition-transform duration-300">
@@ -57,13 +78,13 @@ export default function Navbar() {
             <source srcSet="/navbar/logo.jxl" type="image/jxl" />
             <img
               src="/navbar/logo.jxl"
-              alt="Logo"
+              alt="Fifth Sense Perfumes"
               className="w-full h-full object-contain filter group-hover:brightness-110 transition-all duration-300"
               onError={() => setLogoError(true)}
             />
           </picture>
         ) : (
-          <Footprints className="size-5 text-white dark:text-black animate-pulse" />
+          <PerfumeBottleIcon className="size-5 text-white dark:text-black animate-pulse" />
         )}
       </div>
 
@@ -72,7 +93,7 @@ export default function Navbar() {
           FIFTH SENSE
         </span>
         <span className="text-[10px] uppercase font-semibold tracking-widest text-neutral-500 leading-tight mt-0.5">
-          Footwear Atelier
+          Haute Parfumerie
         </span>
       </div>
     </Link>

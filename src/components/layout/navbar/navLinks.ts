@@ -1,10 +1,10 @@
 import {
   Compass,
   Flame,
-  Footprints,
   Home,
   Mail,
-  Users,
+  Sparkles,
+  Flower2,
 } from "lucide-react";
 
 export interface INavLink {
@@ -25,31 +25,31 @@ export const STOREFRONT_NAV_LINKS: INavLink[] = [
     title: "Catalog",
     href: "/products",
     icon: Compass,
-    description: "Browse all premium footwear",
+    description: "Browse all artisanal perfumes & extraits",
   },
   {
     title: "Men",
     href: "/products?gender=MEN",
-    icon: Footprints,
-    description: "Sneakers, boots, loafers & formal",
+    icon: Sparkles,
+    description: "Woody, smoky oud & leather elixirs",
   },
   {
     title: "Women",
     href: "/products?gender=WOMEN",
-    icon: Users,
-    description: "Flats, heels, boots & sneakers",
+    icon: Flower2,
+    description: "Grasse floral, vanilla & powdery extraits",
   },
   {
     title: "Winter Collection",
     href: "/products?collection=winter",
     icon: Flame,
     badge: "Hot",
-    description: "Insulated winter shoes & boots",
+    description: "Warm amber, spiced cognac & smoked woods",
   },
   {
     title: "Contact",
     href: "/contact",
     icon: Mail,
-    description: "Customer support & showroom outlets",
+    description: "Bespoke perfume consultations & atelier",
   },
 ];

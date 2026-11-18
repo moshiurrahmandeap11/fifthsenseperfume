@@ -45,14 +45,14 @@ export default function CatalogHeader({
   filteredCount,
   activeFilterCount,
 }: CatalogHeaderProps) {
-  // Label for active category
+  // Label for active fragrance category
   const categoryLabel =
-    filters.category === "mens-formal"
-      ? "Men's Formal"
+    filters.category === "woody-smoky-oud"
+      ? "Woody & Smoky Oud"
       : filters.category === "winter-collection"
       ? "Winter Collection"
-      : filters.category === "womens-boots"
-      ? "Women's Boots"
+      : filters.category === "floral-sandalwood"
+      ? "Floral & Sandalwood"
       : null;
 
   return (
@@ -67,37 +67,41 @@ export default function CatalogHeader({
         </Link>
         <ChevronRight className="size-3 text-zinc-400" />
         <span className="text-zinc-900 dark:text-zinc-100 font-medium">
-          CATALOG
+          PARFUMS ARCHIVE
         </span>
         {filters.gender !== "ALL" && (
           <>
             <ChevronRight className="size-3 text-zinc-400" />
             <span className="uppercase text-zinc-600 dark:text-zinc-300">
-              {filters.gender}
+              {filters.gender === "MEN"
+                ? "MASCULINE"
+                : filters.gender === "WOMEN"
+                ? "FEMININE"
+                : "UNISEX"}
             </span>
           </>
         )}
       </nav>
 
-      {/* Hero Title & Editorial Introduction */}
+      {/* Hero Title & Olfactory Introduction */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-zinc-200 dark:border-zinc-800">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-zinc-500 font-mono">
             <span className="size-1.5 rounded-full bg-black dark:bg-white animate-pulse" />
-            Autumn / Winter 2026 Archive
+            Limited Batch Artisanal Extraits
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-white font-heading">
             {filters.category === "winter-collection"
-              ? "WINTER ARCHIVE"
+              ? "WINTER SCENT ARCHIVE"
               : filters.gender === "MEN"
-              ? "MEN'S COLLECTION"
+              ? "MASCULINE EXTRAITS"
               : filters.gender === "WOMEN"
-              ? "WOMEN'S COLLECTION"
-              : "FOOTWEAR ARCHIVE"}
+              ? "FEMININE EXTRAITS"
+              : "HAUTE PARFUMERIE"}
           </h1>
           <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl">
-            Precision engineering meets handcrafted British and Italian leathers.
-            Fitted with high-density memory latex insoles and commando rubber treads.
+            Bespoke fragrances formulated with rare natural absolutes, aged Cambodian oud,
+            and 90-day cold maceration for majestic sillage and 14+ hour longevity.
           </p>
         </div>
 
@@ -106,7 +110,7 @@ export default function CatalogHeader({
           <span className="font-bold text-zinc-900 dark:text-white">
             {filteredCount}
           </span>{" "}
-          of {totalCount} Masterpieces
+          of {totalCount} Olfactory Creations
         </div>
       </div>
 
@@ -117,7 +121,7 @@ export default function CatalogHeader({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400 pointer-events-none" />
           <Input
             type="text"
-            placeholder="Search by leather, style, or boot name..."
+            placeholder="Search by note (e.g. Cambodian Oud, Amber, Vanilla, Rose)..."
             value={filters.search}
             onChange={(e) => onChange({ search: e.target.value })}
             className="pl-9 pr-8 h-10 rounded-xl bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-sm focus-visible:ring-black dark:focus-visible:ring-white"
