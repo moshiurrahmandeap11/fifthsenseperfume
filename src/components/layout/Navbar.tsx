@@ -3,13 +3,6 @@
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { logoutUser } from "@/services/auth.services";
-import {
-  ArrowRight,
-  Flame,
-  Search,
-  ShoppingBag,
-  Sparkles,
-} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
@@ -18,28 +11,6 @@ import LiquidNavLinks from "./navbar/LiquidNavLinks";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
 import NavbarUserMenu from "./navbar/NavbarUserMenu";
 
-// Luxury Perfume Flacon SVG Icon Fallback
-function PerfumeBottleIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <rect x="9" y="2" width="6" height="3" rx="1" />
-      <path d="M10 5v2" />
-      <path d="M14 5v2" />
-      <rect x="8" y="7" width="8" height="2" rx="0.5" />
-      <path d="M6 10a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10Z" />
-      <rect x="9" y="13" width="6" height="5" rx="0.5" strokeDasharray="2 1" />
-    </svg>
-  );
-}
-
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -47,7 +18,6 @@ export default function Navbar() {
   const user = session?.user;
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const [logoError, setLogoError] = useState(false);
 
   // Detect scroll to apply liquid glassmorphism
   useEffect(() => {
@@ -69,33 +39,15 @@ export default function Navbar() {
     }
   };
 
-  // Reusable Perfume Logo Component with graceful fallback
+  // Pure Luxury Typographic Brand Logo (No image icon, normal font)
   const Logo = (
-    <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-      <div className="relative size-9 sm:size-10 rounded-xl overflow-hidden bg-black text-white dark:bg-white dark:text-black flex items-center justify-center p-1.5 shadow-sm group-hover:scale-105 transition-transform duration-300">
-        {!logoError ? (
-          <picture className="w-full h-full flex items-center justify-center">
-            <source srcSet="/navbar/logo.jxl" type="image/jxl" />
-            <img
-              src="/navbar/logo.jxl"
-              alt="Fifth Sense Perfumes"
-              className="w-full h-full object-contain filter group-hover:brightness-110 transition-all duration-300"
-              onError={() => setLogoError(true)}
-            />
-          </picture>
-        ) : (
-          <PerfumeBottleIcon className="size-5 text-white dark:text-black animate-pulse" />
-        )}
-      </div>
-
-      <div className="flex flex-col">
-        <span className="font-extrabold tracking-tight text-base sm:text-lg text-black dark:text-white leading-none">
-          FIFTH SENSE
-        </span>
-        <span className="text-[10px] uppercase font-semibold tracking-widest text-neutral-500 leading-tight mt-0.5">
-          Haute Parfumerie
-        </span>
-      </div>
+    <Link href="/" className="flex flex-col group shrink-0 select-none">
+      <span className="font-normal tracking-[0.25em] text-lg sm:text-xl text-zinc-900 dark:text-zinc-100 leading-none">
+        FIFTH SENSE
+      </span>
+      <span className="text-[9px] uppercase font-normal tracking-[0.35em] text-zinc-400 leading-tight mt-1.5">
+        Haute Parfumerie
+      </span>
     </Link>
   );
 
@@ -104,68 +56,54 @@ export default function Navbar() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         isScrolled
-          ? "bg-white/85 dark:bg-black/85 backdrop-blur-xl border-b border-black/5 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.03)]"
+          ? "bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-black/5 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.02)]"
           : "bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-neutral-100 dark:border-neutral-900"
       )}
     >
       <div className="container mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
-        {/* Left: Brand Logo */}
+        {/* Left: Brand Logo (Pure Typography) */}
         <div className="flex items-center">{Logo}</div>
 
-        {/* Center: Desktop Navigation with Magnetic Liquid Floating Pill Animation */}
+        {/* Center: Desktop Navigation with Liquid Glass & Perfume Amber Elixir Tone */}
         <nav className="hidden lg:flex items-center">
           <Suspense
             fallback={
-              <div className="h-10 w-[540px] rounded-full bg-neutral-100/80 dark:bg-neutral-900/80 animate-pulse border border-neutral-200/60 dark:border-neutral-800/60" />
+              <div className="h-10 w-[540px] rounded-full bg-neutral-100/60 dark:bg-neutral-900/60 animate-pulse" />
             }
           >
             <LiquidNavLinks />
           </Suspense>
         </nav>
 
-        {/* Right: Actions, Try It / User Profile & Mobile Toggle */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5">
-          {/* Search Trigger */}
+        {/* Right: Actions, Try It / User Profile & Mobile Toggle (No Icons, Normal Font) */}
+        <div className="flex items-center gap-3 sm:gap-4">
+          {/* Search Text Link */}
           <Link
             href="/products"
-            className="size-9 rounded-full flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors cursor-pointer"
-            aria-label="Search Catalog"
-            title="Search shoes"
+            className="text-xs uppercase tracking-widest font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
+            title="Search Fragrances"
           >
-            <Search className="size-4" />
+            Search
           </Link>
 
-          {/* Cart Icon with Counter */}
+          {/* Cart Text Link with Counter */}
           <Link
             href="/cart"
-            className="relative size-9 rounded-full flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors cursor-pointer"
-            aria-label="Shopping Cart"
-            title="Cart"
+            className="text-xs uppercase tracking-widest font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
+            title="Fragrance Bag"
           >
-            <ShoppingBag className="size-4" />
-            <span className="absolute -top-0.5 -right-0.5 size-4 rounded-full bg-black text-white dark:bg-white dark:text-black text-[10px] font-bold flex items-center justify-center shadow-xs">
-              0
-            </span>
+            Bag (0)
           </Link>
 
-          {/* 3. Try It Button / Profile Picture Icon */}
+          {/* Try It Button / Profile Menu (Normal Font, Luxury Perfume Amber Tone, No Icons) */}
           {user ? (
-            /* Logged In: Show Profile Picture / Avatar Icon with Dropdown */
             <NavbarUserMenu user={user} />
           ) : (
-            /* Not Logged In: Show High-Contrast Black & White "Try It" Button with Liquid Shimmer */
             <Link
               href="/login"
-              className="group relative overflow-hidden h-9 px-4 sm:px-5 inline-flex items-center justify-center gap-2 rounded-full text-xs font-bold uppercase tracking-wider leading-none text-white bg-black dark:text-black dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer select-none"
+              className="h-8 px-4 rounded-full text-xs font-normal uppercase tracking-widest leading-none text-[#fff8ea] bg-[#29170e] hover:bg-[#3f2214] border border-[#d97706]/35 transition-all duration-300 select-none inline-flex items-center justify-center shadow-xs"
             >
-              <span className="relative z-10 inline-flex items-center justify-center gap-1.5 leading-none">
-                <Sparkles className="size-3.5 animate-pulse text-amber-400 dark:text-amber-500" />
-                <span>Try It</span>
-                <ArrowRight className="size-3.5 group-hover:translate-x-1 transition-transform duration-300" />
-              </span>
-
-              {/* Liquid Shimmer Light Beam Effect */}
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/25 dark:via-black/20 to-transparent transition-transform duration-700 ease-in-out" />
+              Try It
             </Link>
           )}
 

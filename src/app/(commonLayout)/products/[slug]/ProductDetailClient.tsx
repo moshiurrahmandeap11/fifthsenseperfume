@@ -97,10 +97,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     setTimeout(() => {
       setIsAddingToCart(false);
       toast.success(
-        <div className="text-xs">
-          <p className="font-semibold text-white">Added to Shopping Bag</p>
-          <p className="text-zinc-400">
-            {product.name} &bull; EU {selectedSize} &bull; {activeColor?.colorName}
+        <div className="text-xs font-normal">
+          <p className="font-normal text-white">Added to Olfactory Bag</p>
+          <p className="text-zinc-400 font-normal">
+            {product.name} &bull; {selectedSize} &bull; {activeColor?.colorName}
           </p>
         </div>,
         {
@@ -179,23 +179,22 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             {/* Badges */}
             <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
               {product.isBestSeller && (
-                <Badge className="bg-black text-white dark:bg-white dark:text-black font-semibold text-xs tracking-wider uppercase px-3 py-1">
-                  Bestseller
+                <Badge className="bg-black text-white dark:bg-white dark:text-black font-normal text-xs tracking-wider uppercase px-3 py-1">
+                  Signature Scent
                 </Badge>
               )}
               {product.isNewArrival && (
                 <Badge
                   variant="secondary"
-                  className="bg-zinc-900/90 text-white border border-white/20 text-xs px-2.5 py-1"
+                  className="bg-zinc-900/90 text-white border border-white/20 text-xs font-normal px-2.5 py-1"
                 >
-                  <Sparkles className="size-3 mr-1 text-amber-300" />
                   New Arrival
                 </Badge>
               )}
               {discountPercent && (
                 <Badge
                   variant="destructive"
-                  className="bg-red-600 text-white font-bold text-xs px-2.5 py-1"
+                  className="bg-red-600 text-white font-normal text-xs px-2.5 py-1"
                 >
                   -{discountPercent}% OFF
                 </Badge>
@@ -257,33 +256,33 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
         <div className="lg:col-span-5 flex flex-col space-y-6">
           {/* Header Info */}
           <div className="space-y-2 pb-4 border-b border-zinc-200 dark:border-zinc-800">
-            <div className="flex items-center justify-between text-xs font-mono text-zinc-500 uppercase tracking-widest">
-              <span>{product.category?.name || "Footwear"}</span>
+            <div className="flex items-center justify-between text-xs font-mono text-zinc-500 uppercase tracking-widest font-normal">
+              <span>{product.category?.name || "Haute Parfumerie"}</span>
               <span>REF: {product.styleCode}</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-white font-heading">
+            <h1 className="text-2xl sm:text-3xl font-normal tracking-wide text-zinc-950 dark:text-white font-heading">
               {product.name}
             </h1>
 
             {product.nameBn && (
-              <p className="text-sm text-zinc-500 font-sans">
+              <p className="text-sm text-zinc-500 font-sans font-normal">
                 {product.nameBn}
               </p>
             )}
 
             {/* Price */}
             <div className="flex items-baseline gap-3 pt-2">
-              <span className="text-3xl font-bold font-mono text-zinc-950 dark:text-white">
+              <span className="text-3xl font-normal font-mono text-zinc-950 dark:text-white">
                 ৳{currentPrice.toLocaleString("en-BD")}
               </span>
               {product.discountPrice && (
-                <span className="text-base text-zinc-400 line-through font-mono">
+                <span className="text-base text-zinc-400 line-through font-mono font-normal">
                   ৳{product.basePrice.toLocaleString("en-BD")}
                 </span>
               )}
               {product.discountPrice && (
-                <span className="text-xs font-bold text-red-600 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded-md">
+                <span className="text-xs font-normal text-red-600 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded-md">
                   Save ৳
                   {(product.basePrice - product.discountPrice).toLocaleString(
                     "en-BD"
@@ -296,10 +295,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
           {/* Colorway Selection */}
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-zinc-600 dark:text-zinc-400 uppercase tracking-wider font-semibold">
-                Colorway:
+              <span className="text-zinc-600 dark:text-zinc-400 uppercase tracking-wider font-normal">
+                Flacon Edition:
               </span>
-              <span className="text-zinc-900 dark:text-white font-bold">
+              <span className="text-zinc-900 dark:text-white font-normal">
                 {activeColor?.colorName}
               </span>
             </div>
@@ -313,9 +312,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     type="button"
                     onClick={() => handleColorChange(idx)}
                     className={cn(
-                      "flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all text-xs",
+                      "flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all text-xs font-normal",
                       isActive
-                        ? "border-black dark:border-white bg-zinc-100 dark:bg-zinc-900 font-semibold"
+                        ? "border-black dark:border-white bg-zinc-100 dark:bg-zinc-900 font-normal"
                         : "border-zinc-200 dark:border-zinc-800 hover:border-zinc-400"
                     )}
                   >
@@ -333,11 +332,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
           {/* Flacon Volume Selector Matrix */}
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300 font-semibold uppercase tracking-wider font-mono">
-                <Ruler className="size-3.5" />
+              <div className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300 font-normal uppercase tracking-wider font-mono">
                 <span>Select Flacon Volume</span>
               </div>
-              <span className="text-[11px] text-zinc-500 font-sans">
+              <span className="text-[11px] text-zinc-500 font-sans font-normal">
                 {product.heelHeight?.replace("Concentration: ", "") || "Extrait de Parfum"}
               </span>
             </div>
@@ -353,9 +351,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     disabled={isOut}
                     onClick={() => setSelectedSize(v.size)}
                     className={cn(
-                      "h-12 rounded-xl text-xs font-mono font-medium flex flex-col items-center justify-center border transition-all relative",
+                      "h-12 rounded-xl text-xs font-mono font-normal flex flex-col items-center justify-center border transition-all relative",
                       isSelected
-                        ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white font-bold shadow-md"
+                        ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white font-normal shadow-md"
                         : isOut
                         ? "bg-zinc-100 dark:bg-zinc-900 text-zinc-400 line-through border-dashed border-zinc-200 dark:border-zinc-800 cursor-not-allowed"
                         : "bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 border-zinc-300 dark:border-zinc-800 hover:border-black dark:hover:border-white"
@@ -363,7 +361,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   >
                     <span>{v.size} Flacon</span>
                     {v.stockQuantity > 0 && v.stockQuantity <= 5 && (
-                      <span className="text-[9px] text-amber-500 font-sans">
+                      <span className="text-[9px] text-amber-500 font-sans font-normal">
                         {v.stockQuantity} remaining
                       </span>
                     )}
@@ -380,9 +378,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               size="lg"
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="w-full h-13 rounded-2xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 text-sm font-semibold tracking-wide shadow-md flex items-center justify-center gap-2"
+              className="w-full h-13 rounded-2xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 text-sm font-normal tracking-wide shadow-md flex items-center justify-center gap-2"
             >
-              <ShoppingBag className="size-4" />
               <span>
                 {selectedSize
                   ? `Add to Bag — ${selectedSize}`

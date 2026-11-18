@@ -77,13 +77,13 @@ export default function CatalogFilters({
       <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="size-4 text-zinc-900 dark:text-zinc-100" />
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 font-mono">
+          <h2 className="text-sm font-normal uppercase tracking-wider text-zinc-900 dark:text-zinc-100 font-mono">
             Filters
           </h2>
           {activeFilterCount > 0 && (
             <Badge
               variant="default"
-              className="size-5 rounded-full p-0 flex items-center justify-center text-[10px] bg-black text-white dark:bg-white dark:text-black font-mono font-bold"
+              className="size-5 rounded-full p-0 flex items-center justify-center text-[10px] bg-black text-white dark:bg-white dark:text-black font-mono font-normal"
             >
               {activeFilterCount}
             </Badge>
@@ -94,7 +94,7 @@ export default function CatalogFilters({
           <button
             type="button"
             onClick={onReset}
-            className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors font-normal"
           >
             <RotateCcw className="size-3" />
             <span>Reset</span>
@@ -104,7 +104,7 @@ export default function CatalogFilters({
 
       {/* 1. Gender Filter Pills */}
       <div className="space-y-2.5">
-        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
+        <label className="text-xs font-normal uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
           Gender
         </label>
         <div className="grid grid-cols-2 gap-1.5">
@@ -116,9 +116,9 @@ export default function CatalogFilters({
                 type="button"
                 onClick={() => onChange({ gender: opt.value })}
                 className={cn(
-                  "h-9 px-3 rounded-lg text-xs font-medium transition-all text-center flex items-center justify-center border",
+                  "h-9 px-3 rounded-lg text-xs font-normal transition-all text-center flex items-center justify-center border",
                   isSelected
-                    ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-xs font-semibold"
+                    ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-xs font-normal"
                     : "bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600"
                 )}
               >
@@ -131,7 +131,7 @@ export default function CatalogFilters({
 
       {/* 2. Collection / Category Filter */}
       <div className="space-y-2.5">
-        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
+        <label className="text-xs font-normal uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
           Collection
         </label>
         <div className="space-y-1">
@@ -143,9 +143,9 @@ export default function CatalogFilters({
                 type="button"
                 onClick={() => onChange({ category: cat.value })}
                 className={cn(
-                  "w-full text-left px-3 py-2 rounded-lg text-xs transition-all flex items-center justify-between",
+                  "w-full text-left px-3 py-2 rounded-lg text-xs font-normal transition-all flex items-center justify-between",
                   isSelected
-                    ? "bg-zinc-900 text-white font-medium dark:bg-zinc-100 dark:text-black"
+                    ? "bg-zinc-900 text-white font-normal dark:bg-zinc-100 dark:text-black"
                     : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900"
                 )}
               >
@@ -160,14 +160,14 @@ export default function CatalogFilters({
       {/* 3. Flacon Volume Pills */}
       <div className="space-y-2.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
+          <label className="text-xs font-normal uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
             Flacon Volume
           </label>
           {filters.size !== "ALL" && (
             <button
               type="button"
               onClick={() => onChange({ size: "ALL" })}
-              className="text-[11px] text-zinc-400 hover:underline"
+              className="text-[11px] text-zinc-400 hover:underline font-normal"
             >
               Clear
             </button>
@@ -184,7 +184,7 @@ export default function CatalogFilters({
                   onChange({ size: isSelected ? "ALL" : size })
                 }
                 className={cn(
-                  "h-8 rounded-lg text-xs font-mono font-medium transition-all flex items-center justify-center border",
+                  "h-8 rounded-lg text-xs font-mono font-normal transition-all flex items-center justify-center border",
                   isSelected
                     ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white ring-1 ring-black dark:ring-white"
                     : "bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400"
@@ -199,7 +199,7 @@ export default function CatalogFilters({
 
       {/* 4. Price Range */}
       <div className="space-y-2.5">
-        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
+        <label className="text-xs font-normal uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
           Price Range
         </label>
         <div className="space-y-1">
@@ -211,9 +211,9 @@ export default function CatalogFilters({
                 type="button"
                 onClick={() => onChange({ priceRange: range.value })}
                 className={cn(
-                  "w-full text-left px-3 py-2 rounded-lg text-xs transition-all flex items-center justify-between",
+                  "w-full text-left px-3 py-2 rounded-lg text-xs font-normal transition-all flex items-center justify-between",
                   isSelected
-                    ? "bg-zinc-900 text-white font-medium dark:bg-zinc-100 dark:text-black"
+                    ? "bg-zinc-900 text-white font-normal dark:bg-zinc-100 dark:text-black"
                     : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900"
                 )}
               >
@@ -227,7 +227,7 @@ export default function CatalogFilters({
 
       {/* 5. Olfactory Concentration */}
       <div className="space-y-2.5">
-        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
+        <label className="text-xs font-normal uppercase tracking-wider text-zinc-700 dark:text-zinc-300 font-mono">
           Concentration
         </label>
         <div className="space-y-1">
@@ -239,9 +239,9 @@ export default function CatalogFilters({
                 type="button"
                 onClick={() => onChange({ fitType: fit.value })}
                 className={cn(
-                  "w-full text-left px-3 py-2 rounded-lg text-xs transition-all flex items-center justify-between",
+                  "w-full text-left px-3 py-2 rounded-lg text-xs font-normal transition-all flex items-center justify-between",
                   isSelected
-                    ? "bg-zinc-900 text-white font-medium dark:bg-zinc-100 dark:text-black"
+                    ? "bg-zinc-900 text-white font-normal dark:bg-zinc-100 dark:text-black"
                     : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900"
                 )}
               >
@@ -256,7 +256,7 @@ export default function CatalogFilters({
       {/* 6. In-Stock Only Toggle */}
       <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
         <label className="flex items-center justify-between cursor-pointer py-1">
-          <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">
+          <span className="text-xs font-normal text-zinc-800 dark:text-zinc-200">
             In-Stock Perfumes Only
           </span>
           <Switch
@@ -268,7 +268,7 @@ export default function CatalogFilters({
 
       {/* Bottom Service Guarantee Banner */}
       <div className="mt-4 p-3.5 rounded-xl bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-[11px] space-y-2">
-        <div className="flex items-center gap-1.5 font-medium text-zinc-900 dark:text-zinc-200 font-sans">
+        <div className="flex items-center gap-1.5 font-normal text-zinc-900 dark:text-zinc-200 font-sans">
           <Shield className="size-3.5 text-black dark:text-white" />
           <span>Haute Parfumerie Guarantee</span>
         </div>

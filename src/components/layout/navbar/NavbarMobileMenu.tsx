@@ -1,7 +1,6 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import {
   Sheet,
   SheetContent,
@@ -9,12 +8,10 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import {
-  ArrowRight,
   LogOut,
   Menu,
   Search,
   Shield,
-  Sparkles,
   User,
   X,
 } from "lucide-react";
@@ -98,13 +95,12 @@ export default function NavbarMobileMenu({
             </Link>
           </div>
 
-          {/* Nav Links */}
+          {/* Nav Links (Pure typography, no icons, normal weight, luxury perfume active tone) */}
           <div className="px-3 py-4 space-y-1">
-            <p className="px-3 pb-2 text-[10px] font-semibold text-neutral-400 uppercase tracking-widest">
+            <p className="px-3 pb-2 text-[10px] font-normal text-neutral-400 uppercase tracking-widest">
               Navigation
             </p>
             {STOREFRONT_NAV_LINKS.map((link) => {
-              const Icon = link.icon;
               const isActive =
                 link.href === "/"
                   ? pathname === "/"
@@ -116,35 +112,13 @@ export default function NavbarMobileMenu({
                   href={link.href}
                   onClick={() => setOpen(false)}
                   className={cn(
-                    "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                    "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-normal transition-all duration-200",
                     isActive
-                      ? "bg-black text-white dark:bg-white dark:text-black shadow-sm font-semibold"
+                      ? "bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] text-[#fef9ee] border border-[#d97706]/35 shadow-sm"
                       : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white"
                   )}
                 >
-                  <div className="flex items-center gap-3">
-                    <Icon
-                      className={cn(
-                        "size-4",
-                        isActive
-                          ? "text-white dark:text-black"
-                          : "text-neutral-500"
-                      )}
-                    />
-                    <span>{link.title}</span>
-                  </div>
-                  {link.badge && (
-                    <Badge
-                      className={cn(
-                        "text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider",
-                        isActive
-                          ? "bg-white text-black dark:bg-black dark:text-white"
-                          : "bg-red-500 text-white"
-                      )}
-                    >
-                      {link.badge}
-                    </Badge>
-                  )}
+                  <span>{link.title}</span>
                 </Link>
               );
             })}
@@ -158,15 +132,15 @@ export default function NavbarMobileMenu({
               <div className="flex items-center gap-3 px-1">
                 <Avatar className="size-10 border border-neutral-200 dark:border-neutral-800">
                   <AvatarImage src={user.image || undefined} alt={user.name || "User"} />
-                  <AvatarFallback className="bg-black text-white dark:bg-white dark:text-black font-semibold text-xs">
+                  <AvatarFallback className="bg-black text-white dark:bg-white dark:text-black font-normal text-xs">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col min-w-0">
-                  <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 truncate">
+                  <span className="text-sm font-normal text-neutral-900 dark:text-neutral-100 truncate">
                     {user.name}
                   </span>
-                  <span className="text-xs text-neutral-500 truncate">
+                  <span className="text-xs text-neutral-500 truncate font-normal">
                     {user.email}
                   </span>
                 </div>
@@ -176,7 +150,7 @@ export default function NavbarMobileMenu({
                 <Link
                   href={isAdmin ? "/admin/dashboard" : "/customer/dashboard"}
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold bg-black text-white dark:bg-white dark:text-black shadow-sm"
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-normal bg-black text-white dark:bg-white dark:text-black shadow-sm"
                 >
                   {isAdmin ? (
                     <>
@@ -196,7 +170,7 @@ export default function NavbarMobileMenu({
                     setOpen(false);
                     onLogout?.();
                   }}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 transition-colors cursor-pointer"
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-normal text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 transition-colors cursor-pointer"
                 >
                   <LogOut className="size-3.5" />
                   <span>Sign Out</span>
@@ -208,17 +182,11 @@ export default function NavbarMobileMenu({
               <Link
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="group relative overflow-hidden flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl text-sm font-bold tracking-wide uppercase text-white bg-black dark:text-black dark:bg-white shadow-md hover:shadow-lg transition-all duration-300"
+                className="flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-normal tracking-wide uppercase text-[#fef9ee] bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] border border-[#d97706]/35 shadow-sm transition-all duration-300"
               >
-                <span className="relative z-10 flex items-center gap-2">
-                  <Sparkles className="size-4 animate-pulse" />
-                  <span>Try It / Sign In</span>
-                  <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-                {/* Liquid shimmer */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700" />
+                Try It / Sign In
               </Link>
-              <p className="text-[11px] text-center text-neutral-500">
+              <p className="text-[11px] text-center text-neutral-500 font-normal">
                 Sign in to view orders, olfactory wishlist and exclusive perfume releases
               </p>
             </div>

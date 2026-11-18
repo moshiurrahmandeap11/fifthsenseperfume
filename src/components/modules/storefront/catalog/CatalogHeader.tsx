@@ -66,13 +66,13 @@ export default function CatalogHeader({
           HOME
         </Link>
         <ChevronRight className="size-3 text-zinc-400" />
-        <span className="text-zinc-900 dark:text-zinc-100 font-medium">
+        <span className="text-zinc-900 dark:text-zinc-100 font-normal">
           PARFUMS ARCHIVE
         </span>
         {filters.gender !== "ALL" && (
           <>
             <ChevronRight className="size-3 text-zinc-400" />
-            <span className="uppercase text-zinc-600 dark:text-zinc-300">
+            <span className="uppercase text-zinc-600 dark:text-zinc-300 font-normal">
               {filters.gender === "MEN"
                 ? "MASCULINE"
                 : filters.gender === "WOMEN"
@@ -86,11 +86,11 @@ export default function CatalogHeader({
       {/* Hero Title & Olfactory Introduction */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-zinc-200 dark:border-zinc-800">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-zinc-500 font-mono">
+          <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-zinc-500 font-mono font-normal">
             <span className="size-1.5 rounded-full bg-black dark:bg-white animate-pulse" />
             Limited Batch Artisanal Extraits
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-white font-heading">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-normal tracking-wide text-zinc-950 dark:text-white font-heading">
             {filters.category === "winter-collection"
               ? "WINTER SCENT ARCHIVE"
               : filters.gender === "MEN"
@@ -99,15 +99,15 @@ export default function CatalogHeader({
               ? "FEMININE EXTRAITS"
               : "HAUTE PARFUMERIE"}
           </h1>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl font-normal">
             Bespoke fragrances formulated with rare natural absolutes, aged Cambodian oud,
             and 90-day cold maceration for majestic sillage and 14+ hour longevity.
           </p>
         </div>
 
-        <div className="text-xs font-mono text-zinc-500">
+        <div className="text-xs font-mono text-zinc-500 font-normal">
           Showing{" "}
-          <span className="font-bold text-zinc-900 dark:text-white">
+          <span className="font-normal text-zinc-900 dark:text-white">
             {filteredCount}
           </span>{" "}
           of {totalCount} Olfactory Creations

@@ -9,7 +9,6 @@ import React, {
   useCallback,
   useTransition,
 } from "react";
-import { Flame } from "lucide-react";
 import { STOREFRONT_NAV_LINKS } from "./navLinks";
 import { cn } from "@/lib/utils";
 
@@ -199,18 +198,19 @@ export default function LiquidNavLinks() {
       onMouseLeave={handleMouseLeaveContainer}
       className={cn(
         "relative flex items-center p-1.5 rounded-full",
-        "bg-neutral-100/90 dark:bg-neutral-900/90 backdrop-blur-xl",
-        "border border-neutral-200/70 dark:border-neutral-800/70",
-        "shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] select-none",
+        // Pure Liquid Glassmorphic Container
+        "bg-white/50 dark:bg-zinc-950/45 backdrop-blur-2xl",
+        "border border-white/80 dark:border-white/10",
+        "shadow-[0_8px_32px_0_rgba(31,38,135,0.06),inset_0_1px_2px_rgba(255,255,255,0.4)] select-none",
         "transition-colors duration-300"
       )}
     >
-      {/* 1. Translucent Liquid Hover Spotlight (flows seamlessly between items on mouse hover) */}
+      {/* 1. Translucent Liquid Amber Hover Spotlight */}
       <span
         aria-hidden="true"
         className={cn(
           "pointer-events-none absolute top-0 left-0 rounded-full z-[1]",
-          "bg-black/[0.06] dark:bg-white/[0.08] backdrop-blur-xs",
+          "bg-amber-900/10 dark:bg-amber-100/10 backdrop-blur-xs",
           isReady
             ? "transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
             : "transition-none"
@@ -226,14 +226,15 @@ export default function LiquidNavLinks() {
         }}
       />
 
-      {/* 2. Magnetic Liquid Active Indicator Pill (High-Contrast Black & White with Liquid Physics) */}
+      {/* 2. Magnetic Liquid Amber Cognac Pill (Perfume Atelier Elixir Tone) */}
       <span
         aria-hidden="true"
         className={cn(
           "pointer-events-none absolute top-0 left-0 rounded-full z-[2] overflow-hidden",
-          "bg-black text-white dark:bg-white dark:text-black",
-          "shadow-[0_4px_12px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)]",
-          "dark:shadow-[0_4px_16px_rgba(255,255,255,0.16),0_1px_2px_rgba(255,255,255,0.08)]",
+          // Rich Amber-Cognac Perfume Tone (Not plain black)
+          "bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] text-[#fef9ee]",
+          "border border-[#d97706]/35",
+          "shadow-[0_4px_16px_rgba(180,83,9,0.22)]",
           isReady
             ? "transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
             : "transition-none"
@@ -248,11 +249,11 @@ export default function LiquidNavLinks() {
         {/* Liquid Glass Highlight (subtle top meniscus reflection) */}
         <span
           aria-hidden="true"
-          className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/20 dark:from-black/10 to-transparent pointer-events-none"
+          className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/20 via-white/5 to-transparent pointer-events-none"
         />
       </span>
 
-      {/* Navigation Links */}
+      {/* Navigation Links (Pure Text, No Icons, Normal Font Weight) */}
       {STOREFRONT_NAV_LINKS.map((link, idx) => {
         const isActive = activeIndex === idx;
 
@@ -266,32 +267,17 @@ export default function LiquidNavLinks() {
             onClick={() => handleTabClick(idx)}
             onMouseEnter={() => handleMouseEnterTab(idx)}
             className={cn(
-              "relative z-[3] h-8 px-4 text-xs font-medium rounded-full",
-              "inline-flex items-center justify-center gap-1.5 leading-none",
+              "relative z-[3] h-8 px-4 text-xs font-normal tracking-wide rounded-full",
+              "inline-flex items-center justify-center leading-none",
               "transition-colors duration-200 select-none",
               isActive
-                ? "text-white dark:text-black font-semibold"
-                : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"
+                ? "text-[#fff8ea]"
+                : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
             )}
           >
-            <span className="relative z-10 inline-flex items-center justify-center leading-none transition-transform duration-200 active:scale-95">
+            <span className="relative z-10 inline-flex items-center justify-center leading-none">
               {link.title}
             </span>
-
-            {/* Badge Indicator (e.g. Hot badge for Winter Collection) */}
-            {link.badge && (
-              <span
-                className={cn(
-                  "relative z-10 text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider inline-flex items-center gap-0.5 leading-none transition-colors duration-200",
-                  isActive
-                    ? "bg-white text-black dark:bg-black dark:text-white"
-                    : "bg-black text-white dark:bg-white dark:text-black"
-                )}
-              >
-                <Flame className="size-2.5 text-orange-500 fill-orange-500" />
-                {link.badge}
-              </span>
-            )}
           </Link>
         );
       })}

@@ -4,13 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import {
-  Heart,
-  ShoppingBag,
-  Sparkles,
-  Droplets,
-  Flame,
-} from "lucide-react";
+import { Heart } from "lucide-react";
 import { IProduct } from "@/types/product.types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -156,7 +150,7 @@ export default function ProductCard({
           {product.isBestSeller && (
             <Badge
               variant="default"
-              className="bg-black text-white dark:bg-white dark:text-black font-semibold text-[10px] tracking-wider uppercase px-2.5 py-0.5 shadow-sm"
+              className="bg-black text-white dark:bg-white dark:text-black font-normal text-[10px] tracking-wider uppercase px-2.5 py-0.5 shadow-sm"
             >
               Signature Scent
             </Badge>
@@ -164,25 +158,23 @@ export default function ProductCard({
           {product.isNewArrival && (
             <Badge
               variant="secondary"
-              className="bg-zinc-900/90 text-zinc-100 backdrop-blur-md border border-white/10 text-[10px] font-medium tracking-wide uppercase px-2 py-0.5"
+              className="bg-zinc-900/90 text-zinc-100 backdrop-blur-md border border-white/10 text-[10px] font-normal tracking-wide uppercase px-2 py-0.5"
             >
-              <Sparkles className="size-2.5 mr-1 text-amber-300" />
               New Release
             </Badge>
           )}
           {product.categoryId === "cat-winter-amber" && (
             <Badge
               variant="outline"
-              className="bg-amber-950/80 text-amber-200 border-amber-400/30 backdrop-blur-md text-[10px] uppercase tracking-wide px-2 py-0.5"
+              className="bg-amber-950/80 text-amber-200 border-amber-400/30 backdrop-blur-md text-[10px] font-normal uppercase tracking-wide px-2 py-0.5"
             >
-              <Flame className="size-2.5 mr-1 text-amber-400" />
               Winter Warm
             </Badge>
           )}
           {discountPercent && (
             <Badge
               variant="destructive"
-              className="bg-red-600 text-white font-bold text-[10px] px-2 py-0.5"
+              className="bg-red-600 text-white font-normal text-[10px] px-2 py-0.5"
             >
               -{discountPercent}%
             </Badge>
@@ -222,11 +214,10 @@ export default function ProductCard({
           )}
         >
           <div className="flex items-center justify-between text-[11px] font-mono text-zinc-300 mb-2">
-            <span className="flex items-center gap-1 uppercase tracking-wider text-[10px] font-sans">
-              <Droplets className="size-3 text-zinc-400" />
+            <span className="uppercase tracking-wider text-[10px] font-sans font-normal">
               Flacon Volume:
             </span>
-            <span className="text-zinc-400 font-sans text-[10px]">
+            <span className="text-zinc-400 font-sans text-[10px] font-normal">
               {selectedSize ? `${selectedSize} selected` : "Select volume"}
             </span>
           </div>
@@ -243,9 +234,9 @@ export default function ProductCard({
                   disabled={isOutOfStock}
                   onClick={(e) => handleSizeClick(e, variant.size)}
                   className={cn(
-                    "h-7 min-w-[48px] px-2 rounded-md text-[11px] font-mono font-medium transition-all duration-150 flex items-center justify-center",
+                    "h-7 min-w-[48px] px-2 rounded-md text-[11px] font-mono font-normal transition-all duration-150 flex items-center justify-center",
                     isSelected
-                      ? "bg-white text-black font-bold ring-2 ring-white/50"
+                      ? "bg-white text-black font-normal ring-2 ring-white/50"
                       : isOutOfStock
                       ? "bg-zinc-800/50 text-zinc-600 line-through cursor-not-allowed border border-zinc-800"
                       : "bg-zinc-900/90 text-zinc-200 border border-zinc-700/60 hover:border-white hover:text-white"
@@ -290,27 +281,27 @@ export default function ProductCard({
                 );
               })}
             </div>
-            <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
+            <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-normal">
               {activeColor?.colorName}
             </span>
           </div>
         )}
 
         {/* Category & Concentration */}
-        <div className="flex items-center justify-between text-[11px] text-zinc-400 uppercase tracking-widest font-mono mb-1">
+        <div className="flex items-center justify-between text-[11px] text-zinc-400 uppercase tracking-widest font-mono mb-1 font-normal">
           <span>{product.category?.name || "Haute Parfumerie"}</span>
-          <span className="flex items-center gap-1 text-[10px] text-zinc-500">
+          <span className="text-[10px] text-zinc-500 font-normal">
             {product.heelHeight?.replace("Concentration: ", "") || "Extrait de Parfum"}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="font-heading text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 line-clamp-1 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
+        <h3 className="font-heading text-base font-normal tracking-tight text-zinc-900 dark:text-zinc-100 line-clamp-1 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
           <Link href={`/products/${product.slug}`}>{product.name}</Link>
         </h3>
 
         {/* Olfactory Notes Subtitle */}
-        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">
+        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1 font-normal">
           {product.upperMaterial?.replace("Top: ", "")} &bull; {product.insoleType?.replace("Base: ", "")}
         </p>
 
@@ -321,16 +312,16 @@ export default function ProductCard({
         <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-900 flex items-center justify-between gap-2">
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-lg font-bold font-mono tracking-tight text-zinc-950 dark:text-white">
+              <span className="text-lg font-normal font-mono tracking-tight text-zinc-950 dark:text-white">
                 ৳{currentPrice.toLocaleString("en-BD")}
               </span>
               {product.discountPrice && (
-                <span className="text-xs text-zinc-400 line-through font-mono">
+                <span className="text-xs text-zinc-400 line-through font-mono font-normal">
                   ৳{product.basePrice.toLocaleString("en-BD")}
                 </span>
               )}
             </div>
-            <p className="text-[10px] text-zinc-400 uppercase font-mono tracking-wider">
+            <p className="text-[10px] text-zinc-400 uppercase font-mono tracking-wider font-normal">
               Artisanal Batch &bull; Free Shipping
             </p>
           </div>
@@ -342,20 +333,14 @@ export default function ProductCard({
             onClick={handleQuickAdd}
             disabled={isAddingToCart}
             className={cn(
-              "h-9 px-3.5 rounded-xl font-medium text-xs tracking-wide transition-all duration-200",
+              "h-9 px-3.5 rounded-xl font-normal text-xs tracking-wide transition-all duration-200",
               "bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 shadow-sm"
             )}
           >
             {isAddingToCart ? (
-              <span className="flex items-center gap-1">
-                <span className="size-2 rounded-full bg-white dark:bg-black animate-ping" />
-                Adding...
-              </span>
+              <span>Adding...</span>
             ) : (
-              <span className="flex items-center gap-1.5">
-                <ShoppingBag className="size-3.5" />
-                <span>Bag</span>
-              </span>
+              <span>Bag</span>
             )}
           </Button>
         </div>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { DUMMY_PRODUCTS } from "@/data/dummyProducts";
 import ProductCard from "@/components/modules/storefront/catalog/ProductCard";
 import HeroGridSection from "@/components/modules/storefront/home/HeroGridSection";
@@ -15,20 +14,19 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6">
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-zinc-400 mb-1">
+              <div className="text-xs font-mono uppercase tracking-[0.2em] text-zinc-400 mb-1 font-normal">
                 Haute Parfumerie Archive
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-heading text-zinc-950 dark:text-white">
-                CURATED ARTISANAL ELIXIRS
+              <h2 className="text-2xl sm:text-3xl font-normal tracking-[0.15em] uppercase font-heading text-zinc-950 dark:text-white">
+                Curated Artisanal Elixirs
               </h2>
             </div>
 
             <Link
               href="/products"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-black dark:text-white hover:underline font-mono"
+              className="inline-flex items-center text-xs uppercase tracking-widest font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white underline font-mono transition-colors"
             >
-              <span>View All Fragrances</span>
-              <ArrowRight className="size-4" />
+              View All Fragrances
             </Link>
           </div>
 
