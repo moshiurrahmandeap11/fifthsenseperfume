@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 
 interface RectStyle {
   left: number;
+  top: number;
   width: number;
   height: number;
   opacity: number;
@@ -94,6 +95,7 @@ export default function LiquidNavLinks() {
 
   const [activeRect, setActiveRect] = useState<RectStyle>({
     left: 0,
+    top: 0,
     width: 0,
     height: 0,
     opacity: 0,
@@ -101,12 +103,13 @@ export default function LiquidNavLinks() {
 
   const [hoverRect, setHoverRect] = useState<RectStyle>({
     left: 0,
+    top: 0,
     width: 0,
     height: 0,
     opacity: 0,
   });
 
-  // Calculate position of a tab relative to the container
+  // Calculate exact position and dimensions of a tab relative to the container
   const getTabRect = useCallback((index: number): RectStyle | null => {
     const container = containerRef.current;
     const tab = tabRefs.current[index];
@@ -117,6 +120,7 @@ export default function LiquidNavLinks() {
 
     return {
       left: tabRect.left - containerRect.left,
+      top: tabRect.top - containerRect.top,
       width: tabRect.width,
       height: tabRect.height,
       opacity: 1,
@@ -205,14 +209,14 @@ export default function LiquidNavLinks() {
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute top-1.5 rounded-full z-[1]",
+          "pointer-events-none absolute top-0 left-0 rounded-full z-[1]",
           "bg-black/[0.06] dark:bg-white/[0.08] backdrop-blur-xs",
           isReady
             ? "transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
             : "transition-none"
         )}
         style={{
-          transform: `translateX(${hoverRect.left}px)`,
+          transform: `translate3d(${hoverRect.left}px, ${hoverRect.top}px, 0)`,
           width: `${hoverRect.width}px`,
           height: `${hoverRect.height}px`,
           opacity:
@@ -226,7 +230,7 @@ export default function LiquidNavLinks() {
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute top-1.5 rounded-full z-[2] overflow-hidden",
+          "pointer-events-none absolute top-0 left-0 rounded-full z-[2] overflow-hidden",
           "bg-black text-white dark:bg-white dark:text-black",
           "shadow-[0_4px_12px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)]",
           "dark:shadow-[0_4px_16px_rgba(255,255,255,0.16),0_1px_2px_rgba(255,255,255,0.08)]",
@@ -235,7 +239,7 @@ export default function LiquidNavLinks() {
             : "transition-none"
         )}
         style={{
-          transform: `translateX(${activeRect.left}px)`,
+          transform: `translate3d(${activeRect.left}px, ${activeRect.top}px, 0)`,
           width: `${activeRect.width}px`,
           height: `${activeRect.height}px`,
           opacity: activeRect.opacity,
@@ -262,14 +266,15 @@ export default function LiquidNavLinks() {
             onClick={() => handleTabClick(idx)}
             onMouseEnter={() => handleMouseEnterTab(idx)}
             className={cn(
-              "relative z-[3] px-4 py-1.5 text-xs font-medium rounded-full",
-              "transition-colors duration-200 select-none flex items-center gap-1.5",
+              "relative z-[3] h-8 px-4 text-xs font-medium rounded-full",
+              "inline-flex items-center justify-center gap-1.5 leading-none",
+              "transition-colors duration-200 select-none",
               isActive
                 ? "text-white dark:text-black font-semibold"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"
             )}
           >
-            <span className="relative z-10 transition-transform duration-200 active:scale-95">
+            <span className="relative z-10 inline-flex items-center justify-center leading-none transition-transform duration-200 active:scale-95">
               {link.title}
             </span>
 
@@ -277,7 +282,7 @@ export default function LiquidNavLinks() {
             {link.badge && (
               <span
                 className={cn(
-                  "relative z-10 text-[9px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-wider flex items-center gap-0.5 transition-colors duration-200",
+                  "relative z-10 text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider inline-flex items-center gap-0.5 leading-none transition-colors duration-200",
                   isActive
                     ? "bg-white text-black dark:bg-black dark:text-white"
                     : "bg-black text-white dark:bg-white dark:text-black"

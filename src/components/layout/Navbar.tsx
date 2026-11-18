@@ -135,9 +135,9 @@ export default function Navbar() {
             /* Not Logged In: Show High-Contrast Black & White "Try It" Button with Liquid Shimmer */
             <Link
               href="/login"
-              className="group relative overflow-hidden inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-black dark:text-black dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer select-none"
+              className="group relative overflow-hidden h-9 px-4 sm:px-5 inline-flex items-center justify-center gap-2 rounded-full text-xs font-bold uppercase tracking-wider leading-none text-white bg-black dark:text-black dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer select-none"
             >
-              <span className="relative z-10 flex items-center gap-1.5">
+              <span className="relative z-10 inline-flex items-center justify-center gap-1.5 leading-none">
                 <Sparkles className="size-3.5 animate-pulse text-amber-400 dark:text-amber-500" />
                 <span>Try It</span>
                 <ArrowRight className="size-3.5 group-hover:translate-x-1 transition-transform duration-300" />
