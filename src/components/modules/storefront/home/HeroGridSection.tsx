@@ -58,10 +58,10 @@ export default function HeroGridSection() {
   }, []);
 
   return (
-    <section className="relative w-full py-4 sm:py-6 lg:py-8 bg-white dark:bg-zinc-950">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Clean Responsive Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-stretch">
+    <section className="relative w-full py-2 sm:py-4 lg:py-6 bg-white dark:bg-zinc-950">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Compact Clean Responsive Grid Layout (No Shadow, No Hover Scale) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
           
           {/* ======================================================== */}
           {/* 1. LEFT BIG BLOCK: PURE VIDEO (CLICK TO /products) */}
@@ -69,11 +69,11 @@ export default function HeroGridSection() {
           <Link
             href="/products"
             className={cn(
-              "group relative lg:col-span-7 xl:col-span-8",
-              "aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto lg:min-h-[560px] xl:min-h-[620px]",
-              "rounded-2xl sm:rounded-3xl overflow-hidden",
+              "relative lg:col-span-7 xl:col-span-8",
+              "aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto lg:h-[420px] xl:h-[460px]",
+              "rounded-xl sm:rounded-2xl overflow-hidden",
               "border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900",
-              "shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer block"
+              "cursor-pointer block"
             )}
             title="Explore Fragrance Catalog"
           >
@@ -83,14 +83,14 @@ export default function HeroGridSection() {
               loop
               muted
               playsInline
-              className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+              className="w-full h-full object-cover object-center"
             />
           </Link>
 
           {/* ======================================================== */}
           {/* 2. RIGHT SIDE: 2 HORIZONTAL SLIDERS (CLICK TO /products) */}
           {/* ======================================================== */}
-          <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-4 sm:gap-6">
+          <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-3 sm:gap-4 lg:h-[420px] xl:h-[460px]">
             
             {/* ---------------------------------------------------- */}
             {/* BOX 1 (TOP): HORIZONTAL SLIDING PERFUME CAROUSEL */}
@@ -98,10 +98,10 @@ export default function HeroGridSection() {
             <Link
               href="/products"
               className={cn(
-                "group relative flex-1 min-h-[240px] sm:min-h-[270px] lg:min-h-0",
-                "rounded-2xl sm:rounded-3xl overflow-hidden",
+                "relative flex-1 min-h-[190px] sm:min-h-[200px] lg:min-h-0",
+                "rounded-xl sm:rounded-2xl overflow-hidden",
                 "border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900",
-                "shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer block"
+                "cursor-pointer block"
               )}
               title="Explore Fragrances"
             >
@@ -118,7 +118,7 @@ export default function HeroGridSection() {
                       fill
                       sizes="(max-width: 1024px) 100vw, 35vw"
                       priority={idx === 0}
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="object-cover object-center"
                     />
                   </div>
                 ))}
@@ -131,10 +131,10 @@ export default function HeroGridSection() {
             <Link
               href="/products"
               className={cn(
-                "group relative flex-1 min-h-[240px] sm:min-h-[270px] lg:min-h-0",
-                "rounded-2xl sm:rounded-3xl overflow-hidden",
+                "relative flex-1 min-h-[190px] sm:min-h-[200px] lg:min-h-0",
+                "rounded-xl sm:rounded-2xl overflow-hidden",
                 "border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900",
-                "shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer block"
+                "cursor-pointer block"
               )}
               title="Explore Fragrances"
             >
@@ -151,7 +151,7 @@ export default function HeroGridSection() {
                       fill
                       sizes="(max-width: 1024px) 100vw, 35vw"
                       priority={idx === 0}
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="object-cover object-center"
                     />
                   </div>
                 ))}
