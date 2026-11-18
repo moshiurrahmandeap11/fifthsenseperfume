@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Top Slider Images (High-res Luxury Perfumes)
@@ -144,9 +145,20 @@ export default function HeroGridSection() {
             <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none z-[15]" />
 
             {/* Explore Now Button Overlay (Bottom-Left Corner) */}
-            <div className="absolute bottom-5 left-5 sm:bottom-7 sm:left-7 z-20 pointer-events-none">
-              <span className="inline-flex items-center justify-center px-6 py-2.5 sm:px-7 sm:py-3 rounded-full text-xs sm:text-sm font-normal tracking-wide text-zinc-950 bg-white/90 group-hover:bg-white group-hover:scale-[1.03] shadow-lg shadow-black/15 backdrop-blur-md border border-white/70 transition-all duration-300">
-                Explore Now
+            <div className="absolute bottom-5 left-5 sm:bottom-7 sm:left-7 z-20">
+              <span className="group/btn relative inline-flex items-center justify-center w-36 sm:w-40 h-10 sm:h-11 rounded-full text-xs sm:text-sm font-normal tracking-wide text-zinc-950 bg-white/90 hover:bg-white shadow-lg shadow-black/15 backdrop-blur-md border border-white/70 overflow-hidden transition-colors duration-300 select-none">
+                {/* Default Text: "Explore Now" (rolls up & fades out on hover) */}
+                <span className="inline-flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/btn:-translate-y-8 group-hover/btn:opacity-0">
+                  Explore Now
+                </span>
+
+                {/* Hover Arrow Icon (rolls up from bottom into center on hover) */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] translate-y-8 opacity-0 group-hover/btn:translate-y-0 group-hover/btn:opacity-100"
+                >
+                  <ArrowRight className="size-4 text-zinc-950" />
+                </span>
               </span>
             </div>
           </Link>
