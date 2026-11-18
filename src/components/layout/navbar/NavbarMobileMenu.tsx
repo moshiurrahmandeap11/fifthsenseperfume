@@ -114,7 +114,7 @@ export default function NavbarMobileMenu({
                   className={cn(
                     "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-normal transition-all duration-200",
                     isActive
-                      ? "bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] text-[#fef9ee] border border-[#d97706]/35 shadow-sm"
+                      ? "bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] text-[#fef9ee] border border-[#d97706]/35"
                       : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white"
                   )}
                 >
@@ -150,7 +150,7 @@ export default function NavbarMobileMenu({
                 <Link
                   href={isAdmin ? "/admin/dashboard" : "/customer/dashboard"}
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-normal bg-black text-white dark:bg-white dark:text-black shadow-sm"
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-normal bg-black text-white dark:bg-white dark:text-black"
                 >
                   {isAdmin ? (
                     <>
@@ -182,7 +182,7 @@ export default function NavbarMobileMenu({
               <Link
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-normal tracking-wide uppercase text-[#fef9ee] bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] border border-[#d97706]/35 shadow-sm transition-all duration-300"
+                className="flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-normal tracking-wide uppercase text-[#fef9ee] bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] border border-[#d97706]/35 transition-all duration-300"
               >
                 Try It / Sign In
               </Link>

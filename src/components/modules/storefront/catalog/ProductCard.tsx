@@ -119,7 +119,7 @@ export default function ProductCard({
     <div
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800",
-        "bg-white dark:bg-zinc-950 transition-all duration-300 hover:shadow-xl hover:shadow-black/5 hover:-translate-y-1"
+        "bg-white dark:bg-zinc-950 transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600"
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -150,7 +150,7 @@ export default function ProductCard({
           {product.isBestSeller && (
             <Badge
               variant="default"
-              className="bg-black text-white dark:bg-white dark:text-black font-normal text-[10px] tracking-wider uppercase px-2.5 py-0.5 shadow-sm"
+              className="bg-black text-white dark:bg-white dark:text-black font-normal text-[10px] tracking-wider uppercase px-2.5 py-0.5"
             >
               Signature Scent
             </Badge>
@@ -190,8 +190,8 @@ export default function ProductCard({
             className={cn(
               "flex size-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-200",
               isWishlisted
-                ? "bg-black text-red-500 shadow-md ring-2 ring-red-500/50"
-                : "bg-black/40 text-white hover:bg-black hover:text-red-400 hover:scale-110"
+                ? "bg-black text-red-500 ring-2 ring-red-500/50"
+                : "bg-black/40 text-white hover:bg-black hover:text-red-400"
             )}
           >
             <Heart
@@ -334,7 +334,7 @@ export default function ProductCard({
             disabled={isAddingToCart}
             className={cn(
               "h-9 px-3.5 rounded-xl font-normal text-xs tracking-wide transition-all duration-200",
-              "bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 shadow-sm"
+              "bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
             )}
           >
             {isAddingToCart ? (

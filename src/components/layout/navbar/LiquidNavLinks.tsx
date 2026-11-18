@@ -200,8 +200,7 @@ export default function LiquidNavLinks() {
         "relative flex items-center p-1.5 rounded-full",
         // Pure Liquid Glassmorphic Container
         "bg-white/50 dark:bg-zinc-950/45 backdrop-blur-2xl",
-        "border border-white/80 dark:border-white/10",
-        "shadow-[0_8px_32px_0_rgba(31,38,135,0.06),inset_0_1px_2px_rgba(255,255,255,0.4)] select-none",
+        "border border-white/80 dark:border-white/10 select-none",
         "transition-colors duration-300"
       )}
     >
@@ -234,7 +233,6 @@ export default function LiquidNavLinks() {
           // Rich Amber-Cognac Perfume Tone (Not plain black)
           "bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] text-[#fef9ee]",
           "border border-[#d97706]/35",
-          "shadow-[0_4px_16px_rgba(180,83,9,0.22)]",
           isReady
             ? "transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
             : "transition-none"

@@ -146,7 +146,7 @@ export default function HeroGridSection() {
 
             {/* Explore Now Button Overlay (Bottom-Left Corner) */}
             <div className="absolute bottom-5 left-5 sm:bottom-7 sm:left-7 z-20">
-              <span className="group/btn relative inline-flex items-center justify-center w-36 sm:w-40 h-10 sm:h-11 rounded-full text-xs sm:text-sm font-normal tracking-wide text-zinc-950 bg-white/90 hover:bg-white shadow-lg shadow-black/15 backdrop-blur-md border border-white/70 overflow-hidden transition-colors duration-300 select-none">
+              <span className="group/btn relative inline-flex items-center justify-center w-36 sm:w-40 h-10 sm:h-11 rounded-full text-xs sm:text-sm font-normal tracking-wide text-zinc-950 bg-white/90 hover:bg-white backdrop-blur-md border border-white/70 overflow-hidden transition-colors duration-300 select-none">
                 {/* Default Text: "Explore Now" (rolls up & fades out on hover) */}
                 <span className="inline-flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/btn:-translate-y-8 group-hover/btn:opacity-0">
                   Explore Now

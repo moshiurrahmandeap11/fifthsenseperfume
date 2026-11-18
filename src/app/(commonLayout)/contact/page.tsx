@@ -98,7 +98,7 @@ export default function ContactPage() {
         </div>
 
         {/* Message Form (7 cols) */}
-        <div className="lg:col-span-7 p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-6 shadow-sm">
+        <div className="lg:col-span-7 p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-6">
           <div className="space-y-1">
             <h2 className="text-xl font-heading font-bold text-zinc-950 dark:text-white">
               Send a Message

@@ -118,7 +118,7 @@ export default function CatalogFilters({
                 className={cn(
                   "h-9 px-3 rounded-lg text-xs font-normal transition-all text-center flex items-center justify-center border",
                   isSelected
-                    ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-xs font-normal"
+                    ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white font-normal"
                     : "bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600"
                 )}
               >

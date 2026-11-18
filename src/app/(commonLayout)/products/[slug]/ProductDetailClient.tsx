@@ -208,8 +208,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               className={cn(
                 "absolute top-4 right-4 z-10 flex size-11 items-center justify-center rounded-full backdrop-blur-md transition-all",
                 isWishlisted
-                  ? "bg-black text-red-500 shadow-md ring-2 ring-red-500/50"
-                  : "bg-black/50 text-white hover:bg-black hover:text-red-400 hover:scale-110"
+                  ? "bg-black text-red-500 ring-2 ring-red-500/50"
+                  : "bg-black/50 text-white hover:bg-black hover:text-red-400"
               )}
             >
               <Heart
@@ -353,7 +353,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     className={cn(
                       "h-12 rounded-xl text-xs font-mono font-normal flex flex-col items-center justify-center border transition-all relative",
                       isSelected
-                        ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white font-normal shadow-md"
+                        ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white font-normal"
                         : isOut
                         ? "bg-zinc-100 dark:bg-zinc-900 text-zinc-400 line-through border-dashed border-zinc-200 dark:border-zinc-800 cursor-not-allowed"
                         : "bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 border-zinc-300 dark:border-zinc-800 hover:border-black dark:hover:border-white"
@@ -378,7 +378,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               size="lg"
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="w-full h-13 rounded-2xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 text-sm font-normal tracking-wide shadow-md flex items-center justify-center gap-2"
+              className="w-full h-13 rounded-2xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 text-sm font-normal tracking-wide flex items-center justify-center gap-2"
             >
               <span>
                 {selectedSize

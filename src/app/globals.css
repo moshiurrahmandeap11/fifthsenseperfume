@@ -121,6 +121,9 @@
   * {
     @apply border-border outline-ring/50;
   }
+  *, *::before, *::after {
+    box-shadow: none !important;
+  }
   body, h1, h2, h3, h4, h5, h6, b, strong, button, a, p, span, div, label, input, select, textarea {
     font-weight: 400 !important;
   }
