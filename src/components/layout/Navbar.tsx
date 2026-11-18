@@ -13,11 +13,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import LiquidNavLinks from "./navbar/LiquidNavLinks";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
 import NavbarUserMenu from "./navbar/NavbarUserMenu";
-import { STOREFRONT_NAV_LINKS } from "./navbar/navLinks";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -27,7 +27,6 @@ export default function Navbar() {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [logoError, setLogoError] = useState(false);
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   // Detect scroll to apply liquid glassmorphism
   useEffect(() => {
@@ -92,60 +91,15 @@ export default function Navbar() {
         {/* Left: Brand Logo */}
         <div className="flex items-center">{Logo}</div>
 
-        {/* Center: Desktop Navigation with Smooth Liquid Floating Pill Animation */}
+        {/* Center: Desktop Navigation with Magnetic Liquid Floating Pill Animation */}
         <nav className="hidden lg:flex items-center">
-          <div
-            className="relative flex items-center p-1.5 rounded-full bg-neutral-100/80 dark:bg-neutral-900/80 backdrop-blur-md border border-neutral-200/60 dark:border-neutral-800/60 shadow-xs"
-            onMouseLeave={() => setHoveredIdx(null)}
+          <Suspense
+            fallback={
+              <div className="h-10 w-[540px] rounded-full bg-neutral-100/80 dark:bg-neutral-900/80 animate-pulse border border-neutral-200/60 dark:border-neutral-800/60" />
+            }
           >
-            {STOREFRONT_NAV_LINKS.map((link, idx) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname?.startsWith(link.href);
-              const isHovered = hoveredIdx === idx;
-
-              return (
-                <Link
-                  key={link.title}
-                  href={link.href}
-                  onMouseEnter={() => setHoveredIdx(idx)}
-                  className={cn(
-                    "relative px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-300 z-10 select-none flex items-center gap-1.5",
-                    isActive
-                      ? "text-white dark:text-black font-semibold"
-                      : "text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white"
-                  )}
-                >
-                  {/* Liquid Active Background Pill */}
-                  {isActive && (
-                    <span className="absolute inset-0 rounded-full bg-black dark:bg-white shadow-sm z-[-1] transition-all duration-300" />
-                  )}
-
-                  {/* Liquid Hover Indicator Pill (when not active) */}
-                  {!isActive && isHovered && (
-                    <span className="absolute inset-0 rounded-full bg-neutral-200/80 dark:bg-neutral-800/80 z-[-1] transition-all duration-200 animate-in fade-in-50 zoom-in-95" />
-                  )}
-
-                  <span>{link.title}</span>
-
-                  {link.badge && (
-                    <span
-                      className={cn(
-                        "text-[9px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-wider flex items-center gap-0.5",
-                        isActive
-                          ? "bg-white text-black dark:bg-black dark:text-white"
-                          : "bg-black text-white dark:bg-white dark:text-black"
-                      )}
-                    >
-                      <Flame className="size-2.5 text-orange-500 fill-orange-500" />
-                      {link.badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </div>
+            <LiquidNavLinks />
+          </Suspense>
         </nav>
 
         {/* Right: Actions, Try It / User Profile & Mobile Toggle */}

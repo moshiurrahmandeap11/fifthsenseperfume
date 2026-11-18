@@ -245,3 +245,4 @@ export const DUMMY_PRODUCTS: IProduct[] = [
     updatedAt: "2026-02-10T10:00:00.000Z",
   },
 ];
+
