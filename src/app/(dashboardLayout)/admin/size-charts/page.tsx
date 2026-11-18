@@ -3,9 +3,11 @@ import { getAllSizeCharts } from "@/services/sizeChart.services";
 import { ISizeChart } from "@/types/sizeChart.types";
 import { Ruler } from "lucide-react";
 import { revalidatePath } from "next/cache";
+import { connection } from "next/server";
 import React from "react";
 
 export default async function AdminSizeChartsPage() {
+  await connection();
   let sizeCharts: ISizeChart[] = [];
 
   try {

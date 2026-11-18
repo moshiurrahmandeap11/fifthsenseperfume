@@ -14,9 +14,11 @@ import {
   ISizeDemandResult,
 } from "@/types/analytics.types";
 import { Activity, LayoutDashboard } from "lucide-react";
+import { connection } from "next/server";
 import React from "react";
 
 export default async function AdminDashboardPage() {
+  await connection();
   let dashboardData: IDashboardAnalyticsResult | undefined;
   let sizeDemandData: ISizeDemandResult | undefined;
 

@@ -1,11 +1,13 @@
 import { ApiResponse } from "@/types/api.types";
 import axios, { AxiosInstance } from "axios";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api/v1";
 
 const axiosInstance = async (): Promise<AxiosInstance> => {
+  await connection();
   const cookieStore = await cookies();
   const cookieHeader = cookieStore
     .getAll()

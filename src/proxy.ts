@@ -49,6 +49,7 @@ export async function proxy(request: NextRequest) {
           Authorization: `Bearer ${sessionCookie.value}`,
         },
         cache: "no-store",
+        signal: AbortSignal.timeout(3000),
       });
 
       if (res.ok) {

@@ -3,9 +3,11 @@ import { getCategoryTree } from "@/services/category.services";
 import { ICategory } from "@/types/category.types";
 import { Layers } from "lucide-react";
 import { revalidatePath } from "next/cache";
+import { connection } from "next/server";
 import React from "react";
 
 export default async function AdminCategoriesPage() {
+  await connection();
   let categories: ICategory[] = [];
 
   try {

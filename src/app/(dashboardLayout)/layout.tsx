@@ -1,6 +1,7 @@
 import AdminHeader from "@/components/layout/admin/AdminHeader";
 import AdminSidebar from "@/components/layout/admin/AdminSidebar";
 import { getMe } from "@/services/auth.services";
+import { connection } from "next/server";
 import React, { ReactNode } from "react";
 
 export default async function DashboardLayout({
@@ -8,6 +9,7 @@ export default async function DashboardLayout({
 }: {
   children: ReactNode;
 }) {
+  await connection();
   const user = await getMe();
   const userRole = user?.role || "SUPER_ADMIN";
 
