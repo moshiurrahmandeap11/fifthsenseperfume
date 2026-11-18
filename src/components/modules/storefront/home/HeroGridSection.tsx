@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -41,6 +41,36 @@ export default function HeroGridSection() {
   const [topIndex, setTopIndex] = useState(0);
   const [bottomIndex, setBottomIndex] = useState(0);
 
+  // Sequential dual video playback state & refs
+  const [activeVideoIdx, setActiveVideoIdx] = useState<0 | 1>(0);
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
+
+  // When video 1 finishes playing, smoothly switch to video 2
+  const handleVideo1Ended = () => {
+    if (video2Ref.current) {
+      video2Ref.current.currentTime = 0;
+      video2Ref.current.play().catch(() => {});
+    }
+    setActiveVideoIdx(1);
+  };
+
+  // When video 2 finishes playing, smoothly switch back to video 1
+  const handleVideo2Ended = () => {
+    if (video1Ref.current) {
+      video1Ref.current.currentTime = 0;
+      video1Ref.current.play().catch(() => {});
+    }
+    setActiveVideoIdx(0);
+  };
+
+  // Initial autoplay on mount
+  useEffect(() => {
+    if (video1Ref.current) {
+      video1Ref.current.play().catch(() => {});
+    }
+  }, []);
+
   // Auto-slide Top Carousel horizontally every 3.8 seconds
   useEffect(() => {
     const timer = setInterval(() => {
@@ -64,7 +94,7 @@ export default function HeroGridSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
           
           {/* ======================================================== */}
-          {/* 1. LEFT BIG BLOCK: PURE VIDEO (CLICK TO /products) */}
+          {/* 1. LEFT BIG BLOCK: SEQUENTIAL DUAL VIDEOS (CLICK TO /products) */}
           {/* ======================================================== */}
           <Link
             href="/products"
@@ -77,13 +107,37 @@ export default function HeroGridSection() {
             )}
             title="Explore Fragrance Catalog"
           >
+            {/* Video 1: hero_video.mp4 */}
             <video
+              ref={video1Ref}
               src="/hero/hero_video.mp4"
               autoPlay
-              loop
               muted
               playsInline
-              className="w-full h-full object-cover object-center"
+              preload="auto"
+              onEnded={handleVideo1Ended}
+              className={cn(
+                "absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ease-in-out",
+                activeVideoIdx === 0
+                  ? "opacity-100 z-10"
+                  : "opacity-0 z-0 pointer-events-none"
+              )}
+            />
+
+            {/* Video 2: hero_video_2.mp4 */}
+            <video
+              ref={video2Ref}
+              src="/hero/hero_video_2.mp4"
+              muted
+              playsInline
+              preload="auto"
+              onEnded={handleVideo2Ended}
+              className={cn(
+                "absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ease-in-out",
+                activeVideoIdx === 1
+                  ? "opacity-100 z-10"
+                  : "opacity-0 z-0 pointer-events-none"
+              )}
             />
           </Link>
 
