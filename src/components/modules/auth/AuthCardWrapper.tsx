@@ -35,9 +35,11 @@ export default function AuthCardWrapper({
           <CardTitle className="font-semibold text-2xl tracking-tight">
             {title}
           </CardTitle>
-          <CardDescription className="text-muted-foreground text-sm">
-            {description}
-          </CardDescription>
+          {description && (
+            <CardDescription className="text-muted-foreground text-sm">
+              {description}
+            </CardDescription>
+          )}
         </CardHeader>
 
         <CardContent className="space-y-4">{children}</CardContent>
