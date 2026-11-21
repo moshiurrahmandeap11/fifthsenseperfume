@@ -36,7 +36,7 @@ export default function DailySalesTrendChart({
             <span>Daily Sales & Order Trend</span>
           </CardTitle>
           <p className="text-xs text-muted-foreground">
-            Revenue and footwear order volume over the last {data.length} days
+            Revenue and fragrance order volume over the last {data.length} days
           </p>
         </div>
         <div className="text-right">

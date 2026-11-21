@@ -1,9 +1,9 @@
 import DailySalesTrendChart from "@/components/modules/admin/dashboard/DailySalesTrendChart";
 import DashboardOverviewCards from "@/components/modules/admin/dashboard/DashboardOverviewCards";
 import DashboardQuickActions from "@/components/modules/admin/dashboard/DashboardQuickActions";
+import FragranceDemandChart from "@/components/modules/admin/dashboard/FragranceDemandChart";
 import OperationalAlertsBanner from "@/components/modules/admin/dashboard/OperationalAlertsBanner";
 import RecentOrdersTable from "@/components/modules/admin/dashboard/RecentOrdersTable";
-import ShoeSizeDemandChart from "@/components/modules/admin/dashboard/ShoeSizeDemandChart";
 import { Badge } from "@/components/ui/badge";
 import {
   getDashboardAnalytics,
@@ -52,7 +52,7 @@ export default async function AdminDashboardPage() {
             </h1>
           </div>
           <p className="text-xs text-muted-foreground">
-            EcomBD Footwear real-time sales, footwear size-demand curve and logistics operations
+            FIFTH SENSE Haute Parfumerie real-time sales, flacon volume demand curve and atelier logistics operations
           </p>
         </div>
 
@@ -80,10 +80,10 @@ export default async function AdminDashboardPage() {
       {/* 3. Quick Actions Grid */}
       <DashboardQuickActions />
 
-      {/* 4. Analytics Visualizations Grid (Daily Trend & Footwear Size Demand) */}
+      {/* 4. Analytics Visualizations Grid (Daily Trend & Fragrance Volume Demand) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailySalesTrendChart data={dashboardData?.dailySalesTrend} />
-        <ShoeSizeDemandChart data={sizeDemandData} />
+        <FragranceDemandChart data={sizeDemandData} />
       </div>
 
       {/* 5. Recent 5 Customer Orders Table */}

@@ -39,7 +39,7 @@ export default function OperationalAlertsBanner({
               All Operations Normal
             </h4>
             <p className="text-[11px] text-emerald-700/80 dark:text-emerald-400">
-              No broken-size risks, pending exchanges, or unreconciled courier payments.
+              No stock shortages, pending returns, or unreconciled courier payments.
             </p>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default function OperationalAlertsBanner({
               </Badge>
             </h4>
             <p className="text-[11px] text-muted-foreground">
-              Size inventory shortages, pending customer size exchanges, or courier COD reconciliation.
+              Fragrance inventory shortages, pending customer returns, or courier COD reconciliation.
             </p>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function OperationalAlertsBanner({
                   {lowStock} Low Stock
                 </span>
                 <p className="text-[10px] text-muted-foreground">
-                  Broken-size risk
+                  Flacon stock alert
                 </p>
               </div>
             </div>
@@ -101,10 +101,10 @@ export default function OperationalAlertsBanner({
               <ArrowLeftRight className="size-4 text-blue-600 shrink-0" />
               <div>
                 <span className="font-semibold text-foreground">
-                  {pendingExchanges} Exchanges
+                  {pendingExchanges} Returns &amp; QC
                 </span>
                 <p className="text-[10px] text-muted-foreground">
-                  Doorstep swap requests
+                  Damage swap requests
                 </p>
               </div>
             </div>

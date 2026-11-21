@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import {
   ArrowLeftRight,
-  Footprints,
   PhoneCall,
   Printer,
   Sparkles,
@@ -16,10 +15,10 @@ import React from "react";
 export default function DashboardQuickActions() {
   const actions = [
     {
-      title: "Add New Footwear",
-      description: "Color swatches, photo gallery & size matrix",
+      title: "Add New Fragrance",
+      description: "Notes, bottle sizes & concentration",
       href: "/admin/products/new",
-      icon: Footprints,
+      icon: Sparkles,
       color: "text-primary bg-primary/10 hover:bg-primary/20",
     },
     {
@@ -30,8 +29,8 @@ export default function DashboardQuickActions() {
       color: "text-blue-600 bg-blue-500/10 hover:bg-blue-500/20",
     },
     {
-      title: "Review Size Exchanges",
-      description: "Approve doorstep swap orders & QC checks",
+      title: "Review Fragrance Returns & QC",
+      description: "Approve damages, leakage swap & QC checks",
       href: "/admin/exchanges",
       icon: ArrowLeftRight,
       color: "text-emerald-600 bg-emerald-500/10 hover:bg-emerald-500/20",
