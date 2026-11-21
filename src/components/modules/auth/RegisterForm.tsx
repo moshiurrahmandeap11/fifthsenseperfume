@@ -40,7 +40,7 @@ export default function RegisterForm() {
       await registerUser({
         name: data.name,
         email: data.email,
-        phoneNumber: data.phoneNumber,
+        phoneNumber: data.phoneNumber ? data.phoneNumber : undefined,
         password: data.password,
       });
 
