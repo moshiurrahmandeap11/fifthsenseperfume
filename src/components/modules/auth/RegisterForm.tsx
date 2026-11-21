@@ -97,7 +97,12 @@ export default function RegisterForm() {
 
       {/* Phone Number */}
       <div className="space-y-1">
-        <Label htmlFor="phoneNumber">Phone Number</Label>
+        <Label htmlFor="phoneNumber" className="flex items-center gap-1.5">
+          <span>Phone Number</span>
+          <span className="text-xs font-normal text-muted-foreground">
+            (Optional)
+          </span>
+        </Label>
         <div className="relative">
           <Phone className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
           <Input
