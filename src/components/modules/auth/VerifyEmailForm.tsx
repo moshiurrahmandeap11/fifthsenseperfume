@@ -88,7 +88,7 @@ export default function VerifyEmailForm() {
     } catch (error: unknown) {
       const err = error as { message?: string };
       toast.error(
-        err?.message || "Failed to resend code. Please check your email."
+        err?.message || "Failed to resend code. Please try again."
       );
     } finally {
       setIsResending(false);
