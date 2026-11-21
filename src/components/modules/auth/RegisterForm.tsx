@@ -31,7 +31,6 @@ export default function RegisterForm() {
       phoneNumber: "",
       password: "",
       confirmPassword: "",
-      savedShoeSize: "41",
     },
   });
 
