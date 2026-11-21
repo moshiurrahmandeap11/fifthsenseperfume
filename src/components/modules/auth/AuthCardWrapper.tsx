@@ -32,9 +32,6 @@ export default function AuthCardWrapper({
       <Card className="w-full max-w-md border-border/60 shadow-lg transition-all dark:bg-card">
         <CardHeader className="space-y-2 pb-4 text-center">
           <div className="flex items-center justify-center gap-2">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-              <Footprints className="size-5" />
-            </div>
             <span className="font-bold text-xl tracking-tight">EcomBD</span>
           </div>
           <CardTitle className="font-semibold text-2xl tracking-tight">
