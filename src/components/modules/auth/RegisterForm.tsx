@@ -34,8 +34,6 @@ export default function RegisterForm() {
     },
   });
 
-  const selectedSize = watch("savedShoeSize");
-
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsLoading(true);
