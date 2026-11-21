@@ -89,8 +89,8 @@ export default function HeroGridSection() {
   }, []);
 
   return (
-    <section className="relative w-full py-2 sm:py-4 lg:py-6 bg-white dark:bg-zinc-950">
-      <div className="container mx-auto px-4 sm:px-6">
+    <section className="relative w-full pt-3 sm:pt-4 lg:pt-5 pb-8 sm:pb-10 lg:pb-12 bg-white dark:bg-zinc-950">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Full-width Container Responsive Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
           
@@ -101,8 +101,8 @@ export default function HeroGridSection() {
             href="/products"
             className={cn(
               "relative lg:col-span-7 xl:col-span-8",
-              "aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto lg:h-[420px] xl:h-[460px]",
-              "rounded-xl sm:rounded-2xl overflow-hidden",
+              "aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto lg:h-[460px] xl:h-[490px] 2xl:h-[520px]",
+              "rounded-none overflow-hidden",
               "border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900",
               "cursor-pointer block group"
             )}
@@ -146,7 +146,7 @@ export default function HeroGridSection() {
 
             {/* Explore Now Button Overlay (Bottom-Left Corner) */}
             <div className="absolute bottom-5 left-5 sm:bottom-7 sm:left-7 z-20">
-              <span className="group/btn relative inline-flex items-center justify-center w-36 sm:w-40 h-10 sm:h-11 rounded-full text-xs sm:text-sm font-normal tracking-wide text-zinc-950 bg-white/90 hover:bg-white backdrop-blur-md border border-white/70 overflow-hidden transition-colors duration-300 select-none">
+              <span className="group/btn relative inline-flex items-center justify-center w-36 sm:w-40 h-10 sm:h-11 rounded-none text-xs sm:text-sm font-normal tracking-wide text-zinc-950 bg-white/90 hover:bg-white backdrop-blur-md border border-white/70 overflow-hidden transition-colors duration-300 select-none">
                 {/* Default Text: "Explore Now" (rolls up & fades out on hover) */}
                 <span className="inline-flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/btn:-translate-y-8 group-hover/btn:opacity-0">
                   Explore Now
@@ -166,7 +166,7 @@ export default function HeroGridSection() {
           {/* ======================================================== */}
           {/* 2. RIGHT SIDE: 2 HORIZONTAL SLIDERS (CLICK TO /products) */}
           {/* ======================================================== */}
-          <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-3 sm:gap-4 lg:h-[420px] xl:h-[460px]">
+          <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-3 sm:gap-4 lg:h-[460px] xl:h-[490px] 2xl:h-[520px]">
             
             {/* ---------------------------------------------------- */}
             {/* BOX 1 (TOP): HORIZONTAL SLIDING PERFUME CAROUSEL */}
@@ -174,8 +174,8 @@ export default function HeroGridSection() {
             <Link
               href="/products"
               className={cn(
-                "relative flex-1 min-h-[190px] sm:min-h-[200px] lg:min-h-0",
-                "rounded-xl sm:rounded-2xl overflow-hidden",
+                "relative flex-1 min-h-[200px] sm:min-h-[220px] lg:min-h-0",
+                "rounded-none overflow-hidden",
                 "border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900",
                 "cursor-pointer block"
               )}
@@ -207,8 +207,8 @@ export default function HeroGridSection() {
             <Link
               href="/products"
               className={cn(
-                "relative flex-1 min-h-[190px] sm:min-h-[200px] lg:min-h-0",
-                "rounded-xl sm:rounded-2xl overflow-hidden",
+                "relative flex-1 min-h-[220px] sm:min-h-[240px] lg:min-h-0",
+                "rounded-none overflow-hidden",
                 "border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900",
                 "cursor-pointer block"
               )}

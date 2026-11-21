@@ -104,7 +104,7 @@ export default function Navbar() {
           <div className="h-18 sm:h-20 grid grid-cols-3 items-center">
             
             {/* Left Column: Search Icon & Mobile Menu */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 -ml-2">
               {/* Mobile Drawer Trigger (Only visible on mobile) */}
               <div className="md:hidden">
                 <NavbarMobileMenu
@@ -136,7 +136,7 @@ export default function Navbar() {
             </div>
 
             {/* Right Column: Wishlist & Shopping Cart */}
-            <div className="flex items-center justify-end gap-3 sm:gap-4">
+            <div className="flex items-center justify-end gap-2 sm:gap-4 -mr-2">
               {/* Wishlist Link */}
               <Link
                 href="/products"
