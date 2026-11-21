@@ -15,7 +15,7 @@ export default async function CommonLayout({
   return (
     <div className="flex min-h-screen flex-col">
       {/* Shared Storefront Navbar */}
-      <Navbar />
+      <Navbar initialUser={user} />
 
       <main className="flex-1">{children}</main>
 
