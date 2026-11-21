@@ -153,7 +153,11 @@ export default function VerifyEmailForm() {
       </div>
 
       {/* Submit Button */}
-      <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="w-full cursor-pointer mt-2"
+        disabled={isLoading}
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 size-4 animate-spin" />
@@ -168,7 +172,7 @@ export default function VerifyEmailForm() {
       <div className="pt-2 text-center text-xs">
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="size-3.5" />
           <span>Return to Sign In</span>
