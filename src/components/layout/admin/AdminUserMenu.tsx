@@ -83,7 +83,8 @@ export default function AdminUserMenu({ user }: AdminUserMenuProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56 p-1.5 shadow-lg">
-        <DropdownMenuLabel className="p-2 space-y-1 font-normal">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="p-2 space-y-1 font-normal">
           <div className="flex items-center justify-between">
             <span className="font-semibold text-xs text-foreground truncate">
               {displayName}
@@ -94,6 +95,7 @@ export default function AdminUserMenu({ user }: AdminUserMenuProps) {
           </div>
           <p className="text-[11px] text-muted-foreground truncate">{displayEmail}</p>
         </DropdownMenuLabel>
+        </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 
