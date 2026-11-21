@@ -21,7 +21,9 @@ export default async function CommonLayout({
 
       {/* Shared Footer */}
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        <p>&copy; <CurrentYear /> FIFTH SENSE PERFUMES. All rights reserved. Haute Parfumerie &amp; Olfactory Atelier.</p>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <p>&copy; <CurrentYear /> FIFTH SENSE PERFUMES. All rights reserved. Haute Parfumerie &amp; Olfactory Atelier.</p>
+        </div>
       </footer>
     </div>
   );

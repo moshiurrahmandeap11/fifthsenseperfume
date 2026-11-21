@@ -1,38 +1,67 @@
-export interface INavLink {
+export interface ISubLink {
   title: string;
   href: string;
   description?: string;
 }
 
+export interface INavLink {
+  title: string;
+  href: string;
+  hasDropdown?: boolean;
+  sublinks?: ISubLink[];
+}
+
 export const STOREFRONT_NAV_LINKS: INavLink[] = [
   {
-    title: "Home",
+    title: "HOME",
     href: "/",
-    description: "Fifth Sense Haute Parfumerie",
   },
   {
-    title: "Catalog",
+    title: "SHOP",
     href: "/products",
-    description: "Browse all artisanal perfumes & extraits",
+    hasDropdown: true,
+    sublinks: [
+      {
+        title: "All Artisanal Fragrances",
+        href: "/products",
+        description: "Explore the complete Fifth Sense olfactory collection",
+      },
+      {
+        title: "Men's Collection",
+        href: "/products?gender=MEN",
+        description: "Smoky birch, Cambodian oud & Tuscan leather",
+      },
+      {
+        title: "Women's Collection",
+        href: "/products?gender=WOMEN",
+        description: "Grasse floral, white amber & velvety santal",
+      },
+      {
+        title: "Winter Amber Elixirs",
+        href: "/products?collection=winter",
+        description: "Spiced cognac, aged rum & smoked woods",
+      },
+      {
+        title: "Signature Extraits de Parfum",
+        href: "/products?concentration=extrait",
+        description: "High-concentration 35% pure perfume oils",
+      },
+    ],
   },
   {
-    title: "Men",
-    href: "/products?gender=MEN",
-    description: "Woody, smoky oud & leather elixirs",
+    title: "SHOP ALL",
+    href: "/products",
   },
   {
-    title: "Women",
-    href: "/products?gender=WOMEN",
-    description: "Grasse floral, vanilla & powdery extraits",
+    title: "OUR STORY",
+    href: "/contact#atelier",
   },
   {
-    title: "Winter Collection",
-    href: "/products?collection=winter",
-    description: "Warm amber, spiced cognac & smoked woods",
-  },
-  {
-    title: "Contact",
+    title: "CONTACT US",
     href: "/contact",
-    description: "Bespoke perfume consultations & atelier",
+  },
+  {
+    title: "TRACK YOUR ORDER",
+    href: "/customer/dashboard",
   },
 ];
