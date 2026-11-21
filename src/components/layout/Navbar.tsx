@@ -21,7 +21,9 @@ export default function Navbar({ initialUser }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
-  const user = session?.user;
+  const [currentUser, setCurrentUser] = useState<IUser | null>(
+    initialUser ?? null
+  );
 
   const [isScrolled, setIsScrolled] = useState(false);
 
