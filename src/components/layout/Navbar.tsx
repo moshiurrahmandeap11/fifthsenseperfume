@@ -1,9 +1,5 @@
 "use client";
 
-import { useSession } from "@/lib/auth-client";
-import { cn } from "@/lib/utils";
-import { getMe, logoutUser } from "@/services/auth.services";
-import { IUser } from "@/types/auth.types";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,9 +12,10 @@ import {
   X,
   User,
 } from "lucide-react";
-import { useSession } from "@/lib/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
 import { logoutUser } from "@/services/auth.services";
 import { cn } from "@/lib/utils";
+import { IUser } from "@/types/auth.types";
 import toast from "react-hot-toast";
 import TopBar from "./TopBar";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
@@ -33,9 +30,21 @@ export default function Navbar({ initialUser }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
+  const [prevInitialUserId, setPrevInitialUserId] = useState<string | null>(
+    initialUser?.id ?? null
+  );
   const [currentUser, setCurrentUser] = useState<IUser | null>(
     initialUser ?? null
   );
+
+  const nextInitialUserId = initialUser?.id ?? null;
+  if (nextInitialUserId !== prevInitialUserId) {
+    setPrevInitialUserId(nextInitialUserId);
+    setCurrentUser(initialUser ?? null);
+  }
+
+  const user =
+    currentUser ?? (session?.user as unknown as IUser | undefined) ?? null;
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -68,7 +77,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
 
   const handleMobileLogout = async () => {
     try {
-      await logoutUser();
+      await Promise.allSettled([signOut(), logoutUser()]);
       setCurrentUser(null);
       toast.success("Signed out successfully");
       router.push("/");
