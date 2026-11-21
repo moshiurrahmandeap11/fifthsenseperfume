@@ -2,7 +2,8 @@
 
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
-import { logoutUser } from "@/services/auth.services";
+import { getMe, logoutUser } from "@/services/auth.services";
+import { IUser } from "@/types/auth.types";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,7 +13,11 @@ import LiquidNavLinks from "./navbar/LiquidNavLinks";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
 import NavbarUserMenu from "./navbar/NavbarUserMenu";
 
-export default function Navbar() {
+interface NavbarProps {
+  initialUser?: IUser | null;
+}
+
+export default function Navbar({ initialUser }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
