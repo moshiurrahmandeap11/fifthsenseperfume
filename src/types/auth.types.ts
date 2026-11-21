@@ -79,7 +79,7 @@ export interface IResetPasswordPayload {
 }
 
 export interface IAuthResponse {
-  token: string;
+  token: string | null;
   user: IUser;
 }
 
@@ -87,3 +87,15 @@ export interface IMessageResponse {
   message: string;
   success?: boolean;
 }
+
+export type IAuthActionResult<T = undefined> =
+  | {
+      success: true;
+      message: string;
+      data: T;
+    }
+  | {
+      success: false;
+      message: string;
+      data?: never;
+    };

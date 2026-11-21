@@ -34,7 +34,11 @@ export default function ForgotPasswordForm() {
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
       setIsLoading(true);
-      await forgotPassword({ email: data.email });
+      const res = await forgotPassword({ email: data.email });
+      if (!res.success) {
+        toast.error(res.message || "Failed to send reset code. Please try again.");
+        return;
+      }
       toast.success("A 6-digit reset code has been sent to your email!");
       router.push(`/reset-password?email=${encodeURIComponent(data.email)}`);
     } catch (error: unknown) {

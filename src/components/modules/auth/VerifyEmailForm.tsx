@@ -59,12 +59,19 @@ export default function VerifyEmailForm() {
   const onSubmit = async (data: VerifyEmailFormData) => {
     try {
       setIsLoading(true);
-      await verifyEmail({
+      const res = await verifyEmail({
         email: data.email,
         otp: data.otp,
       });
 
-      toast.success("Email verified successfully! Welcome to EcomBD.");
+      if (!res.success) {
+        toast.error(
+          res.message || "Invalid or expired verification code. Please try again."
+        );
+        return;
+      }
+
+      toast.success("Email verified successfully! Welcome to FIFTH SENSE.");
       router.push("/customer/dashboard");
       router.refresh();
     } catch (error: unknown) {
@@ -82,7 +89,11 @@ export default function VerifyEmailForm() {
 
     try {
       setIsResending(true);
-      await requestEmailOtp({ email: currentEmail });
+      const res = await requestEmailOtp({ email: currentEmail });
+      if (!res.success) {
+        toast.error(res.message || "Failed to resend code. Please try again.");
+        return;
+      }
       toast.success("A new verification code has been sent!");
       setResendCooldown(60);
     } catch (error: unknown) {

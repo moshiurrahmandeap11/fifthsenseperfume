@@ -43,10 +43,17 @@ export default function ChangePasswordForm({
   const onSubmit = async (data: ChangePasswordFormData) => {
     try {
       setIsLoading(true);
-      await changePassword({
+      const res = await changePassword({
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       });
+
+      if (!res.success) {
+        toast.error(
+          res.message || "Failed to change password. Please check your current password."
+        );
+        return;
+      }
 
       toast.success("Password changed successfully!");
       reset();

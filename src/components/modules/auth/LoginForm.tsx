@@ -56,9 +56,14 @@ export default function LoginForm() {
         password: data.password,
       });
 
+      if (!res.success) {
+        toast.error(res.message || "Login failed. Please check your credentials.");
+        return;
+      }
+
       toast.success("Logged in successfully!");
 
-      const role = res?.user?.role;
+      const role = res.data?.user?.role;
 
       if (callbackUrl && !callbackUrl.includes("/login")) {
         router.push(callbackUrl);

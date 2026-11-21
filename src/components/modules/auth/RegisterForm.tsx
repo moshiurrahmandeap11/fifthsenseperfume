@@ -40,12 +40,17 @@ export default function RegisterForm() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsLoading(true);
-      await registerUser({
+      const res = await registerUser({
         name: data.name,
         email: data.email,
         phoneNumber: data.phoneNumber ? data.phoneNumber : undefined,
         password: data.password,
       });
+
+      if (!res.success) {
+        toast.error(res.message || "Registration failed. Please try again.");
+        return;
+      }
 
       toast.success(
         "Account created! A 6-digit verification code has been sent to your email."

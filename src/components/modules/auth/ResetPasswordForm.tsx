@@ -49,11 +49,16 @@ export default function ResetPasswordForm() {
   const onSubmit = async (data: ResetPasswordFormData) => {
     try {
       setIsLoading(true);
-      await resetPassword({
+      const res = await resetPassword({
         email: data.email,
         otp: data.otp,
         newPassword: data.newPassword,
       });
+
+      if (!res.success) {
+        toast.error(res.message || "Failed to reset password. Please verify your OTP code.");
+        return;
+      }
 
       toast.success("Password reset successfully! Please sign in with your new password.");
       router.push("/login");
