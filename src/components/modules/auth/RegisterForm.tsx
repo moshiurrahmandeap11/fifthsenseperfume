@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { registerUser } from "@/services/auth.services";
 import { RegisterFormData, registerValidationSchema } from "@/zod/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2, Lock, Mail, Phone, Ruler, User } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
