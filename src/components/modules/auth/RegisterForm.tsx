@@ -113,30 +113,6 @@ export default function RegisterForm() {
         )}
       </div>
 
-      {/* Shoe Size Preference Selector */}
-      <div className="space-y-1.5 pt-1">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Ruler className="size-3.5" />
-          <span>Select Your Preferred Shoe Size (EU Size)</span>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {POPULAR_SHOE_SIZES.map((size) => (
-            <button
-              key={size}
-              type="button"
-              onClick={() => setValue("savedShoeSize", size)}
-              className={`flex size-8 items-center justify-center rounded-md border text-xs font-medium transition-all cursor-pointer ${
-                selectedSize === size
-                  ? "border-primary bg-primary text-primary-foreground shadow-xs"
-                  : "border-border bg-background hover:bg-muted"
-              }`}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Password */}
       <div className="space-y-1">
         <Label htmlFor="password">Password</Label>
