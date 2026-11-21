@@ -2,7 +2,17 @@ import AdminHeader from "@/components/layout/admin/AdminHeader";
 import AdminSidebar from "@/components/layout/admin/AdminSidebar";
 import { getMe } from "@/services/auth.services";
 import { connection } from "next/server";
+import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
+
+const ADMIN_ROLES = [
+  "SUPER_ADMIN",
+  "ADMIN",
+  "MANAGER",
+  "MODERATOR",
+  "INVENTORY_STAFF",
+  "ACCOUNTANT",
+];
 
 export default async function DashboardLayout({
   children,
@@ -11,7 +21,16 @@ export default async function DashboardLayout({
 }) {
   await connection();
   const user = await getMe();
-  const userRole = user?.role || "SUPER_ADMIN";
+
+  if (!user) {
+    redirect("/login?callbackUrl=/admin/dashboard");
+  }
+
+  if (!ADMIN_ROLES.includes(user.role)) {
+    redirect("/customer/dashboard");
+  }
+
+  const userRole = user.role;
 
   return (
     <div className="min-h-screen bg-muted/15 flex">

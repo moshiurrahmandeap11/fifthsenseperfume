@@ -43,7 +43,7 @@ export async function proxy(request: NextRequest) {
 
     try {
       const apiBase =
-        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api/v1";
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8252/api/v1";
       const res = await fetch(`${apiBase}/auth/me`, {
         headers: {
           Cookie: `${SESSION_COOKIE_NAME}=${sessionCookie.value}`,

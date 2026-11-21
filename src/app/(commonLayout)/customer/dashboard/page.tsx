@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { Metadata } from "next";
 import { connection } from "next/server";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import React from "react";
 
@@ -36,6 +37,10 @@ export const metadata: Metadata = {
 export default async function CustomerDashboardPage() {
   await connection();
   const user = await getMe();
+
+  if (!user) {
+    redirect("/login?callbackUrl=/customer/dashboard");
+  }
 
   const displayName = user?.name || "Customer";
   const displayEmail = user?.email || "";
