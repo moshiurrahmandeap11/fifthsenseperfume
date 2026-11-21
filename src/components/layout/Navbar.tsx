@@ -77,6 +77,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
   const handleMobileLogout = async () => {
     try {
       await logoutUser();
+      setCurrentUser(null);
       toast.success("Signed out successfully");
       router.push("/");
       router.refresh();
