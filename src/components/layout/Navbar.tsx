@@ -124,7 +124,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
           </Suspense>
         </nav>
 
-        {/* Right: Actions, Try It / User Profile & Mobile Toggle (No Icons, Normal Font) */}
+        {/* Right: Actions, User Profile & Mobile Toggle */}
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Search Text Link */}
           <Link
@@ -144,21 +144,21 @@ export default function Navbar({ initialUser }: NavbarProps) {
             Bag (0)
           </Link>
 
-          {/* Try It Button / Profile Menu (Normal Font, Luxury Perfume Amber Tone, No Icons) */}
-          {user ? (
-            <NavbarUserMenu user={user} />
+          {/* Profile Menu when logged in, or Sign In button when logged out */}
+          {currentUser ? (
+            <NavbarUserMenu user={currentUser} />
           ) : (
             <Link
               href="/login"
               className="h-8 px-4 rounded-full text-xs font-normal leading-none text-[#fff8ea] bg-[#29170e] hover:bg-[#3f2214] border border-[#d97706]/35 transition-all duration-300 select-none inline-flex items-center justify-center"
             >
-              Try It
+              Sign In
             </Link>
           )}
 
           {/* Mobile Hamburger Drawer Menu */}
           <NavbarMobileMenu
-            user={user}
+            user={currentUser}
             onLogout={handleMobileLogout}
             logoElement={Logo}
           />
