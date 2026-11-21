@@ -53,7 +53,8 @@ export default function AdminNotificationBell({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-80 p-2 shadow-lg">
-        <DropdownMenuLabel className="flex items-center justify-between px-2 py-1.5 font-normal">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="flex items-center justify-between px-2 py-1.5 font-normal">
           <span className="text-xs font-semibold text-foreground">
             Operational Alerts
           </span>
@@ -64,6 +65,7 @@ export default function AdminNotificationBell({
             {totalAlerts} Action {totalAlerts === 1 ? "Item" : "Items"}
           </Badge>
         </DropdownMenuLabel>
+        </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 
