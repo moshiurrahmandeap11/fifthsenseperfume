@@ -55,16 +55,16 @@ export default function AdminNotificationBell({
       <DropdownMenuContent align="end" className="w-80 p-2 shadow-lg">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="flex items-center justify-between px-2 py-1.5 font-normal">
-          <span className="text-xs font-semibold text-foreground">
-            Operational Alerts
-          </span>
-          <Badge
-            variant={totalAlerts > 0 ? "destructive" : "secondary"}
-            className="text-[10px] h-4.5"
-          >
-            {totalAlerts} Action {totalAlerts === 1 ? "Item" : "Items"}
-          </Badge>
-        </DropdownMenuLabel>
+            <span className="text-xs font-semibold text-foreground">
+              Operational Alerts
+            </span>
+            <Badge
+              variant={totalAlerts > 0 ? "destructive" : "secondary"}
+              className="text-[10px] h-4.5"
+            >
+              {totalAlerts} Action {totalAlerts === 1 ? "Item" : "Items"}
+            </Badge>
+          </DropdownMenuLabel>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />

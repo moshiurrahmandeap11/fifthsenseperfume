@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerUser } from "@/services/auth.services";
-import { RegisterFormData, registerValidationSchema } from "@/zod/auth.validation";
+import {
+  RegisterFormData,
+  registerValidationSchema,
+} from "@/zod/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader2, Lock, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
@@ -76,7 +79,7 @@ export default function RegisterForm() {
         )}
       </div>
 
-      {/* Email */}
+      {/* Email Address */}
       <div className="space-y-1.5">
         <Label htmlFor="email">Email Address</Label>
         <div className="relative">
@@ -95,7 +98,7 @@ export default function RegisterForm() {
         )}
       </div>
 
-      {/* Phone Number */}
+      {/* Phone Number (Optional) */}
       <div className="space-y-1.5">
         <Label htmlFor="phoneNumber" className="flex items-center gap-1.5">
           <span>Phone Number</span>
@@ -137,7 +140,6 @@ export default function RegisterForm() {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
             aria-label={showPassword ? "Hide password" : "Show password"}
-            tabIndex={-1}
           >
             {showPassword ? (
               <EyeOff className="size-4" />
@@ -170,7 +172,6 @@ export default function RegisterForm() {
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
             aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-            tabIndex={-1}
           >
             {showConfirmPassword ? (
               <EyeOff className="size-4" />
@@ -202,6 +203,7 @@ export default function RegisterForm() {
         )}
       </Button>
 
+      {/* Sign In Link */}
       <div className="pt-2 text-center text-xs text-muted-foreground">
         Already have an account?{" "}
         <Link

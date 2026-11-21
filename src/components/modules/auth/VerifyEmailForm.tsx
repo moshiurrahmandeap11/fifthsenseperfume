@@ -84,7 +84,7 @@ export default function VerifyEmailForm() {
       setIsResending(true);
       await requestEmailOtp({ email: currentEmail });
       toast.success("A new verification code has been sent!");
-      setResendCooldown(60); // 60s cooldown
+      setResendCooldown(60);
     } catch (error: unknown) {
       const err = error as { message?: string };
       toast.error(
@@ -116,7 +116,7 @@ export default function VerifyEmailForm() {
         )}
       </div>
 
-      {/* 6-Digit OTP */}
+      {/* Verification Code */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
           <Label htmlFor="otp">Verification Code</Label>
@@ -125,7 +125,7 @@ export default function VerifyEmailForm() {
             tabIndex={-1}
             onClick={handleResendCode}
             disabled={isResending || resendCooldown > 0 || !currentEmail}
-            className="text-xs text-primary hover:underline disabled:text-muted-foreground cursor-pointer flex items-center gap-1"
+            className="text-xs text-primary hover:underline disabled:text-muted-foreground cursor-pointer flex items-center gap-1 transition-colors"
           >
             {isResending ? (
               <RefreshCw className="size-3 animate-spin" />
@@ -168,7 +168,7 @@ export default function VerifyEmailForm() {
         )}
       </Button>
 
-      {/* Footer Navigation */}
+      {/* Single Back Link */}
       <div className="pt-2 text-center text-xs">
         <Link
           href="/login"

@@ -105,31 +105,31 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
         {/* User Card Header */}
         <DropdownMenuGroup>
           <DropdownMenuLabel className="font-normal p-2">
-          <div className="flex items-center gap-3">
-            <Avatar className="size-10 border border-neutral-200 dark:border-neutral-800">
-              <AvatarImage src={user?.image || undefined} alt={displayName} />
-              <AvatarFallback className="bg-black text-white dark:bg-white dark:text-black font-semibold text-sm">
-                {initials || "U"}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col min-w-0 flex-1">
-              <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate">
-                {displayName}
-              </span>
-              <span className="text-xs text-neutral-500 truncate">
-                {displayEmail}
-              </span>
-              <div className="mt-1">
-                <Badge
-                  variant="outline"
-                  className="text-[10px] px-1.5 py-0 font-medium bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 border-neutral-300 dark:border-neutral-700"
-                >
-                  {isAdmin ? "Staff" : "Customer"}
-                </Badge>
+            <div className="flex items-center gap-3">
+              <Avatar className="size-10 border border-neutral-200 dark:border-neutral-800">
+                <AvatarImage src={user?.image || undefined} alt={displayName} />
+                <AvatarFallback className="bg-black text-white dark:bg-white dark:text-black font-semibold text-sm">
+                  {initials || "U"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate">
+                  {displayName}
+                </span>
+                <span className="text-xs text-neutral-500 truncate">
+                  {displayEmail}
+                </span>
+                <div className="mt-1">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] px-1.5 py-0 font-medium bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 border-neutral-300 dark:border-neutral-700"
+                  >
+                    {isAdmin ? "Staff" : "Customer"}
+                  </Badge>
+                </div>
               </div>
             </div>
-          </div>
-        </DropdownMenuLabel>
+          </DropdownMenuLabel>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="my-1.5 bg-neutral-200/70 dark:bg-neutral-800/70" />

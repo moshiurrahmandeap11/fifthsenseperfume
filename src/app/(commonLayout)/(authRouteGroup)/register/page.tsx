@@ -10,9 +10,7 @@ export const metadata: Metadata = {
 
 export default function RegisterPage() {
   return (
-    <AuthCardWrapper
-      title="Create Account"
-      >
+    <AuthCardWrapper title="Create Account">
       <Suspense fallback={<div className="h-40 animate-pulse rounded bg-muted/40" />}>
         <RegisterForm />
       </Suspense>

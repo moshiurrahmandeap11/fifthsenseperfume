@@ -85,16 +85,16 @@ export default function AdminUserMenu({ user }: AdminUserMenuProps) {
       <DropdownMenuContent align="end" className="w-56 p-1.5 shadow-lg">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="p-2 space-y-1 font-normal">
-          <div className="flex items-center justify-between">
-            <span className="font-semibold text-xs text-foreground truncate">
-              {displayName}
-            </span>
-            <Badge variant="outline" className="text-[9px] uppercase px-1.5 py-0">
-              {displayRole}
-            </Badge>
-          </div>
-          <p className="text-[11px] text-muted-foreground truncate">{displayEmail}</p>
-        </DropdownMenuLabel>
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-xs text-foreground truncate">
+                {displayName}
+              </span>
+              <Badge variant="outline" className="text-[9px] uppercase px-1.5 py-0">
+                {displayRole}
+              </Badge>
+            </div>
+            <p className="text-[11px] text-muted-foreground truncate">{displayEmail}</p>
+          </DropdownMenuLabel>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />

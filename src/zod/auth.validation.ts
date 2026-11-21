@@ -25,7 +25,6 @@ export const registerValidationSchema = z
       .email("Please enter a valid email address"),
     phoneNumber: z
       .string()
-      
       .regex(
         /^(?:\+88|88)?(01[3-9]\d{8})$/,
         "Please enter a valid Bangladeshi mobile number"

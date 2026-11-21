@@ -10,9 +10,7 @@ export const metadata: Metadata = {
 
 export default function ForgotPasswordPage() {
   return (
-    <AuthCardWrapper
-      title="Reset Password"
-      >
+    <AuthCardWrapper title="Reset Password">
       <Suspense fallback={<div className="h-40 animate-pulse rounded bg-muted/40" />}>
         <ForgotPasswordForm />
       </Suspense>

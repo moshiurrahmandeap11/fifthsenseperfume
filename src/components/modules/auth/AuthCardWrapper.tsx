@@ -31,7 +31,6 @@ export default function AuthCardWrapper({
     <div className="flex min-h-[calc(100vh-80px)] w-full items-center justify-center p-4 py-8">
       <Card className="w-full max-w-md border-border/60 shadow-lg transition-all dark:bg-card">
         <CardHeader className="space-y-1.5 pb-4 text-center">
-          
           <CardTitle className="font-semibold text-2xl tracking-tight">
             {title}
           </CardTitle>
