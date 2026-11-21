@@ -1,5 +1,7 @@
 import CurrentYear from "@/components/common/CurrentYear";
 import Navbar from "@/components/layout/Navbar";
+import { getMe } from "@/services/auth.services";
+import { connection } from "next/server";
 import { ReactNode } from "react";
 
 export default function CommonLayout({
