@@ -187,7 +187,11 @@ export default function RegisterForm() {
       </div>
 
       {/* Submit Button */}
-      <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="w-full cursor-pointer mt-2"
+        disabled={isLoading}
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 size-4 animate-spin" />
