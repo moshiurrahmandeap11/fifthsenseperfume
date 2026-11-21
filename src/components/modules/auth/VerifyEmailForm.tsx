@@ -122,6 +122,7 @@ export default function VerifyEmailForm() {
           <Label htmlFor="otp">Verification Code</Label>
           <button
             type="button"
+            tabIndex={-1}
             onClick={handleResendCode}
             disabled={isResending || resendCooldown > 0 || !currentEmail}
             className="text-xs text-primary hover:underline disabled:text-muted-foreground cursor-pointer flex items-center gap-1"
