@@ -57,9 +57,9 @@ export default function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {/* Full Name */}
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <Label htmlFor="name">Full Name</Label>
         <div className="relative">
           <User className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
@@ -77,7 +77,7 @@ export default function RegisterForm() {
       </div>
 
       {/* Email */}
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <Label htmlFor="email">Email Address</Label>
         <div className="relative">
           <Mail className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
@@ -96,7 +96,7 @@ export default function RegisterForm() {
       </div>
 
       {/* Phone Number */}
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <Label htmlFor="phoneNumber" className="flex items-center gap-1.5">
           <span>Phone Number</span>
           <span className="text-xs font-normal text-muted-foreground">
@@ -119,7 +119,7 @@ export default function RegisterForm() {
       </div>
 
       {/* Password */}
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <Label htmlFor="password">Password</Label>
         <div className="relative">
           <Lock className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
@@ -152,7 +152,7 @@ export default function RegisterForm() {
       </div>
 
       {/* Confirm Password */}
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <Label htmlFor="confirmPassword">Confirm Password</Label>
         <div className="relative">
           <Lock className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
