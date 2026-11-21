@@ -12,7 +12,6 @@ export default function VerifyEmailPage() {
   return (
     <AuthCardWrapper
       title="Verify Your Email"
-      description="Enter the 6-digit verification code sent to your email address to activate your account"
       backButtonLabel="Return to Sign In"
       backButtonHref="/login"
     >
