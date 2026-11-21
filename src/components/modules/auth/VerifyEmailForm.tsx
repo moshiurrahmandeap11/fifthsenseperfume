@@ -160,7 +160,7 @@ export default function VerifyEmailForm() {
             Verifying code...
           </>
         ) : (
-          "Verify Email & Continue"
+          "Verify Email"
         )}
       </Button>
 
