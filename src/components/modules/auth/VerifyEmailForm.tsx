@@ -150,9 +150,6 @@ export default function VerifyEmailForm() {
         {errors.otp && (
           <p className="text-xs text-destructive">{errors.otp.message}</p>
         )}
-        <p className="text-[11px] text-muted-foreground">
-          Enter the 6-digit code sent to your email. The code expires in 5 minutes.
-        </p>
       </div>
 
       {/* Submit Button */}
