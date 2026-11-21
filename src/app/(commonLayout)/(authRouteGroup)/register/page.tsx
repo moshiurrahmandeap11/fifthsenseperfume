@@ -12,7 +12,6 @@ export default function RegisterPage() {
   return (
     <AuthCardWrapper
       title="Create Account"
-      description="Register for hassle-free doorstep size exchanges and fast checkout"
       backButtonLabel="Already have an account? Sign in"
       backButtonHref="/login"
     >
