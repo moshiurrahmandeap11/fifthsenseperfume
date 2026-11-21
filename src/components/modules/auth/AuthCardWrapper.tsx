@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Footprints } from "lucide-react";
 import Link from "next/link";
 import React, { ReactNode } from "react";
 
