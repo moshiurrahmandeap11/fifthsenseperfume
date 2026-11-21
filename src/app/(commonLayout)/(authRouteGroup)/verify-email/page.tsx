@@ -12,9 +12,7 @@ export default function VerifyEmailPage() {
   return (
     <AuthCardWrapper
       title="Verify Your Email"
-      backButtonLabel="Return to Sign In"
-      backButtonHref="/login"
-    >
+      >
       <Suspense fallback={<div className="h-40 animate-pulse rounded bg-muted/40" />}>
         <VerifyEmailForm />
       </Suspense>
