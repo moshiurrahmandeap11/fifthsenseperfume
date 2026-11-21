@@ -103,7 +103,8 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
         className="w-64 p-2 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-xl border border-neutral-200/80 dark:border-neutral-800/80 shadow-2xl rounded-2xl animate-in fade-in-0 zoom-in-95"
       >
         {/* User Card Header */}
-        <DropdownMenuLabel className="font-normal p-2">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-normal p-2">
           <div className="flex items-center gap-3">
             <Avatar className="size-10 border border-neutral-200 dark:border-neutral-800">
               <AvatarImage src={user?.image || undefined} alt={displayName} />
@@ -129,6 +130,7 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
             </div>
           </div>
         </DropdownMenuLabel>
+        </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="my-1.5 bg-neutral-200/70 dark:bg-neutral-800/70" />
 
