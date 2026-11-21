@@ -119,7 +119,7 @@ export default function VerifyEmailForm() {
       {/* 6-Digit OTP */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <Label htmlFor="otp">6-Digit Verification Code</Label>
+          <Label htmlFor="otp">Verification Code</Label>
           <button
             type="button"
             onClick={handleResendCode}
