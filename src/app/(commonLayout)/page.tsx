@@ -4,6 +4,7 @@ import ProductCard from "@/components/modules/storefront/catalog/ProductCard";
 import HeroGridSection from "@/components/modules/storefront/home/HeroGridSection";
 import FeatureTickerStrip from "@/components/modules/storefront/home/FeatureTickerStrip";
 import AttarPromoBanners from "@/components/modules/storefront/home/AttarPromoBanners";
+import SectionHeader from "@/components/common/SectionHeader";
 
 export default function HomePage() {
   return (
@@ -17,28 +18,26 @@ export default function HomePage() {
       {/* 3. House of Attars & Essential Oils Promo Banners (from Figma) */}
       <AttarPromoBanners />
 
-      {/* 3. Best Sellers Products Showcase */}
-      <section className="pt-8 sm:pt-12 pb-16 sm:pb-20 bg-white dark:bg-zinc-950 border-t border-neutral-100 dark:border-neutral-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      {/* 4. Best Sellers Products Showcase */}
+      <section className="pt-6 sm:pt-8 lg:pt-10 pb-16 sm:pb-20 bg-white dark:bg-zinc-950">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
           
           {/* Centered Editorial Section Header matching Figma */}
-          <div className="text-center space-y-1">
-            <p
-              className="font-script text-2xl sm:text-3xl lg:text-4xl text-neutral-400 select-none"
-              style={{
-                fontFamily: 'var(--font-script), "BrittanySignature", cursive',
-              }}
-            >
-              Best products
-            </p>
-            <h2 className="font-heading font-serif text-2xl sm:text-3xl lg:text-4xl uppercase tracking-normal text-neutral-950 dark:text-white font-normal">
-              BEST SELLERS PRODUCTS
-            </h2>
-          </div>
+          <SectionHeader
+            scriptSubtitle="Best products"
+            title="BEST SELLERS PRODUCTS"
+            description="The stylish and organized cosmetic products"
+          />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {/* 4 Column Luxury Fragrance Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6">
             {DUMMY_PRODUCTS.map((prod, idx) => (
-              <ProductCard key={prod.id} product={prod} priority={idx === 0} />
+              <ProductCard
+                key={prod.id}
+                product={prod}
+                priority={idx < 4}
+                initialWishlisted={idx === 1}
+              />
             ))}
           </div>
 

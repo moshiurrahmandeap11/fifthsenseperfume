@@ -135,6 +135,9 @@
     box-shadow: none !important;
     border-radius: 0 !important;
   }
+  .rounded-full, [data-rounded-full] {
+    border-radius: 9999px !important;
+  }
   body {
     @apply bg-background text-foreground font-sans;
     font-weight: 400;
