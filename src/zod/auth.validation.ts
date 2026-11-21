@@ -25,8 +25,7 @@ export const registerValidationSchema = z
       .email("Please enter a valid email address"),
     phoneNumber: z
       .string()
-      .min(11, "Please enter an 11-digit mobile number (e.g., 017XXXXXXXX)")
-      .max(14, "Mobile number cannot exceed 14 digits")
+      
       .regex(
         /^(?:\+88|88)?(01[3-9]\d{8})$/,
         "Please enter a valid Bangladeshi mobile number"
