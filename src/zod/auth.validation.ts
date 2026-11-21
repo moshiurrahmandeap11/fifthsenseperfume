@@ -29,7 +29,9 @@ export const registerValidationSchema = z
       .regex(
         /^(?:\+88|88)?(01[3-9]\d{8})$/,
         "Please enter a valid Bangladeshi mobile number"
-      ),
+      )
+      .optional()
+      .or(z.literal("")),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters")
