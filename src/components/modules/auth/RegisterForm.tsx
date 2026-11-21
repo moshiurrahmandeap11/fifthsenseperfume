@@ -204,7 +204,10 @@ export default function RegisterForm() {
 
       <div className="pt-2 text-center text-xs text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+        <Link
+          href="/login"
+          className="font-medium text-foreground underline underline-offset-4 hover:text-primary transition-colors"
+        >
           Sign In
         </Link>
       </div>
