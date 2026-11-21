@@ -13,7 +13,7 @@ import React, { ReactNode } from "react";
 
 interface AuthCardWrapperProps {
   title: string;
-  description: string;
+  description?: string;
   children: ReactNode;
   backButtonLabel?: string;
   backButtonHref?: string;
