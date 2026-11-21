@@ -184,7 +184,7 @@ export default function NavbarMobileMenu({
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-normal tracking-wide uppercase text-[#fef9ee] bg-gradient-to-r from-[#29170e] via-[#3f2214] to-[#29170e] border border-[#d97706]/35 transition-all duration-300"
               >
-                Try It / Sign In
+                Sign In
               </Link>
               <p className="text-[11px] text-center text-neutral-500 font-normal">
                 Sign in to view orders, olfactory wishlist and exclusive perfume releases
