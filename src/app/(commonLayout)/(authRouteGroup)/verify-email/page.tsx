@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Verify Email | EcomBD Footwear",
+  title: "Verify Email | FIFTH SENSE PERFUMES",
   description: "Verify your email address",
 };
 

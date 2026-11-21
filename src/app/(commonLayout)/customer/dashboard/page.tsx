@@ -12,12 +12,10 @@ import {
   Award,
   CheckCircle2,
   Clock,
-  Footprints,
   Mail,
   MapPin,
   Package,
   Phone,
-  Ruler,
   Shield,
   ShoppingBag,
   Sparkles,
@@ -30,8 +28,8 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Customer Dashboard | EcomBD Footwear",
-  description: "Manage your profile, saved shoe size, orders, and account security",
+  title: "Customer Dashboard | FIFTH SENSE PERFUMES",
+  description: "Manage your profile, fragrance preferences, orders, and account security",
 };
 
 export default async function CustomerDashboardPage() {
@@ -45,7 +43,6 @@ export default async function CustomerDashboardPage() {
   const displayName = user?.name || "Customer";
   const displayEmail = user?.email || "";
   const displayPhone = user?.phoneNumber || "Not set";
-  const displayShoeSize = user?.savedShoeSize || "41";
   const displayAddress = user?.address || "No address saved";
   const loyaltyPoints = user?.loyaltyPoints || 0;
   const isVerified = !!user?.emailVerified;
@@ -95,29 +92,29 @@ export default async function CustomerDashboardPage() {
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-neutral-900 hover:bg-neutral-100 px-4 py-2 text-xs font-semibold transition-all shadow-sm cursor-pointer"
           >
             <ShoppingBag className="size-3.5" />
-            <span>Browse Footwear</span>
+            <span>Browse Fragrances</span>
           </Link>
         </div>
       </div>
 
       {/* 2. Key Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {/* Saved Shoe Size */}
+        {/* Preferred Scent Family */}
         <Card className="shadow-xs border-border/70 hover:border-primary/40 transition-colors">
           <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Saved Shoe Size
+              Scent Profile
             </CardTitle>
             <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Ruler className="size-4" />
+              <Sparkles className="size-4" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">
-              EU {displayShoeSize}
+            <div className="text-xl font-bold text-foreground">
+              Woody & Amber
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Used for 1-click personalized fit recommendations
+              Personalized olfactive recommendation profile
             </p>
           </CardContent>
         </Card>
@@ -194,7 +191,7 @@ export default async function CustomerDashboardPage() {
                 <span>Account Profile Information</span>
               </CardTitle>
               <CardDescription className="text-xs">
-                Your personal details, saved delivery address, and footwear preferences
+                Your personal details, saved delivery address, and fragrance preferences
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -222,9 +219,9 @@ export default async function CustomerDashboardPage() {
 
                 <div className="p-3.5 rounded-xl bg-muted/40 border border-border/50 space-y-1">
                   <span className="text-[11px] font-semibold uppercase text-muted-foreground">
-                    Default Shoe Size
+                    Favorite Concentration
                   </span>
-                  <p className="text-sm font-medium text-foreground">EU {displayShoeSize}</p>
+                  <p className="text-sm font-medium text-foreground">Extrait de Parfum (30%)</p>
                 </div>
               </div>
 

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Forgot Password | EcomBD Footwear",
+  title: "Forgot Password | FIFTH SENSE PERFUMES",
   description: "Reset your account password via email verification code",
 };
 
