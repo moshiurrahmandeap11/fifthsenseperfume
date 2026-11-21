@@ -12,9 +12,7 @@ export default function RegisterPage() {
   return (
     <AuthCardWrapper
       title="Create Account"
-      backButtonLabel="Already have an account? Sign in"
-      backButtonHref="/login"
-    >
+      >
       <Suspense fallback={<div className="h-40 animate-pulse rounded bg-muted/40" />}>
         <RegisterForm />
       </Suspense>
