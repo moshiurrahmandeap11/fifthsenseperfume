@@ -42,7 +42,6 @@ export default function RegisterForm() {
         email: data.email,
         phoneNumber: data.phoneNumber,
         password: data.password,
-        savedShoeSize: data.savedShoeSize,
       });
 
       toast.success(
