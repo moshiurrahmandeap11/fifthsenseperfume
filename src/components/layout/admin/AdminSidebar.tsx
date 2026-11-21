@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Footprints, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -29,17 +29,17 @@ export default function AdminSidebar({
       <div className="flex h-16 items-center justify-between border-b px-5">
         <Link href="/admin/dashboard" className="flex items-center gap-2.5 group">
           <div className="size-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-200">
-            <Footprints className="size-5" />
+            <Sparkles className="size-5" />
           </div>
           <div className="flex flex-col">
             <span className="font-bold tracking-tight text-foreground text-base flex items-center gap-1.5">
-              EcomBD
+              FIFTH SENSE
               <span className="text-[10px] font-semibold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">
                 Admin
               </span>
             </span>
             <span className="text-[11px] text-muted-foreground font-medium">
-              Footwear Operations
+              Haute Parfumerie Atelier
             </span>
           </div>
         </Link>
@@ -121,7 +121,7 @@ export default function AdminSidebar({
             </span>
           </div>
           <p className="text-[11px] text-muted-foreground">
-            D2C Footwear Engine v1.0
+            Luxury Fragrance Engine v1.0
           </p>
         </div>
       </div>

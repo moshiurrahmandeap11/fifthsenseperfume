@@ -51,7 +51,7 @@ export default function AdminHeader({ user, alerts }: AdminHeaderProps) {
           }}
         >
           <Search className="size-3.5 text-muted-foreground" />
-          <span>Search orders, products, SKUs...</span>
+          <span>Search orders, fragrances, SKUs...</span>
           <kbd className="pointer-events-none inline-flex h-4.5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground ml-2">
             ⌘K
           </kbd>

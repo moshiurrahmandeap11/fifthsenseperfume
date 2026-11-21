@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Footprints, Menu } from "lucide-react";
+import { Menu, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
@@ -48,14 +48,14 @@ export default function AdminMobileSidebar({
         <SheetHeader className="h-16 px-5 border-b flex flex-row items-center justify-between">
           <SheetTitle className="flex items-center gap-2.5 text-left">
             <div className="size-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-              <Footprints className="size-4.5" />
+              <Sparkles className="size-4.5" />
             </div>
             <div>
               <div className="font-bold text-foreground text-sm flex items-center gap-1.5">
-                EcomBD Admin
+                FIFTH SENSE
               </div>
               <span className="text-[10px] text-muted-foreground font-normal">
-                Footwear Operations
+                Haute Parfumerie Atelier
               </span>
             </div>
           </SheetTitle>
