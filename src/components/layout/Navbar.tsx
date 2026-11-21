@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import LiquidNavLinks from "./navbar/LiquidNavLinks";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
 import NavbarUserMenu from "./navbar/NavbarUserMenu";
+import TopBar from "./TopBar";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -55,67 +56,73 @@ export default function Navbar() {
   );
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        isScrolled
-          ? "bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-black/5 dark:border-white/10"
-          : "bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-neutral-100 dark:border-neutral-900"
-      )}
-    >
-      <div className="container mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
-        {/* Left: Brand Logo (Pure Typography) */}
-        <div className="flex items-center">{Logo}</div>
+    <header className="sticky top-0 z-50 w-full">
+      {/* Top Announcement Bar (from Figma) */}
+      <TopBar />
 
-        {/* Center: Desktop Navigation with Liquid Glass & Perfume Amber Elixir Tone */}
-        <nav className="hidden lg:flex items-center">
-          <Suspense
-            fallback={
-              <div className="h-10 w-[540px] rounded-full bg-neutral-100/60 dark:bg-neutral-900/60 animate-pulse" />
-            }
-          >
-            <LiquidNavLinks />
-          </Suspense>
-        </nav>
+      {/* Main Navbar */}
+      <div
+        className={cn(
+          "w-full transition-all duration-300",
+          isScrolled
+            ? "bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-black/5 dark:border-white/10"
+            : "bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-neutral-100 dark:border-neutral-900"
+        )}
+      >
+        <div className="container mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
+          {/* Left: Brand Logo (Pure Typography) */}
+          <div className="flex items-center">{Logo}</div>
 
-        {/* Right: Actions, Try It / User Profile & Mobile Toggle (No Icons, Normal Font) */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          {/* Search Text Link */}
-          <Link
-            href="/products"
-            className="text-xs font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
-            title="Search Fragrances"
-          >
-            Search
-          </Link>
-
-          {/* Cart Text Link with Counter */}
-          <Link
-            href="/cart"
-            className="text-xs font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
-            title="Fragrance Bag"
-          >
-            Bag (0)
-          </Link>
-
-          {/* Try It Button / Profile Menu (Normal Font, Luxury Perfume Amber Tone, No Icons) */}
-          {user ? (
-            <NavbarUserMenu user={user} />
-          ) : (
-            <Link
-              href="/login"
-              className="h-8 px-4 rounded-full text-xs font-normal leading-none text-[#fff8ea] bg-[#29170e] hover:bg-[#3f2214] border border-[#d97706]/35 transition-all duration-300 select-none inline-flex items-center justify-center"
+          {/* Center: Desktop Navigation with Liquid Glass & Perfume Amber Elixir Tone */}
+          <nav className="hidden lg:flex items-center">
+            <Suspense
+              fallback={
+                <div className="h-10 w-[540px] rounded-full bg-neutral-100/60 dark:bg-neutral-900/60 animate-pulse" />
+              }
             >
-              Try It
-            </Link>
-          )}
+              <LiquidNavLinks />
+            </Suspense>
+          </nav>
 
-          {/* Mobile Hamburger Drawer Menu */}
-          <NavbarMobileMenu
-            user={user}
-            onLogout={handleMobileLogout}
-            logoElement={Logo}
-          />
+          {/* Right: Actions, Try It / User Profile & Mobile Toggle (No Icons, Normal Font) */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* Search Text Link */}
+            <Link
+              href="/products"
+              className="text-xs font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
+              title="Search Fragrances"
+            >
+              Search
+            </Link>
+
+            {/* Cart Text Link with Counter */}
+            <Link
+              href="/cart"
+              className="text-xs font-normal text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors px-1 py-1 select-none"
+              title="Fragrance Bag"
+            >
+              Bag (0)
+            </Link>
+
+            {/* Try It Button / Profile Menu (Normal Font, Luxury Perfume Amber Tone, No Icons) */}
+            {user ? (
+              <NavbarUserMenu user={user} />
+            ) : (
+              <Link
+                href="/login"
+                className="h-8 px-4 rounded-full text-xs font-normal leading-none text-[#fff8ea] bg-[#29170e] hover:bg-[#3f2214] border border-[#d97706]/35 transition-all duration-300 select-none inline-flex items-center justify-center"
+              >
+                Try It
+              </Link>
+            )}
+
+            {/* Mobile Hamburger Drawer Menu */}
+            <NavbarMobileMenu
+              user={user}
+              onLogout={handleMobileLogout}
+              logoElement={Logo}
+            />
+          </div>
         </div>
       </div>
     </header>
