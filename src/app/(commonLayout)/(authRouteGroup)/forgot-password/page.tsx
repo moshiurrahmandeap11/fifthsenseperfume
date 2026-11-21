@@ -12,7 +12,6 @@ export default function ForgotPasswordPage() {
   return (
     <AuthCardWrapper
       title="Reset Password"
-      description="Enter your email to receive a 6-digit verification code"
       backButtonLabel="Return to Sign In"
       backButtonHref="/login"
     >
