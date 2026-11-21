@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { AnimatePresence, motion } from "@/components/ui/fluid-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -28,23 +29,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createStaff, deleteStaff, updateStaff } from "@/services/admin.services";
 import { IStaffUser, StaffRole } from "@/types/admin.types";
 import { UserRole } from "@/types/auth.types";
 import { ICustomerProfile } from "@/types/user.types";
-import {
-  Crown,
-  KeyRound,
-  Mail,
-  Phone,
-  Plus,
-  Search,
-  ShieldCheck,
-  Trash2,
-  UserCheck,
-  Users,
-} from "lucide-react";
+import { Mail, Phone, Plus, Search, Trash2 } from "lucide-react";
 import React, { useMemo, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 
@@ -63,7 +53,6 @@ export default function StaffAndCrmClient({
   const [searchTerm, setSearchTerm] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  // Add Staff Modal
   const [isAddStaffOpen, setIsAddStaffOpen] = useState(false);
   const [staffName, setStaffName] = useState("");
   const [staffEmail, setStaffEmail] = useState("");
@@ -95,7 +84,7 @@ export default function StaffAndCrmClient({
 
   const handleCreateStaff = () => {
     if (!staffName || !staffEmail || !staffPassword) {
-      toast.error("Please fill in name, email and temporary password");
+      toast.error("Please fill in name, email and password");
       return;
     }
 
@@ -116,6 +105,7 @@ export default function StaffAndCrmClient({
         setIsAddStaffOpen(false);
         setStaffName("");
         setStaffEmail("");
+        setStaffPhone("");
         setStaffPassword("");
       } catch (err: unknown) {
         const error = err as { message?: string };
@@ -131,7 +121,7 @@ export default function StaffAndCrmClient({
         setStaffList((prev) =>
           prev.map((s) => (s.id === staffId ? { ...s, role: newRole as UserRole } : s))
         );
-        toast.success("Staff role updated");
+        toast.success("Role updated");
       } catch (err: unknown) {
         const error = err as { message?: string };
         toast.error(error.message || "Failed to update role");
@@ -140,7 +130,7 @@ export default function StaffAndCrmClient({
   };
 
   const handleDeleteStaff = (staffId: string, name: string) => {
-    if (!confirm(`Are you sure you want to revoke staff access for ${name}?`)) return;
+    if (!confirm(`Revoke access for ${name}?`)) return;
 
     startTransition(async () => {
       try {
@@ -155,56 +145,53 @@ export default function StaffAndCrmClient({
   };
 
   return (
-    <div className="space-y-6">
-      {/* KPI Cards */}
+    <div className="space-y-6 w-full">
+      {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Atelier Staff &amp; Team
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-1 space-y-0">
+            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
+              Atelier Staff
             </CardTitle>
-            <ShieldCheck className="size-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
-              {staffList.length} members
+            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
+              {staffList.length}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Active admin, moderator and inventory team
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Active operations members
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Fragrance VIP Customers
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-1 space-y-0">
+            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
+              Registered Customers
             </CardTitle>
-            <Crown className="size-4 text-amber-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
-              {customerList.length} profiles
+            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
+              {customerList.length}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Registered perfume connoisseurs
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Customer profiles
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-1 space-y-0">
+            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
               Access Control
             </CardTitle>
-            <KeyRound className="size-4 text-emerald-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-emerald-600">
-              Role-Based RBAC
+            <div className="text-2xl font-normal tracking-tight text-foreground">
+              RBAC
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Strict granular permission enforcement
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Role permissions active
             </p>
           </CardContent>
         </Card>
@@ -214,10 +201,10 @@ export default function StaffAndCrmClient({
       <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "STAFF" | "CUSTOMERS")}>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
           <TabsList className="h-9">
-            <TabsTrigger value="STAFF" className="text-xs cursor-pointer">
+            <TabsTrigger value="STAFF" className="text-xs font-normal cursor-pointer">
               Atelier Staff ({staffList.length})
             </TabsTrigger>
-            <TabsTrigger value="CUSTOMERS" className="text-xs cursor-pointer">
+            <TabsTrigger value="CUSTOMERS" className="text-xs font-normal cursor-pointer">
               Customer CRM ({customerList.length})
             </TabsTrigger>
           </TabsList>
@@ -229,7 +216,7 @@ export default function StaffAndCrmClient({
                 placeholder="Search staff or customers..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8 text-xs h-9 bg-background"
+                className="pl-8 text-xs h-9 bg-background font-normal"
               />
             </div>
 
@@ -237,7 +224,7 @@ export default function StaffAndCrmClient({
               <Button
                 size="sm"
                 onClick={() => setIsAddStaffOpen(true)}
-                className="h-9 text-xs cursor-pointer gap-1.5"
+                className="h-9 text-xs font-normal cursor-pointer gap-1.5"
               >
                 <Plus className="size-3.5" />
                 <span>Add Staff</span>
@@ -246,232 +233,240 @@ export default function StaffAndCrmClient({
           </div>
         </div>
 
-        {/* Staff Tab */}
-        <TabsContent value="STAFF" className="mt-0">
-          <div className="rounded-xl border bg-card shadow-xs overflow-hidden">
-            <Table>
-              <TableHeader className="bg-muted/30">
-                <TableRow>
-                  <TableHead className="text-xs font-semibold">Staff Member</TableHead>
-                  <TableHead className="text-xs font-semibold">Contact</TableHead>
-                  <TableHead className="text-xs font-semibold">Assigned Role</TableHead>
-                  <TableHead className="text-xs font-semibold">Status</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredStaff.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="h-44 text-center">
-                      <div className="flex flex-col items-center justify-center text-muted-foreground space-y-2">
-                        <Users className="size-8 stroke-[1.5]" />
-                        <p className="text-xs font-medium">No staff members found</p>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredStaff.map((staff) => (
-                    <TableRow key={staff.id} className="hover:bg-muted/20">
-                      <TableCell>
-                        <div className="space-y-0.5">
-                          <div className="font-semibold text-xs text-foreground">
-                            {staff.name}
-                          </div>
-                          <div className="text-[11px] text-muted-foreground font-mono">
-                            ID: {staff.id.substring(0, 8)}...
-                          </div>
-                        </div>
-                      </TableCell>
-
-                      <TableCell>
-                        <div className="space-y-0.5">
-                          <div className="text-xs text-foreground flex items-center gap-1">
-                            <Mail className="size-3 text-muted-foreground" />
-                            <span>{staff.email}</span>
-                          </div>
-                          {staff.phoneNumber && (
-                            <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-                              <Phone className="size-3" />
-                              <span>{staff.phoneNumber}</span>
+        <AnimatePresence mode="wait">
+          {activeTab === "STAFF" ? (
+            <motion.div
+              key="staff-tab"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
+              <div className="rounded-lg border border-border/50 bg-card overflow-hidden">
+                <Table>
+                  <TableHeader className="bg-muted/30">
+                    <TableRow>
+                      <TableHead className="text-xs font-normal">Staff Member</TableHead>
+                      <TableHead className="text-xs font-normal">Contact</TableHead>
+                      <TableHead className="text-xs font-normal">Assigned Role</TableHead>
+                      <TableHead className="text-xs font-normal">Status</TableHead>
+                      <TableHead className="text-xs font-normal text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredStaff.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="h-32 text-center text-xs text-muted-foreground">
+                          No staff members found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredStaff.map((staff) => (
+                        <TableRow key={staff.id} className="hover:bg-muted/20">
+                          <TableCell>
+                            <div className="space-y-0.5">
+                              <div className="font-normal text-xs text-foreground">
+                                {staff.name}
+                              </div>
+                              <div className="text-[11px] text-muted-foreground font-mono">
+                                ID: {staff.id.substring(0, 8)}...
+                              </div>
                             </div>
-                          )}
-                        </div>
-                      </TableCell>
+                          </TableCell>
 
-                      <TableCell>
-                        <Select
-                          value={staff.role}
-                          onValueChange={(val) => val && handleRoleChange(staff.id, val as StaffRole)}
-                          disabled={isPending}
-                        >
-                          <SelectTrigger className="w-36 h-7 text-xs">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
-                            <SelectItem value="ADMIN">Admin</SelectItem>
-                            <SelectItem value="MANAGER">Manager</SelectItem>
-                            <SelectItem value="MODERATOR">Call Moderator</SelectItem>
-                            <SelectItem value="INVENTORY_STAFF">Vault Staff</SelectItem>
-                            <SelectItem value="ACCOUNTANT">Accountant</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </TableCell>
+                          <TableCell>
+                            <div className="space-y-0.5">
+                              <div className="text-xs font-normal text-foreground flex items-center gap-1.5">
+                                <Mail className="size-3 text-muted-foreground" />
+                                <span>{staff.email}</span>
+                              </div>
+                              {staff.phoneNumber && (
+                                <div className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                                  <Phone className="size-3" />
+                                  <span>{staff.phoneNumber}</span>
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
 
-                      <TableCell>
-                        <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-300 text-[10px] gap-1">
-                          <UserCheck className="size-2.5" /> Active
-                        </Badge>
-                      </TableCell>
+                          <TableCell>
+                            <Select
+                              value={staff.role}
+                              onValueChange={(val) => val && handleRoleChange(staff.id, val as StaffRole)}
+                              disabled={isPending}
+                            >
+                              <SelectTrigger className="w-36 h-7 text-xs font-normal">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="SUPER_ADMIN" className="text-xs font-normal">Super Admin</SelectItem>
+                                <SelectItem value="ADMIN" className="text-xs font-normal">Admin</SelectItem>
+                                <SelectItem value="MANAGER" className="text-xs font-normal">Manager</SelectItem>
+                                <SelectItem value="MODERATOR" className="text-xs font-normal">Call Moderator</SelectItem>
+                                <SelectItem value="INVENTORY_STAFF" className="text-xs font-normal">Vault Staff</SelectItem>
+                                <SelectItem value="ACCOUNTANT" className="text-xs font-normal">Accountant</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
 
-                      <TableCell className="text-right">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleDeleteStaff(staff.id, staff.name)}
-                          className="size-7 p-0 cursor-pointer text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="size-3.5" />
-                        </Button>
-                      </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="text-[10px] font-normal text-muted-foreground">
+                              Active
+                            </Badge>
+                          </TableCell>
+
+                          <TableCell className="text-right">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleDeleteStaff(staff.id, staff.name)}
+                              className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-foreground"
+                            >
+                              <Trash2 className="size-3.5" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="customers-tab"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
+              <div className="rounded-lg border border-border/50 bg-card overflow-hidden">
+                <Table>
+                  <TableHeader className="bg-muted/30">
+                    <TableRow>
+                      <TableHead className="text-xs font-normal">Customer</TableHead>
+                      <TableHead className="text-xs font-normal">Contact Info</TableHead>
+                      <TableHead className="text-xs font-normal">Loyalty Points</TableHead>
+                      <TableHead className="text-xs font-normal">Orders Count</TableHead>
+                      <TableHead className="text-xs font-normal text-right">Role</TableHead>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </TabsContent>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredCustomers.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="h-32 text-center text-xs text-muted-foreground">
+                          No registered fragrance customers
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredCustomers.map((c) => (
+                        <TableRow key={c.id} className="hover:bg-muted/20">
+                          <TableCell>
+                            <div className="font-normal text-xs text-foreground">{c.name}</div>
+                          </TableCell>
 
-        {/* Customer CRM Tab */}
-        <TabsContent value="CUSTOMERS" className="mt-0">
-          <div className="rounded-xl border bg-card shadow-xs overflow-hidden">
-            <Table>
-              <TableHeader className="bg-muted/30">
-                <TableRow>
-                  <TableHead className="text-xs font-semibold">Customer</TableHead>
-                  <TableHead className="text-xs font-semibold">Contact Info</TableHead>
-                  <TableHead className="text-xs font-semibold">Loyalty Club</TableHead>
-                  <TableHead className="text-xs font-semibold">Orders Count</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Registered</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredCustomers.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="h-44 text-center">
-                      <div className="flex flex-col items-center justify-center text-muted-foreground space-y-2">
-                        <Crown className="size-8 stroke-[1.5]" />
-                        <p className="text-xs font-medium">No registered fragrance customers</p>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredCustomers.map((c) => (
-                    <TableRow key={c.id} className="hover:bg-muted/20">
-                      <TableCell>
-                        <div className="font-semibold text-xs text-foreground">{c.name}</div>
-                      </TableCell>
+                          <TableCell>
+                            <div className="space-y-0.5">
+                              <div className="text-xs font-normal text-foreground">{c.email}</div>
+                              <div className="text-[11px] text-muted-foreground">{c.phoneNumber || "No phone"}</div>
+                            </div>
+                          </TableCell>
 
-                      <TableCell>
-                        <div className="space-y-0.5">
-                          <div className="text-xs text-foreground">{c.email}</div>
-                          <div className="text-[11px] text-muted-foreground">{c.phoneNumber || "No phone"}</div>
-                        </div>
-                      </TableCell>
+                          <TableCell>
+                            <span className="text-xs font-normal text-muted-foreground tabular-nums">
+                              {c.loyaltyPoints || 0} pts
+                            </span>
+                          </TableCell>
 
-                      <TableCell>
-                        <Badge variant="outline" className="text-[10px] gap-1">
-                          <Crown className="size-2.5 text-amber-500" />
-                          <span>{c.loyaltyPoints || 0} pts</span>
-                        </Badge>
-                      </TableCell>
+                          <TableCell>
+                            <span className="text-xs font-normal text-foreground tabular-nums">
+                              {(c as unknown as { _count?: { orders?: number } })?._count?.orders ?? 0}
+                            </span>{" "}
+                            <span className="text-[11px] text-muted-foreground">orders</span>
+                          </TableCell>
 
-                      <TableCell>
-                        <span className="font-bold text-xs">{(c as unknown as { _count?: { orders?: number } })?._count?.orders ?? 0}</span>{" "}
-                        <span className="text-[11px] text-muted-foreground">orders</span>
-                      </TableCell>
-
-                      <TableCell className="text-right text-[11px] text-muted-foreground">
-                        Customer
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </TabsContent>
+                          <TableCell className="text-right text-[11px] text-muted-foreground">
+                            Customer
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Tabs>
 
       {/* Add Staff Dialog */}
       <Dialog open={isAddStaffOpen} onOpenChange={setIsAddStaffOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base">
-              <Plus className="size-4 text-primary" />
-              Add Atelier Staff Member
+            <DialogTitle className="text-sm font-normal">
+              Add Staff Member
             </DialogTitle>
-            <DialogDescription className="text-xs">
-              Grant dashboard administrative and operations privileges
+            <DialogDescription className="text-xs font-normal">
+              Assign role and initial credentials
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-2">
-            <div className="space-y-1.5">
-              <Label className="text-xs">Full Name <span className="text-destructive">*</span></Label>
+          <div className="space-y-3 py-2">
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Full Name</Label>
               <Input
-                placeholder="e.g. Tanvir Ahmed"
+                placeholder="Full name"
                 value={staffName}
                 onChange={(e) => setStaffName(e.target.value)}
-                className="text-xs h-9"
+                className="text-xs h-9 font-normal"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-xs">Official Email Address <span className="text-destructive">*</span></Label>
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Email Address</Label>
               <Input
                 type="email"
-                placeholder="e.g. tanvir@fifthsenseperfumes.com"
+                placeholder="name@fifthsenseperfumes.com"
                 value={staffEmail}
                 onChange={(e) => setStaffEmail(e.target.value)}
-                className="text-xs h-9"
+                className="text-xs h-9 font-normal"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-xs">Phone Number</Label>
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Phone Number (Optional)</Label>
               <Input
-                placeholder="e.g. 01712345678"
+                placeholder="01712345678"
                 value={staffPhone}
                 onChange={(e) => setStaffPhone(e.target.value)}
-                className="text-xs h-9"
+                className="text-xs h-9 font-normal"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-xs">Role Assignment</Label>
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Role Assignment</Label>
               <Select value={staffRole} onValueChange={(val) => val && setStaffRole(val as StaffRole)}>
-                <SelectTrigger className="text-xs h-9">
+                <SelectTrigger className="text-xs h-9 font-normal">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ADMIN">Administrator</SelectItem>
-                  <SelectItem value="MANAGER">Operations Manager</SelectItem>
-                  <SelectItem value="MODERATOR">Call Center Moderator</SelectItem>
-                  <SelectItem value="INVENTORY_STAFF">Vault / Fragrance Inventory</SelectItem>
-                  <SelectItem value="ACCOUNTANT">Accountant</SelectItem>
+                  <SelectItem value="ADMIN" className="text-xs font-normal">Administrator</SelectItem>
+                  <SelectItem value="MANAGER" className="text-xs font-normal">Operations Manager</SelectItem>
+                  <SelectItem value="MODERATOR" className="text-xs font-normal">Call Center Moderator</SelectItem>
+                  <SelectItem value="INVENTORY_STAFF" className="text-xs font-normal">Vault / Inventory</SelectItem>
+                  <SelectItem value="ACCOUNTANT" className="text-xs font-normal">Accountant</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-xs">Initial Password <span className="text-destructive">*</span></Label>
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Initial Password</Label>
               <Input
                 type="password"
                 placeholder="••••••••"
                 value={staffPassword}
                 onChange={(e) => setStaffPassword(e.target.value)}
-                className="text-xs h-9"
+                className="text-xs h-9 font-normal"
               />
             </div>
           </div>
@@ -482,7 +477,7 @@ export default function StaffAndCrmClient({
               size="sm"
               onClick={() => setIsAddStaffOpen(false)}
               disabled={isPending}
-              className="text-xs"
+              className="text-xs font-normal"
             >
               Cancel
             </Button>
@@ -490,7 +485,7 @@ export default function StaffAndCrmClient({
               size="sm"
               onClick={handleCreateStaff}
               disabled={isPending}
-              className="text-xs cursor-pointer"
+              className="text-xs font-normal cursor-pointer"
             >
               {isPending ? "Creating..." : "Save Staff"}
             </Button>

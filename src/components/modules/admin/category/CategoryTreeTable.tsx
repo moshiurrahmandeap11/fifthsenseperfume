@@ -23,7 +23,6 @@ import {
   ChevronDown,
   ChevronRight,
   Edit2,
-  FolderTree,
   Image as ImageIcon,
   MoreVertical,
   Plus,
@@ -48,13 +47,10 @@ export default function CategoryTreeTable({
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({});
   const [editingCategory, setEditingCategory] = useState<ICategory | null>(null);
-  const [deletingCategory, setDeletingCategory] = useState<ICategory | null>(
-    null
-  );
+  const [deletingCategory, setDeletingCategory] = useState<ICategory | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedParentId, setSelectedParentId] = useState<string | null>(null);
 
-  // Group into Root Categories and Children
   const { rootCategories, parentOptions } = useMemo(() => {
     const roots: ICategory[] = [];
     const parents: ICategory[] = [];
@@ -69,7 +65,6 @@ export default function CategoryTreeTable({
     return { rootCategories: roots, parentOptions: parents };
   }, [categories]);
 
-  // Filter based on search term
   const filteredCategories = useMemo(() => {
     if (!searchTerm.trim()) return rootCategories;
 
@@ -113,41 +108,41 @@ export default function CategoryTreeTable({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       {/* Search and Action Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
           <Input
-            placeholder="Search categories or subcategories..."
+            placeholder="Search collections..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 h-9 text-xs"
+            className="pl-9 h-9 text-xs font-normal"
           />
         </div>
 
         <Button
           onClick={handleCreateRoot}
           size="sm"
-          className="gap-1.5 h-9 text-xs cursor-pointer"
+          className="gap-1.5 h-9 text-xs font-normal cursor-pointer"
         >
-          <Plus className="size-4" />
-          <span>Add Root Category</span>
+          <Plus className="size-3.5" />
+          <span>Add Collection</span>
         </Button>
       </div>
 
       {/* Category Tree Table Container */}
-      <div className="rounded-xl border bg-card shadow-xs overflow-hidden">
+      <div className="rounded-lg border border-border/50 bg-card overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/30">
-              <TableHead className="w-12 text-center">#</TableHead>
-              <TableHead>Category Name & Hierarchy</TableHead>
-              <TableHead>Slug Identifier</TableHead>
-              <TableHead className="text-center">Products</TableHead>
-              <TableHead className="text-center">Priority</TableHead>
-              <TableHead className="text-center">Store Visibility</TableHead>
-              <TableHead className="w-16 text-right">Actions</TableHead>
+          <TableHeader className="bg-muted/30">
+            <TableRow>
+              <TableHead className="w-10 text-center text-xs font-normal">#</TableHead>
+              <TableHead className="text-xs font-normal">Collection &amp; Hierarchy</TableHead>
+              <TableHead className="text-xs font-normal">Slug</TableHead>
+              <TableHead className="text-center text-xs font-normal">Products</TableHead>
+              <TableHead className="text-center text-xs font-normal">Order</TableHead>
+              <TableHead className="text-center text-xs font-normal">Status</TableHead>
+              <TableHead className="w-16 text-right text-xs font-normal">Actions</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -156,31 +151,22 @@ export default function CategoryTreeTable({
               <TableRow>
                 <TableCell
                   colSpan={7}
-                  className="py-12 text-center text-xs text-muted-foreground"
+                  className="py-12 text-center text-xs text-muted-foreground font-normal"
                 >
-                  <FolderTree className="size-8 text-muted-foreground/40 mx-auto mb-2" />
-                  <p className="font-medium text-foreground">
-                    No categories found
-                  </p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">
-                    {searchTerm
-                      ? "No categories match your search keyword."
-                      : "Create top-level collections (e.g. Extrait, EDP, Discovery Sets) to structure your luxury fragrance atelier."}
-                  </p>
+                  No collections found
                 </TableCell>
               </TableRow>
             ) : (
               filteredCategories.map((root, index) => {
-                const hasChildren =
-                  root.children && root.children.length > 0;
+                const hasChildren = root.children && root.children.length > 0;
                 const isExpanded = !!expandedIds[root.id];
                 const productCount = root._count?.products || 0;
 
                 return (
                   <React.Fragment key={root.id}>
                     {/* Root Category Row */}
-                    <TableRow className="hover:bg-muted/40 font-medium">
-                      <TableCell className="text-center text-xs text-muted-foreground">
+                    <TableRow className="hover:bg-muted/30">
+                      <TableCell className="text-center text-xs text-muted-foreground tabular-nums">
                         {index + 1}
                       </TableCell>
 
@@ -190,12 +176,12 @@ export default function CategoryTreeTable({
                             <button
                               type="button"
                               onClick={() => toggleExpand(root.id)}
-                              className="size-6 rounded-md hover:bg-muted flex items-center justify-center text-muted-foreground cursor-pointer transition-colors"
+                              className="size-6 rounded hover:bg-muted flex items-center justify-center text-muted-foreground cursor-pointer transition-colors"
                             >
                               {isExpanded ? (
-                                <ChevronDown className="size-4 text-primary" />
+                                <ChevronDown className="size-3.5" />
                               ) : (
-                                <ChevronRight className="size-4" />
+                                <ChevronRight className="size-3.5" />
                               )}
                             </button>
                           ) : (
@@ -203,7 +189,7 @@ export default function CategoryTreeTable({
                           )}
 
                           {root.image ? (
-                            <div className="relative size-8 rounded-md border overflow-hidden shrink-0 bg-muted">
+                            <div className="relative size-8 rounded border overflow-hidden shrink-0 bg-muted">
                               <Image
                                 src={root.image}
                                 alt={root.name}
@@ -212,13 +198,13 @@ export default function CategoryTreeTable({
                               />
                             </div>
                           ) : (
-                            <div className="size-8 rounded-md border bg-muted/60 flex items-center justify-center shrink-0 text-muted-foreground">
-                              <ImageIcon className="size-4" />
+                            <div className="size-8 rounded border bg-muted/40 flex items-center justify-center shrink-0 text-muted-foreground">
+                              <ImageIcon className="size-3.5" />
                             </div>
                           )}
 
                           <div>
-                            <div className="text-xs font-bold text-foreground flex items-center gap-2">
+                            <div className="text-xs font-normal text-foreground flex items-center gap-1.5">
                               <span>{root.name}</span>
                               {root.nameBn && (
                                 <span className="text-[10px] text-muted-foreground font-normal">
@@ -226,10 +212,9 @@ export default function CategoryTreeTable({
                                 </span>
                               )}
                             </div>
-                            <span className="text-[10px] text-muted-foreground">
+                            <span className="text-[10px] text-muted-foreground font-normal">
                               Root Collection
-                              {hasChildren &&
-                                ` • ${root.children?.length} subcategories`}
+                              {hasChildren && ` · ${root.children?.length} subcategories`}
                             </span>
                           </div>
                         </div>
@@ -240,12 +225,12 @@ export default function CategoryTreeTable({
                       </TableCell>
 
                       <TableCell className="text-center">
-                        <Badge variant="secondary" className="text-[10px] h-5">
-                          {productCount} {productCount === 1 ? "Item" : "Items"}
+                        <Badge variant="outline" className="text-[10px] font-normal text-muted-foreground">
+                          {productCount}
                         </Badge>
                       </TableCell>
 
-                      <TableCell className="text-center text-xs font-mono">
+                      <TableCell className="text-center text-xs font-mono text-muted-foreground tabular-nums">
                         {root.sortOrder}
                       </TableCell>
 
@@ -261,30 +246,30 @@ export default function CategoryTreeTable({
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger
-                            className="size-8 rounded-md hover:bg-muted inline-flex items-center justify-center text-muted-foreground cursor-pointer"
-                            aria-label="Category Actions"
+                            className="size-7 rounded hover:bg-muted inline-flex items-center justify-center text-muted-foreground cursor-pointer"
+                            aria-label="Actions"
                           >
-                            <MoreVertical className="size-4" />
+                            <MoreVertical className="size-3.5" />
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-44 text-xs">
+                          <DropdownMenuContent align="end" className="w-40 text-xs">
                             <DropdownMenuItem
                               onClick={() => handleAddSubcategory(root.id)}
-                              className="cursor-pointer gap-2"
+                              className="cursor-pointer gap-2 font-normal"
                             >
-                              <Plus className="size-3.5 text-primary" />
+                              <Plus className="size-3.5" />
                               <span>Add Subcategory</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleEdit(root)}
-                              className="cursor-pointer gap-2"
+                              className="cursor-pointer gap-2 font-normal"
                             >
-                              <Edit2 className="size-3.5 text-muted-foreground" />
-                              <span>Edit Category</span>
+                              <Edit2 className="size-3.5" />
+                              <span>Edit</span>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onClick={() => setDeletingCategory(root)}
-                              className="cursor-pointer gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
+                              className="cursor-pointer gap-2 text-destructive focus:text-destructive font-normal"
                             >
                               <Trash2 className="size-3.5" />
                               <span>Delete</span>
@@ -294,7 +279,7 @@ export default function CategoryTreeTable({
                       </TableCell>
                     </TableRow>
 
-                    {/* Subcategories (Visible when expanded) */}
+                    {/* Subcategories */}
                     {hasChildren &&
                       isExpanded &&
                       root.children?.map((child, cIdx) => {
@@ -305,18 +290,16 @@ export default function CategoryTreeTable({
                             key={child.id}
                             className="bg-muted/10 hover:bg-muted/20"
                           >
-                            <TableCell className="text-center text-[10px] text-muted-foreground/60">
+                            <TableCell className="text-center text-[10px] text-muted-foreground/60 tabular-nums">
                               {index + 1}.{cIdx + 1}
                             </TableCell>
 
                             <TableCell>
-                              <div className="flex items-center gap-2.5 pl-8">
-                                <span className="text-muted-foreground/60 text-xs">
-                                  └
-                                </span>
+                              <div className="flex items-center gap-2 pl-7">
+                                <span className="text-muted-foreground/50 text-xs">└</span>
 
                                 {child.image ? (
-                                  <div className="relative size-7 rounded-md border overflow-hidden shrink-0 bg-muted">
+                                  <div className="relative size-7 rounded border overflow-hidden shrink-0 bg-muted">
                                     <Image
                                       src={child.image}
                                       alt={child.name}
@@ -325,13 +308,13 @@ export default function CategoryTreeTable({
                                     />
                                   </div>
                                 ) : (
-                                  <div className="size-7 rounded-md border bg-muted/40 flex items-center justify-center shrink-0 text-muted-foreground">
-                                    <ImageIcon className="size-3.5" />
+                                  <div className="size-7 rounded border bg-muted/40 flex items-center justify-center shrink-0 text-muted-foreground">
+                                    <ImageIcon className="size-3" />
                                   </div>
                                 )}
 
                                 <div>
-                                  <div className="text-xs font-semibold text-foreground flex items-center gap-2">
+                                  <div className="text-xs font-normal text-foreground flex items-center gap-1.5">
                                     <span>{child.name}</span>
                                     {child.nameBn && (
                                       <span className="text-[10px] text-muted-foreground font-normal">
@@ -339,7 +322,7 @@ export default function CategoryTreeTable({
                                       </span>
                                     )}
                                   </div>
-                                  <span className="text-[10px] text-muted-foreground">
+                                  <span className="text-[10px] text-muted-foreground font-normal">
                                     Subcategory of {root.name}
                                   </span>
                                 </div>
@@ -353,13 +336,13 @@ export default function CategoryTreeTable({
                             <TableCell className="text-center">
                               <Badge
                                 variant="outline"
-                                className="text-[10px] h-4.5"
+                                className="text-[10px] font-normal text-muted-foreground"
                               >
                                 {childProducts}
                               </Badge>
                             </TableCell>
 
-                            <TableCell className="text-center text-xs font-mono">
+                            <TableCell className="text-center text-xs font-mono text-muted-foreground tabular-nums">
                               {child.sortOrder}
                             </TableCell>
 
@@ -375,26 +358,23 @@ export default function CategoryTreeTable({
                             <TableCell className="text-right">
                               <DropdownMenu>
                                 <DropdownMenuTrigger
-                                  className="size-8 rounded-md hover:bg-muted inline-flex items-center justify-center text-muted-foreground cursor-pointer"
-                                  aria-label="Subcategory Actions"
+                                  className="size-7 rounded hover:bg-muted inline-flex items-center justify-center text-muted-foreground cursor-pointer"
+                                  aria-label="Actions"
                                 >
-                                  <MoreVertical className="size-4" />
+                                  <MoreVertical className="size-3.5" />
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent
-                                  align="end"
-                                  className="w-40 text-xs"
-                                >
+                                <DropdownMenuContent align="end" className="w-36 text-xs">
                                   <DropdownMenuItem
                                     onClick={() => handleEdit(child)}
-                                    className="cursor-pointer gap-2"
+                                    className="cursor-pointer gap-2 font-normal"
                                   >
-                                    <Edit2 className="size-3.5 text-muted-foreground" />
+                                    <Edit2 className="size-3.5" />
                                     <span>Edit</span>
                                   </DropdownMenuItem>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem
                                     onClick={() => setDeletingCategory(child)}
-                                    className="cursor-pointer gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
+                                    className="cursor-pointer gap-2 text-destructive focus:text-destructive font-normal"
                                   >
                                     <Trash2 className="size-3.5" />
                                     <span>Delete</span>

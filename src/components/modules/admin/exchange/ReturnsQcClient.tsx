@@ -2,11 +2,10 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -31,19 +30,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { decideExchangeStatus, decideReturnQc } from "@/services/exchange.services";
 import { ExchangeStatus, IExchangeRequest, ReturnQcStatus } from "@/types/exchange.types";
-import {
-  AlertTriangle,
-  ArrowLeftRight,
-  CheckCircle2,
-  Clock,
-  Droplets,
-  Eye,
-  FileCheck2,
-  Search,
-  ShieldAlert,
-  XCircle,
-} from "lucide-react";
-import Image from "next/image";
+import { Search } from "lucide-react";
 import React, { useMemo, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 
@@ -116,7 +103,7 @@ export default function ReturnsQcClient({ initialExchanges }: ReturnsQcClientPro
                 : e
             )
           );
-          toast.success(`Exchange ${selectedExchange.exchangeNumber} status updated to ${newStatus}`);
+          toast.success("Return status updated");
         } else {
           await decideReturnQc(selectedExchange.id, {
             decision: qcStatus,
@@ -130,7 +117,7 @@ export default function ReturnsQcClient({ initialExchanges }: ReturnsQcClientPro
                 : e
             )
           );
-          toast.success(`QC grading updated to ${qcStatus}`);
+          toast.success("QC grading updated");
         }
 
         setSelectedExchange(null);
@@ -141,235 +128,139 @@ export default function ReturnsQcClient({ initialExchanges }: ReturnsQcClientPro
     });
   };
 
-  const renderStatusBadge = (status: ExchangeStatus) => {
-    switch (status) {
-      case "PENDING":
-        return (
-          <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-300 gap-1 text-[11px]">
-            <Clock className="size-3" /> Under Review
-          </Badge>
-        );
-      case "APPROVED":
-        return (
-          <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-300 gap-1 text-[11px]">
-            <CheckCircle2 className="size-3" /> Approved
-          </Badge>
-        );
-      case "REPLACEMENT_DISPATCHED":
-        return (
-          <Badge variant="outline" className="bg-purple-500/10 text-purple-600 border-purple-300 gap-1 text-[11px]">
-            <Droplets className="size-3" /> Dispatched
-          </Badge>
-        );
-      case "COMPLETED":
-        return (
-          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-300 gap-1 text-[11px]">
-            <CheckCircle2 className="size-3" /> Completed
-          </Badge>
-        );
-      case "REJECTED":
-        return (
-          <Badge variant="destructive" className="gap-1 text-[11px]">
-            <XCircle className="size-3" /> Rejected
-          </Badge>
-        );
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
-  };
-
-  const renderQcBadge = (qc: ReturnQcStatus) => {
-    switch (qc) {
-      case "AWAITING_RETURN":
-        return <span className="text-[11px] text-muted-foreground">In Customer Hands</span>;
-      case "RECEIVED_PENDING_QC":
-        return (
-          <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-300 text-[10px]">
-            Vault Inspection Needed
-          </Badge>
-        );
-      case "QC_PASSED_RESTOCKED":
-        return (
-          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-300 text-[10px]">
-            Restocked / Pristine
-          </Badge>
-        );
-      case "QC_FAILED_DAMAGED":
-        return (
-          <Badge variant="destructive" className="text-[10px]">
-            Damaged / Discarded
-          </Badge>
-        );
-      default:
-        return <span className="text-[11px]">{qc}</span>;
-    }
-  };
-
   return (
     <div className="space-y-6">
       {/* Returns KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Pending Exchange Requests
-            </CardTitle>
-            <Clock className="size-4 text-amber-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
-              {pendingCount}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Awaiting atelier approval
-            </p>
-          </CardContent>
+        <Card className="shadow-none border border-border/60 bg-card p-4 space-y-1">
+          <div className="text-xs font-normal text-muted-foreground uppercase">
+            Pending Review
+          </div>
+          <div className="text-xl font-normal text-foreground tabular-nums">
+            {pendingCount}
+          </div>
         </Card>
 
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Warehouse Returns QC
-            </CardTitle>
-            <ShieldAlert className="size-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
-              {qcPendingCount}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Returned flacons awaiting inspection
-            </p>
-          </CardContent>
+        <Card className="shadow-none border border-border/60 bg-card p-4 space-y-1">
+          <div className="text-xs font-normal text-muted-foreground uppercase">
+            Warehouse QC Pending
+          </div>
+          <div className="text-xl font-normal text-foreground tabular-nums">
+            {qcPendingCount}
+          </div>
         </Card>
 
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Resolved &amp; Swapped
-            </CardTitle>
-            <FileCheck2 className="size-4 text-emerald-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
-              {completedCount}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Successfully satisfied customers
-            </p>
-          </CardContent>
+        <Card className="shadow-none border border-border/60 bg-card p-4 space-y-1">
+          <div className="text-xs font-normal text-muted-foreground uppercase">
+            Resolved
+          </div>
+          <div className="text-xl font-normal text-foreground tabular-nums">
+            {completedCount}
+          </div>
         </Card>
       </div>
 
       {/* Control Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+        <div className="relative w-full sm:w-72">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
           <Input
-            placeholder="Search return #, order #, customer or fragrance..."
+            placeholder="Search return #, order #, or customer..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 text-xs h-9 bg-background"
+            className="pl-8 text-xs h-8 bg-background font-normal"
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <Select value={statusFilter} onValueChange={(val) => val && setStatusFilter(val)}>
-            <SelectTrigger className="w-36 h-9 text-xs cursor-pointer">
-              <SelectValue placeholder="Filter status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">All Statuses</SelectItem>
-              <SelectItem value="PENDING">Under Review</SelectItem>
-              <SelectItem value="APPROVED">Approved</SelectItem>
-              <SelectItem value="REPLACEMENT_DISPATCHED">Dispatched</SelectItem>
-              <SelectItem value="COMPLETED">Completed</SelectItem>
-              <SelectItem value="REJECTED">Rejected</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Select value={statusFilter} onValueChange={(val) => val && setStatusFilter(val)}>
+          <SelectTrigger className="w-36 h-8 text-xs font-normal cursor-pointer">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Statuses</SelectItem>
+            <SelectItem value="PENDING">Under Review</SelectItem>
+            <SelectItem value="APPROVED">Approved</SelectItem>
+            <SelectItem value="REPLACEMENT_DISPATCHED">Dispatched</SelectItem>
+            <SelectItem value="COMPLETED">Completed</SelectItem>
+            <SelectItem value="REJECTED">Rejected</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Returns Table */}
-      <div className="rounded-xl border bg-card shadow-xs overflow-hidden">
+      <Card className="shadow-none border border-border/60 overflow-hidden">
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow>
-              <TableHead className="text-xs font-semibold">Return ID &amp; Date</TableHead>
-              <TableHead className="text-xs font-semibold">Customer &amp; Order</TableHead>
-              <TableHead className="text-xs font-semibold">Fragrance Flacon</TableHead>
-              <TableHead className="text-xs font-semibold">Reason / Issue</TableHead>
-              <TableHead className="text-xs font-semibold">Status</TableHead>
-              <TableHead className="text-xs font-semibold">Vault QC</TableHead>
-              <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
+              <TableHead className="text-xs font-normal">Ticket #</TableHead>
+              <TableHead className="text-xs font-normal">Customer</TableHead>
+              <TableHead className="text-xs font-normal">Fragrance</TableHead>
+              <TableHead className="text-xs font-normal">Issue</TableHead>
+              <TableHead className="text-xs font-normal">Status</TableHead>
+              <TableHead className="text-xs font-normal">QC Grade</TableHead>
+              <TableHead className="text-xs font-normal text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredExchanges.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="h-44 text-center">
-                  <div className="flex flex-col items-center justify-center text-muted-foreground space-y-2">
-                    <ArrowLeftRight className="size-8 stroke-[1.5]" />
-                    <p className="text-xs font-medium">No returns or damage QC tickets</p>
-                    <p className="text-[11px] text-muted-foreground/80">
-                      When customers report damaged atomizers or request scent exchanges, they appear here
-                    </p>
-                  </div>
+                <TableCell colSpan={7} className="h-36 text-center text-xs font-normal text-muted-foreground">
+                  No return tickets found
                 </TableCell>
               </TableRow>
             ) : (
               filteredExchanges.map((item) => (
-                <TableRow key={item.id} className="hover:bg-muted/20">
+                <TableRow key={item.id} className="hover:bg-muted/20 transition-colors">
                   <TableCell>
-                    <div className="space-y-0.5">
-                      <span className="font-mono font-semibold text-xs text-foreground">
-                        {item.exchangeNumber}
-                      </span>
-                      <div className="text-[11px] text-muted-foreground">
-                        {new Date(item.createdAt).toLocaleDateString()}
-                      </div>
+                    <div className="font-mono text-xs font-normal text-foreground">
+                      {item.exchangeNumber}
+                    </div>
+                    <div className="text-[11px] font-mono text-muted-foreground">
+                      {new Date(item.createdAt).toLocaleDateString()}
                     </div>
                   </TableCell>
 
                   <TableCell>
-                    <div className="space-y-0.5">
-                      <div className="font-medium text-xs text-foreground">
-                        {item.order?.customerName || "Customer"}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground">
-                        {item.order?.customerPhone} • #{item.order?.orderNumber}
-                      </div>
+                    <div className="text-xs font-normal text-foreground">
+                      {item.order?.customerName || "Customer"}
+                    </div>
+                    <div className="text-[11px] font-mono text-muted-foreground">
+                      {item.order?.customerPhone}
                     </div>
                   </TableCell>
 
                   <TableCell>
-                    <div className="space-y-0.5">
-                      <div className="font-medium text-xs text-foreground line-clamp-1">
-                        {item.orderItem?.productName || "Fragrance Flacon"}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground">
-                        {item.oldVariant?.size || "Standard Volume"}
-                      </div>
+                    <div className="text-xs font-normal text-foreground line-clamp-1">
+                      {item.orderItem?.productName || "Fragrance"}
                     </div>
+                    <div className="text-[11px] text-muted-foreground">
+                      {item.oldVariant?.size || "Standard"}
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="max-w-xs text-xs font-normal text-muted-foreground line-clamp-1">
+                    {item.reason}
                   </TableCell>
 
                   <TableCell>
-                    <div className="max-w-xs text-xs text-muted-foreground line-clamp-2">
-                      {item.reason}
-                    </div>
+                    <Badge variant="outline" className="text-[10px] font-normal">
+                      {item.status}
+                    </Badge>
                   </TableCell>
 
-                  <TableCell>{renderStatusBadge(item.status)}</TableCell>
-
-                  <TableCell>{renderQcBadge(item.returnQcStatus)}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="text-[10px] font-normal">
+                      {item.returnQcStatus}
+                    </Badge>
+                  </TableCell>
 
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-1">
                       <Button
                         size="sm"
-                        variant="outline"
+                        variant="ghost"
                         onClick={() => handleOpenDecision(item, "STATUS")}
-                        className="h-7 text-xs px-2 cursor-pointer"
+                        className="h-7 text-xs font-normal px-2 cursor-pointer"
                       >
                         Status
                       </Button>
@@ -377,9 +268,9 @@ export default function ReturnsQcClient({ initialExchanges }: ReturnsQcClientPro
                         size="sm"
                         variant="ghost"
                         onClick={() => handleOpenDecision(item, "QC")}
-                        className="h-7 text-xs px-2 cursor-pointer text-blue-600 hover:text-blue-700"
+                        className="h-7 text-xs font-normal px-2 cursor-pointer"
                       >
-                        QC Grade
+                        QC
                       </Button>
                     </div>
                   </TableCell>
@@ -388,84 +279,71 @@ export default function ReturnsQcClient({ initialExchanges }: ReturnsQcClientPro
             )}
           </TableBody>
         </Table>
-      </div>
+      </Card>
 
       {/* Decision Dialog */}
       <Dialog open={!!selectedExchange} onOpenChange={(open) => !open && setSelectedExchange(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base">
-              {decisionType === "STATUS" ? (
-                <>
-                  <CheckCircle2 className="size-4 text-primary" />
-                  Review Return Status
-                </>
-              ) : (
-                <>
-                  <ShieldAlert className="size-4 text-blue-600" />
-                  Warehouse QC Inspection
-                </>
-              )}
+            <DialogTitle className="text-sm font-normal">
+              {decisionType === "STATUS" ? "Update Return Status" : "Warehouse QC Decision"}
             </DialogTitle>
-            <DialogDescription className="text-xs">
-              Ticket: {selectedExchange?.exchangeNumber} • Fragrance: {selectedExchange?.orderItem?.productName}
-            </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-2">
+          <div className="space-y-3 py-2 text-xs font-normal">
             {decisionType === "STATUS" ? (
-              <div className="space-y-1.5">
-                <Label className="text-xs">Update Status</Label>
+              <div className="space-y-1">
+                <Label className="text-xs font-normal">Status</Label>
                 <Select value={newStatus} onValueChange={(val) => val && setNewStatus(val as ExchangeStatus)}>
-                  <SelectTrigger className="text-xs h-9">
+                  <SelectTrigger className="text-xs h-8 font-normal">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="PENDING">Under Review</SelectItem>
-                    <SelectItem value="APPROVED">Approve Replacement Flacon</SelectItem>
-                    <SelectItem value="REPLACEMENT_DISPATCHED">Replacement Dispatched</SelectItem>
+                    <SelectItem value="APPROVED">Approve Replacement</SelectItem>
+                    <SelectItem value="REPLACEMENT_DISPATCHED">Dispatched</SelectItem>
                     <SelectItem value="COMPLETED">Completed</SelectItem>
-                    <SelectItem value="REJECTED">Reject Return</SelectItem>
+                    <SelectItem value="REJECTED">Reject</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             ) : (
-              <div className="space-y-1.5">
-                <Label className="text-xs">Warehouse QC Condition</Label>
+              <div className="space-y-1">
+                <Label className="text-xs font-normal">Warehouse QC</Label>
                 <Select value={qcStatus} onValueChange={(val) => val && setQcStatus(val as ReturnQcStatus)}>
-                  <SelectTrigger className="text-xs h-9">
+                  <SelectTrigger className="text-xs h-8 font-normal">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="AWAITING_RETURN">Awaiting Return</SelectItem>
                     <SelectItem value="RECEIVED_PENDING_QC">Received (Pending Inspection)</SelectItem>
-                    <SelectItem value="QC_PASSED_RESTOCKED">QC Passed (Unopened, Restocked)</SelectItem>
-                    <SelectItem value="QC_FAILED_DAMAGED">QC Failed (Atomizer Leaked / Damaged)</SelectItem>
+                    <SelectItem value="QC_PASSED_RESTOCKED">QC Passed (Restocked)</SelectItem>
+                    <SelectItem value="QC_FAILED_DAMAGED">QC Failed (Damaged / Leaked)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             )}
 
             {newStatus === "REJECTED" && decisionType === "STATUS" && (
-              <div className="space-y-1.5">
-                <Label className="text-xs text-destructive">Rejection Reason</Label>
+              <div className="space-y-1">
+                <Label className="text-xs font-normal text-muted-foreground">Rejection Reason</Label>
                 <Input
                   value={rejectionReason}
                   onChange={(e) => setRejectionReason(e.target.value)}
-                  placeholder="e.g. Flacon was more than 50% consumed"
-                  className="text-xs h-9"
+                  placeholder="e.g. Consumed or outside policy"
+                  className="text-xs h-8 font-normal"
                 />
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <Label className="text-xs">Admin / Atelier Inspection Note</Label>
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Internal Note</Label>
               <Textarea
                 value={adminNote}
                 onChange={(e) => setAdminNote(e.target.value)}
-                placeholder="Internal notes regarding bottle condition or courier damage..."
-                className="text-xs"
-                rows={3}
+                placeholder="Inspection or packaging notes..."
+                className="text-xs font-normal"
+                rows={2}
               />
             </div>
           </div>
@@ -476,7 +354,7 @@ export default function ReturnsQcClient({ initialExchanges }: ReturnsQcClientPro
               size="sm"
               onClick={() => setSelectedExchange(null)}
               disabled={isPending}
-              className="text-xs"
+              className="text-xs font-normal"
             >
               Cancel
             </Button>
@@ -484,9 +362,9 @@ export default function ReturnsQcClient({ initialExchanges }: ReturnsQcClientPro
               size="sm"
               onClick={handleSaveDecision}
               disabled={isPending}
-              className="text-xs cursor-pointer"
+              className="text-xs font-normal cursor-pointer"
             >
-              {isPending ? "Saving..." : "Confirm Decision"}
+              {isPending ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>
         </DialogContent>

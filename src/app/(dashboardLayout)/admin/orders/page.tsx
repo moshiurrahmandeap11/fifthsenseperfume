@@ -1,13 +1,13 @@
 import OrderManagementClient, { AdminOrder } from "@/components/modules/admin/order/OrderManagementClient";
+import { FluidPage } from "@/components/ui/fluid-motion";
 import { getAllOrders } from "@/services/order.services";
-import { ShoppingBag } from "lucide-react";
 import { Metadata } from "next";
 import { connection } from "next/server";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Orders & Call Center | FIFTH SENSE PERFUMES",
-  description: "Manage perfume customer orders, dispatch, and call center verification",
+  title: "Orders | FIFTH SENSE PERFUMES",
+  description: "Fragrance customer orders, dispatch, and verification",
 };
 
 export default async function AdminOrdersPage() {
@@ -24,26 +24,19 @@ export default async function AdminOrdersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <ShoppingBag className="size-4" />
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Orders &amp; Call Center
-            </h1>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Real-time fragrance order management, call center confirmation, and parcel dispatch
-          </p>
-        </div>
+    <FluidPage className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-2 border-b">
+        <h1 className="text-base font-normal tracking-wide uppercase text-foreground">
+          Orders &amp; Call Center
+        </h1>
+        <span className="text-xs font-mono text-muted-foreground">
+          {orders.length} total
+        </span>
       </div>
 
       {/* Main Interactive Orders Client */}
       <OrderManagementClient initialOrders={orders} />
-    </div>
+    </FluidPage>
   );
 }

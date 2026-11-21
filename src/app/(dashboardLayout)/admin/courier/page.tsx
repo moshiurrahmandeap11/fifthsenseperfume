@@ -1,14 +1,14 @@
 import CourierLogisticsClient from "@/components/modules/admin/courier/CourierLogisticsClient";
+import { FluidPage } from "@/components/ui/fluid-motion";
 import { getAllShipments, getShippingZones } from "@/services/courier.services";
 import { ICourierShipment, IShippingZoneRule } from "@/types/courier.types";
-import { Truck } from "lucide-react";
 import { Metadata } from "next";
 import { connection } from "next/server";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Courier & Fraud Check | FIFTH SENSE PERFUMES",
-  description: "Track consignments across Steadfast and Pathao, check customer fraud risk scores",
+  title: "Courier & Logistics | FIFTH SENSE PERFUMES",
+  description: "Track consignments across Steadfast and Pathao, check fraud scores",
 };
 
 export default async function AdminCourierPage() {
@@ -33,22 +33,15 @@ export default async function AdminCourierPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <FluidPage className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Truck className="size-4" />
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Courier &amp; Fraud Check
-            </h1>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Monitor Steadfast &amp; Pathao consignments, run phone fraud checks, and review delivery zones
-          </p>
-        </div>
+      <div className="flex items-center justify-between pb-2 border-b">
+        <h1 className="text-base font-normal tracking-wide uppercase text-foreground">
+          Courier &amp; Fraud Check
+        </h1>
+        <span className="text-xs font-mono text-muted-foreground">
+          {shipments.length} consignments
+        </span>
       </div>
 
       {/* Main Interactive Client */}
@@ -56,6 +49,6 @@ export default async function AdminCourierPage() {
         initialShipments={shipments}
         shippingZones={shippingZones}
       />
-    </div>
+    </FluidPage>
   );
 }

@@ -1,16 +1,16 @@
 import StaffAndCrmClient from "@/components/modules/admin/user/StaffAndCrmClient";
+import { FluidPage } from "@/components/ui/fluid-motion";
 import { getAllStaff } from "@/services/admin.services";
 import { getAllCustomers } from "@/services/user.services";
 import { IStaffUser } from "@/types/admin.types";
 import { ICustomerProfile } from "@/types/user.types";
-import { Users } from "lucide-react";
 import { Metadata } from "next";
 import { connection } from "next/server";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Staff & Customer CRM | FIFTH SENSE PERFUMES",
-  description: "Manage atelier team roles and fragrance customer relationships",
+  title: "Staff & Customers | FIFTH SENSE",
+  description: "Atelier access control and customer directory",
 };
 
 export default async function AdminUsersPage() {
@@ -35,26 +35,19 @@ export default async function AdminUsersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Users className="size-4" />
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Staff &amp; Customer CRM
-            </h1>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Manage atelier staff access roles, moderator permissions, and customer fragrance VIP records
+    <FluidPage className="w-full space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/40 pb-4">
+        <div>
+          <h1 className="text-xl font-normal tracking-tight text-foreground">
+            Staff &amp; Customers
+          </h1>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Role-based permissions and registered customer directory
           </p>
         </div>
       </div>
 
-      {/* Main Interactive Client */}
       <StaffAndCrmClient initialStaff={staff} initialCustomers={customers} />
-    </div>
+    </FluidPage>
   );
 }

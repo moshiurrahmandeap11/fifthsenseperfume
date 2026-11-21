@@ -5,16 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ISizeChart } from "@/types/sizeChart.types";
-import {
-  Edit2,
-  Eye,
-  Footprints,
-  Plus,
-  Ruler,
-  Search,
-  Trash2,
-} from "lucide-react";
-import Image from "next/image";
+import { Edit2, Eye, Plus, Search, Trash2 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import SizeChartBuilderDialog from "./SizeChartBuilderDialog";
 import SizeChartDeleteAlert from "./SizeChartDeleteAlert";
@@ -62,130 +53,91 @@ export default function SizeChartCardGrid({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       {/* Search and Action Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
           <Input
-            placeholder="Search size charts..."
+            placeholder="Search volume guides..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 h-9 text-xs"
+            className="pl-9 h-9 text-xs font-normal"
           />
         </div>
 
         <Button
           onClick={handleCreate}
           size="sm"
-          className="gap-1.5 h-9 text-xs cursor-pointer"
+          className="gap-1.5 h-9 text-xs font-normal cursor-pointer"
         >
-          <Plus className="size-4" />
-          <span>Create Size Chart</span>
+          <Plus className="size-3.5" />
+          <span>Create Volume Guide</span>
         </Button>
       </div>
 
-      {/* Grid of Size Charts */}
+      {/* Grid of Volume Guides */}
       {filteredCharts.length === 0 ? (
-        <div className="rounded-xl border bg-card p-12 text-center shadow-xs">
-          <Ruler className="size-10 text-muted-foreground/40 mx-auto mb-2" />
-          <h3 className="text-sm font-bold text-foreground">
-            No size charts configured
-          </h3>
-          <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
-            {searchTerm
-              ? "No size chart matches your search query."
-              : "Create concentration & volume guides (30ml, 50ml, 100ml, Extrait, EDP) so customers understand sillage and spray yields."}
+        <div className="rounded-lg border border-border/50 bg-card p-12 text-center">
+          <p className="text-xs text-muted-foreground font-normal">
+            No volume guides configured
           </p>
-          {!searchTerm && (
-            <Button
-              onClick={handleCreate}
-              size="sm"
-              className="gap-1 text-xs cursor-pointer"
-            >
-              <Plus className="size-3.5" />
-              <span>Create First Size Chart</span>
-            </Button>
-          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredCharts.map((chart) => {
             const rowCount = chart.rows?.length || 0;
             const productCount = chart._count?.products || 0;
-            const minSize = chart.rows?.[0]?.euSize;
-            const maxSize = chart.rows?.[rowCount - 1]?.euSize;
 
             return (
               <Card
                 key={chart.id}
-                className="shadow-xs hover:shadow-sm transition-shadow flex flex-col justify-between"
+                className="shadow-none border-border/50 bg-card flex flex-col justify-between"
               >
-                <CardHeader className="pb-3 border-b">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="space-y-1">
-                      <CardTitle className="text-sm font-bold text-foreground line-clamp-1">
-                        {chart.title}
-                      </CardTitle>
-                      <p className="text-[11px] text-muted-foreground line-clamp-1">
-                        {chart.description || "Standard fragrance volume template"}
-                      </p>
-                    </div>
-
-                    <div className="size-7 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                      <Ruler className="size-3.5" />
-                    </div>
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <div className="space-y-0.5">
+                    <CardTitle className="text-xs font-normal text-foreground line-clamp-1">
+                      {chart.title}
+                    </CardTitle>
+                    <p className="text-[11px] text-muted-foreground line-clamp-1 font-normal">
+                      {chart.description || "Flacon volume guide"}
+                    </p>
                   </div>
                 </CardHeader>
 
-                <CardContent className="pt-4 pb-2 space-y-3 flex-1">
-                  {/* Size Range & Metrics */}
+                <CardContent className="pt-4 pb-2 space-y-2.5 flex-1 font-normal">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Configured Sizes:</span>
-                    <span className="font-bold text-foreground">
-                      {rowCount} Sizes {minSize && maxSize && `(EU ${minSize} - ${maxSize})`}
+                    <span className="text-muted-foreground">Volumes:</span>
+                    <span className="text-foreground tabular-nums">
+                      {rowCount} {rowCount === 1 ? "Option" : "Options"}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-muted-foreground">Linked Products:</span>
-                    <Badge variant="secondary" className="text-[10px] h-4.5">
-                      {productCount} {productCount === 1 ? "Product" : "Products"}
+                    <Badge variant="outline" className="text-[10px] font-normal text-muted-foreground">
+                      {productCount}
                     </Badge>
                   </div>
 
-                  {/* Sizes Preview Badges */}
                   <div className="pt-1 flex flex-wrap gap-1">
-                    {chart.rows?.slice(0, 6).map((row, rIdx) => (
+                    {chart.rows?.map((row, rIdx) => (
                       <span
                         key={rIdx}
-                        className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-muted text-foreground border"
+                        className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-muted/40 text-foreground border border-border/40"
                       >
-                        EU {row.euSize}
+                        {row.euSize}
                       </span>
                     ))}
-                    {rowCount > 6 && (
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-muted/60 text-muted-foreground">
-                        +{rowCount - 6} more
-                      </span>
-                    )}
                   </div>
-
-                  {/* Guide Image thumbnail indicator */}
-                  {chart.guideImage && (
-                    <div className="pt-1 flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
-                      <Footprints className="size-3.5" />
-                      <span>Includes foot measurement diagram</span>
-                    </div>
-                  )}
                 </CardContent>
 
-                <CardFooter className="pt-3 border-t flex items-center justify-between">
+                <CardFooter className="pt-3 border-t border-border/40 flex items-center justify-between">
                   <Button
                     variant="outline"
                     size="xs"
                     onClick={() => handlePreview(chart)}
-                    className="text-xs gap-1 cursor-pointer"
+                    className="text-xs font-normal gap-1 cursor-pointer"
                   >
                     <Eye className="size-3 text-muted-foreground" />
                     <span>Preview</span>
@@ -197,7 +149,7 @@ export default function SizeChartCardGrid({
                       size="icon-xs"
                       onClick={() => handleEdit(chart)}
                       className="cursor-pointer text-muted-foreground hover:text-foreground"
-                      aria-label="Edit Size Chart"
+                      aria-label="Edit"
                     >
                       <Edit2 className="size-3.5" />
                     </Button>
@@ -205,8 +157,8 @@ export default function SizeChartCardGrid({
                       variant="ghost"
                       size="icon-xs"
                       onClick={() => setDeletingChart(chart)}
-                      className="cursor-pointer text-muted-foreground hover:text-destructive"
-                      aria-label="Delete Size Chart"
+                      className="cursor-pointer text-muted-foreground hover:text-foreground"
+                      aria-label="Delete"
                     >
                       <Trash2 className="size-3.5" />
                     </Button>
@@ -218,7 +170,7 @@ export default function SizeChartCardGrid({
         </div>
       )}
 
-      {/* Builder Modal (Create/Edit) */}
+      {/* Builder Modal */}
       <SizeChartBuilderDialog
         isOpen={isBuilderOpen}
         onClose={() => setIsBuilderOpen(false)}
@@ -226,7 +178,7 @@ export default function SizeChartCardGrid({
         initialData={editingChart}
       />
 
-      {/* Visual Preview Modal */}
+      {/* Preview Modal */}
       <SizeChartVisualPreview
         chart={selectedChart}
         isOpen={isPreviewOpen}

@@ -63,18 +63,18 @@ export default function AdminUserMenu({ user }: AdminUserMenuProps) {
         )}
         disabled={isLoggingOut}
       >
-        <Avatar className="size-8 border">
+        <Avatar className="size-7 border">
           <AvatarImage src="" alt={displayName} />
-          <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
+          <AvatarFallback className="bg-muted text-muted-foreground font-normal text-xs">
             {initials}
           </AvatarFallback>
         </Avatar>
 
         <div className="hidden md:flex flex-col text-left">
-          <span className="text-xs font-semibold text-foreground truncate max-w-28 leading-none">
+          <span className="text-xs font-normal text-foreground truncate max-w-28 leading-none">
             {displayName}
           </span>
-          <span className="text-[10px] text-muted-foreground mt-0.5 truncate max-w-28 leading-none">
+          <span className="text-[10px] text-muted-foreground mt-0.5 truncate max-w-28 leading-none font-normal">
             {displayRole}
           </span>
         </div>

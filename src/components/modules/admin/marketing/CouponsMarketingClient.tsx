@@ -2,11 +2,10 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -30,17 +29,7 @@ import {
 } from "@/components/ui/table";
 import { createCoupon, deleteCoupon, updateCoupon } from "@/services/marketing.services";
 import { DiscountType, ICoupon } from "@/types/marketing.types";
-import {
-  CheckCircle2,
-  Clock,
-  Percent,
-  Plus,
-  Search,
-  Sparkles,
-  Tag,
-  Trash2,
-  XCircle,
-} from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import React, { useMemo, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 
@@ -77,7 +66,7 @@ export default function CouponsMarketingClient({
 
   const handleCreateCoupon = () => {
     if (!code.trim()) {
-      toast.error("Please provide a promo coupon code (e.g. FIFTHSENSE10)");
+      toast.error("Please provide a coupon code");
       return;
     }
 
@@ -96,7 +85,7 @@ export default function CouponsMarketingClient({
         if (res?.data) {
           setCoupons((prev) => [res.data, ...prev]);
         }
-        toast.success(`Coupon ${code.toUpperCase()} created successfully`);
+        toast.success(`Coupon ${code.toUpperCase()} created`);
         setIsAddOpen(false);
         setCode("");
         setDescription("");
@@ -114,22 +103,22 @@ export default function CouponsMarketingClient({
         setCoupons((prev) =>
           prev.map((c) => (c.id === coupon.id ? { ...c, isActive: !c.isActive } : c))
         );
-        toast.success(`Coupon ${coupon.code} ${!coupon.isActive ? "activated" : "deactivated"}`);
+        toast.success(`Coupon ${coupon.code} updated`);
       } catch (err: unknown) {
         const error = err as { message?: string };
-        toast.error(error.message || "Failed to update coupon status");
+        toast.error(error.message || "Failed to update status");
       }
     });
   };
 
   const handleDelete = (id: string, couponCode: string) => {
-    if (!confirm(`Are you sure you want to permanently delete coupon "${couponCode}"?`)) return;
+    if (!confirm(`Delete coupon "${couponCode}"?`)) return;
 
     startTransition(async () => {
       try {
         await deleteCoupon(id);
         setCoupons((prev) => prev.filter((c) => c.id !== id));
-        toast.success(`Coupon ${couponCode} deleted`);
+        toast.success("Coupon deleted");
       } catch (err: unknown) {
         const error = err as { message?: string };
         toast.error(error.message || "Failed to delete coupon");
@@ -140,142 +129,96 @@ export default function CouponsMarketingClient({
   return (
     <div className="space-y-6">
       {/* Marketing KPI Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Active Promo Campaigns
-            </CardTitle>
-            <Tag className="size-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
-              {activeCount}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Active promotional discount codes
-            </p>
-          </CardContent>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Card className="shadow-none border border-border/60 bg-card p-4 space-y-1">
+          <div className="text-xs font-normal text-muted-foreground uppercase">
+            Active Coupons
+          </div>
+          <div className="text-xl font-normal text-foreground tabular-nums">
+            {activeCount}
+          </div>
         </Card>
 
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Total Redemptions
-            </CardTitle>
-            <Percent className="size-4 text-emerald-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-emerald-600">
-              {totalUsedCount} times
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Perfume voucher redemptions recorded
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Campaign Conversion
-            </CardTitle>
-            <Sparkles className="size-4 text-purple-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
-              VIP Atelier
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              First-order &amp; discovery set incentives
-            </p>
-          </CardContent>
+        <Card className="shadow-none border border-border/60 bg-card p-4 space-y-1">
+          <div className="text-xs font-normal text-muted-foreground uppercase">
+            Total Redemptions
+          </div>
+          <div className="text-xl font-normal text-foreground tabular-nums">
+            {totalUsedCount} times
+          </div>
         </Card>
       </div>
 
       {/* Control Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+        <div className="relative w-full sm:w-72">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
           <Input
-            placeholder="Search coupon code or campaign..."
+            placeholder="Search coupon code..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 text-xs h-9 bg-background"
+            className="pl-8 text-xs h-8 bg-background font-normal"
           />
         </div>
 
         <Button
           size="sm"
           onClick={() => setIsAddOpen(true)}
-          className="h-9 text-xs cursor-pointer gap-1.5"
+          className="h-8 px-3 text-xs gap-1.5 cursor-pointer font-normal"
         >
           <Plus className="size-3.5" />
-          <span>Create Coupon Code</span>
+          <span>Create Coupon</span>
         </Button>
       </div>
 
       {/* Coupons Table */}
-      <div className="rounded-xl border bg-card shadow-xs overflow-hidden">
+      <Card className="shadow-none border border-border/60 overflow-hidden">
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow>
-              <TableHead className="text-xs font-semibold">Promo Code</TableHead>
-              <TableHead className="text-xs font-semibold">Discount Offer</TableHead>
-              <TableHead className="text-xs font-semibold">Min. Order Value</TableHead>
-              <TableHead className="text-xs font-semibold">Usage / Limit</TableHead>
-              <TableHead className="text-xs font-semibold">Status</TableHead>
-              <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
+              <TableHead className="text-xs font-normal">Code</TableHead>
+              <TableHead className="text-xs font-normal">Discount</TableHead>
+              <TableHead className="text-xs font-normal text-right">Min. Order</TableHead>
+              <TableHead className="text-xs font-normal text-right">Used / Limit</TableHead>
+              <TableHead className="text-xs font-normal">Status</TableHead>
+              <TableHead className="text-xs font-normal text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredCoupons.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-44 text-center">
-                  <div className="flex flex-col items-center justify-center text-muted-foreground space-y-2">
-                    <Tag className="size-8 stroke-[1.5]" />
-                    <p className="text-xs font-medium">No fragrance promo coupons found</p>
-                    <p className="text-[11px] text-muted-foreground/80">
-                      Create promotional codes (e.g. FIFTHSENSE10 or WINTEROUD) to reward customers
-                    </p>
-                  </div>
+                <TableCell colSpan={6} className="h-36 text-center text-xs font-normal text-muted-foreground">
+                  No coupons found
                 </TableCell>
               </TableRow>
             ) : (
               filteredCoupons.map((coupon) => (
-                <TableRow key={coupon.id} className="hover:bg-muted/20">
+                <TableRow key={coupon.id} className="hover:bg-muted/20 transition-colors">
                   <TableCell>
-                    <div className="space-y-0.5">
-                      <div className="font-mono font-bold text-xs text-foreground flex items-center gap-1.5">
-                        <Tag className="size-3 text-primary" />
-                        <span>{coupon.code}</span>
+                    <div className="font-mono text-xs font-normal text-foreground">
+                      {coupon.code}
+                    </div>
+                    {coupon.description && (
+                      <div className="text-[11px] font-normal text-muted-foreground line-clamp-1">
+                        {coupon.description}
                       </div>
-                      {coupon.description && (
-                        <div className="text-[11px] text-muted-foreground line-clamp-1">
-                          {coupon.description}
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </TableCell>
 
                   <TableCell>
-                    <Badge variant="outline" className="font-semibold text-xs text-foreground bg-background">
-                      {coupon.discountType === "PERCENTAGE" && `${coupon.discountValue}% OFF`}
-                      {coupon.discountType === "FIXED" && `BDT ${coupon.discountValue} OFF`}
-                      {coupon.discountType === "FREE_SHIPPING" && "FREE DELIVERY"}
-                    </Badge>
+                    <span className="text-xs font-normal text-foreground">
+                      {coupon.discountType === "PERCENTAGE" && `${coupon.discountValue}%`}
+                      {coupon.discountType === "FIXED" && `BDT ${coupon.discountValue}`}
+                      {coupon.discountType === "FREE_SHIPPING" && "Free Shipping"}
+                    </span>
                   </TableCell>
 
-                  <TableCell>
-                    <div className="text-xs font-medium">
-                      BDT {coupon.minOrderAmount?.toLocaleString() || 0}
-                    </div>
+                  <TableCell className="text-right text-xs font-normal text-foreground tabular-nums">
+                    BDT {coupon.minOrderAmount?.toLocaleString() || 0}
                   </TableCell>
 
-                  <TableCell>
-                    <div className="text-xs text-muted-foreground font-mono">
-                      {coupon.usedCount} / {coupon.usageLimit || "∞"} used
-                    </div>
+                  <TableCell className="text-right font-mono text-xs font-normal text-muted-foreground">
+                    {coupon.usedCount} / {coupon.usageLimit || "∞"}
                   </TableCell>
 
                   <TableCell>
@@ -283,17 +226,11 @@ export default function CouponsMarketingClient({
                       size="sm"
                       variant="ghost"
                       onClick={() => handleToggleStatus(coupon)}
-                      className="h-6 px-1.5 cursor-pointer"
+                      className="h-6 px-1 cursor-pointer font-normal"
                     >
-                      {coupon.isActive ? (
-                        <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-300 gap-1 text-[10px]">
-                          <CheckCircle2 className="size-2.5" /> Active
-                        </Badge>
-                      ) : (
-                        <Badge variant="outline" className="text-muted-foreground gap-1 text-[10px]">
-                          <XCircle className="size-2.5" /> Inactive
-                        </Badge>
-                      )}
+                      <Badge variant="outline" className="text-[10px] font-normal">
+                        {coupon.isActive ? "Active" : "Inactive"}
+                      </Badge>
                     </Button>
                   </TableCell>
 
@@ -302,7 +239,7 @@ export default function CouponsMarketingClient({
                       size="sm"
                       variant="ghost"
                       onClick={() => handleDelete(coupon.id, coupon.code)}
-                      className="size-7 p-0 cursor-pointer text-destructive hover:bg-destructive/10"
+                      className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-destructive"
                     >
                       <Trash2 className="size-3.5" />
                     </Button>
@@ -312,91 +249,85 @@ export default function CouponsMarketingClient({
             )}
           </TableBody>
         </Table>
-      </div>
+      </Card>
 
       {/* Create Coupon Modal */}
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base">
-              <Tag className="size-4 text-primary" />
-              Create Fragrance Promo Coupon
+            <DialogTitle className="text-sm font-normal">
+              New Promotional Coupon
             </DialogTitle>
-            <DialogDescription className="text-xs">
-              Configure promotional codes for the FIFTH SENSE luxury perfume boutique
-            </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-2">
-            <div className="space-y-1.5">
-              <Label className="text-xs">Coupon Code <span className="text-destructive">*</span></Label>
+          <div className="space-y-3 py-2 text-xs font-normal">
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Coupon Code</Label>
               <Input
-                placeholder="e.g. FIFTHSENSE10 or NOIRVIP"
+                placeholder="e.g. FIFTHSENSE10"
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
-                className="font-mono text-xs uppercase h-9"
+                className="font-mono text-xs uppercase h-8 font-normal"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-xs">Campaign Description</Label>
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Description</Label>
               <Input
-                placeholder="e.g. 10% discount for luxury extrait orders over 3,000 BDT"
+                placeholder="e.g. 10% off extrait orders over 3,000 BDT"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="text-xs h-9"
+                className="text-xs h-8 font-normal"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs">Discount Type</Label>
-                <Select value={discountType} onValueChange={(val) => setDiscountType(val as DiscountType)}>
-                  <SelectTrigger className="text-xs h-9">
+              <div className="space-y-1">
+                <Label className="text-xs font-normal">Type</Label>
+                <Select value={discountType} onValueChange={(val) => val && setDiscountType(val as DiscountType)}>
+                  <SelectTrigger className="text-xs h-8 font-normal">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="PERCENTAGE">Percentage (%)</SelectItem>
-                    <SelectItem value="FIXED">Fixed Amount (BDT)</SelectItem>
+                    <SelectItem value="FIXED">Fixed (BDT)</SelectItem>
                     <SelectItem value="FREE_SHIPPING">Free Shipping</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs">
-                  {discountType === "PERCENTAGE" ? "Discount Rate (%)" : "Discount Value (BDT)"}
-                </Label>
+              <div className="space-y-1">
+                <Label className="text-xs font-normal">Discount Value</Label>
                 <Input
                   type="number"
                   min={1}
                   value={discountValue}
                   onChange={(e) => setDiscountValue(parseFloat(e.target.value) || 0)}
-                  className="text-xs h-9"
+                  className="text-xs h-8 font-normal"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs">Min. Order Amount (BDT)</Label>
+              <div className="space-y-1">
+                <Label className="text-xs font-normal">Min. Order (BDT)</Label>
                 <Input
                   type="number"
                   min={0}
                   value={minOrderAmount}
                   onChange={(e) => setMinOrderAmount(parseFloat(e.target.value) || 0)}
-                  className="text-xs h-9"
+                  className="text-xs h-8 font-normal"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs">Usage Limit (Total uses)</Label>
+              <div className="space-y-1">
+                <Label className="text-xs font-normal">Usage Limit</Label>
                 <Input
                   type="number"
                   min={1}
                   value={usageLimit}
                   onChange={(e) => setUsageLimit(parseInt(e.target.value) || 1)}
-                  className="text-xs h-9"
+                  className="text-xs h-8 font-normal"
                 />
               </div>
             </div>
@@ -408,7 +339,7 @@ export default function CouponsMarketingClient({
               size="sm"
               onClick={() => setIsAddOpen(false)}
               disabled={isPending}
-              className="text-xs"
+              className="text-xs font-normal"
             >
               Cancel
             </Button>
@@ -416,9 +347,9 @@ export default function CouponsMarketingClient({
               size="sm"
               onClick={handleCreateCoupon}
               disabled={isPending}
-              className="text-xs cursor-pointer"
+              className="text-xs font-normal cursor-pointer"
             >
-              {isPending ? "Creating..." : "Save Coupon"}
+              {isPending ? "Creating..." : "Save"}
             </Button>
           </DialogFooter>
         </DialogContent>

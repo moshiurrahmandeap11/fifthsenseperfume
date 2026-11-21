@@ -1,14 +1,14 @@
 import ReturnsQcClient from "@/components/modules/admin/exchange/ReturnsQcClient";
+import { FluidPage } from "@/components/ui/fluid-motion";
 import { getAllExchanges } from "@/services/exchange.services";
 import { IExchangeRequest } from "@/types/exchange.types";
-import { ArrowLeftRight } from "lucide-react";
 import { Metadata } from "next";
 import { connection } from "next/server";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Damages & Returns QC | FIFTH SENSE PERFUMES",
-  description: "Inspect fragrance leakage, defective atomizers, and process returns",
+  title: "Damages & Returns | FIFTH SENSE PERFUMES",
+  description: "Fragrance leakage and atomizer damage returns",
 };
 
 export default async function AdminExchangesPage() {
@@ -25,26 +25,19 @@ export default async function AdminExchangesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <FluidPage className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <ArrowLeftRight className="size-4" />
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Damages &amp; Returns QC
-            </h1>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Manage flacon replacement requests, atomizer defect reports, and warehouse inspections
-          </p>
-        </div>
+      <div className="flex items-center justify-between pb-2 border-b">
+        <h1 className="text-base font-normal tracking-wide uppercase text-foreground">
+          Damages &amp; Returns QC
+        </h1>
+        <span className="text-xs font-mono text-muted-foreground">
+          {exchanges.length} tickets
+        </span>
       </div>
 
       {/* Main Interactive Client */}
       <ReturnsQcClient initialExchanges={exchanges} />
-    </div>
+    </FluidPage>
   );
 }

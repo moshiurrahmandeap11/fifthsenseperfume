@@ -2,11 +2,10 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -31,17 +30,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { createProduct, deleteProduct } from "@/services/product.services";
 import { ICreateProductPayload, IProduct } from "@/types/product.types";
-import {
-  Droplets,
-  Eye,
-  Layers,
-  Plus,
-  Search,
-  Sparkles,
-  Trash2,
-} from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -54,7 +44,6 @@ export default function FragranceCatalogClient({
 }: FragranceCatalogClientProps) {
   const [products, setProducts] = useState<IProduct[]>(initialProducts || []);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFamily, setSelectedFamily] = useState("ALL");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -66,8 +55,8 @@ export default function FragranceCatalogClient({
   const [concentration, setConcentration] = useState("Extrait de Parfum");
   const [olfactiveFamily, setOlfactiveFamily] = useState("Woody & Oriental");
   const [topNotes, setTopNotes] = useState("Bergamot, Pink Pepper");
-  const [heartNotes, setHeartNotes] = useState("Turkish Rose, Jasmine, Cedar");
-  const [baseNotes, setBaseNotes] = useState("Madagascar Vanilla, Amber, Agarwood");
+  const [heartNotes, setHeartNotes] = useState("Turkish Rose, Jasmine");
+  const [baseNotes, setBaseNotes] = useState("Amber, Agarwood");
   const [basePrice, setBasePrice] = useState("4500");
   const [discountPrice, setDiscountPrice] = useState("3800");
   const [thumbnailUrl, setThumbnailUrl] = useState("https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop");
@@ -99,7 +88,7 @@ export default function FragranceCatalogClient({
         slug: generatedSlug,
         styleCode,
         shortDescription: shortDesc,
-        description: `${description}\n\nOlfactive Pyramid:\n• Top Notes: ${topNotes}\n• Heart Notes: ${heartNotes}\n• Base Notes: ${baseNotes}`,
+        description: `${description}\n\nTop: ${topNotes} | Heart: ${heartNotes} | Base: ${baseNotes}`,
         basePrice: parseFloat(basePrice),
         discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
         costPrice: parseFloat(basePrice) * 0.4,
@@ -139,9 +128,8 @@ export default function FragranceCatalogClient({
       const res = await createProduct(payload as unknown as ICreateProductPayload);
       if (res?.data) {
         setProducts((prev) => [res.data, ...prev]);
-        toast.success(`Fragrance '${name}' created successfully!`);
+        toast.success(`Fragrance '${name}' created`);
         setIsCreateOpen(false);
-        // Reset form
         setName("");
         setSlug("");
         setShortDesc("");
@@ -154,13 +142,13 @@ export default function FragranceCatalogClient({
     }
   };
 
-  const handleDelete = async (id: string, fragName: string) => {
-    if (!confirm(`Are you sure you want to remove '${fragName}' from catalog?`)) return;
+  const handleDeleteFragrance = async (id: string, fragName: string) => {
+    if (!confirm(`Delete fragrance '${fragName}'?`)) return;
 
     try {
       await deleteProduct(id);
       setProducts((prev) => prev.filter((p) => p.id !== id));
-      toast.success("Fragrance archived from catalog");
+      toast.success("Fragrance deleted");
     } catch {
       toast.error("Failed to delete fragrance");
     }
@@ -168,60 +156,54 @@ export default function FragranceCatalogClient({
 
   return (
     <div className="space-y-6">
-      {/* 1. Header with Add Button */}
+      {/* Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="relative w-full sm:w-72">
-          <Search className="size-4 text-muted-foreground absolute left-3 top-2.5" />
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
           <Input
-            placeholder="Search fragrances, extrait, note..."
+            placeholder="Search fragrance or SKU..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 h-9 text-xs"
+            className="pl-8 text-xs h-8 bg-background font-normal"
           />
         </div>
 
         <Button
           size="sm"
           onClick={() => setIsCreateOpen(true)}
-          className="h-9 px-3.5 text-xs gap-1.5 cursor-pointer bg-primary text-primary-foreground"
+          className="h-8 px-3 text-xs gap-1.5 cursor-pointer font-normal"
         >
-          <Plus className="size-4" />
-          <span>Add New Fragrance</span>
+          <Plus className="size-3.5" />
+          <span>Add Fragrance</span>
         </Button>
       </div>
 
-      {/* 2. Fragrances Table */}
-      <Card className="shadow-xs overflow-hidden">
+      {/* Fragrances Table */}
+      <Card className="shadow-none border border-border/60 overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/30">
-              <TableHead className="text-xs font-semibold">Fragrance</TableHead>
-              <TableHead className="text-xs font-semibold">Concentration</TableHead>
-              <TableHead className="text-xs font-semibold">Base Price</TableHead>
-              <TableHead className="text-xs font-semibold">Sale Price</TableHead>
-              <TableHead className="text-xs font-semibold">Status</TableHead>
-              <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
+          <TableHeader className="bg-muted/30">
+            <TableRow>
+              <TableHead className="text-xs font-normal">Fragrance</TableHead>
+              <TableHead className="text-xs font-normal">Concentration</TableHead>
+              <TableHead className="text-xs font-normal text-right">Base Price</TableHead>
+              <TableHead className="text-xs font-normal text-right">Sale Price</TableHead>
+              <TableHead className="text-xs font-normal">Status</TableHead>
+              <TableHead className="text-xs font-normal text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-44 text-center text-xs text-muted-foreground">
-                  <div className="flex flex-col items-center justify-center gap-1.5">
-                    <Droplets className="size-8 text-muted-foreground/40 mb-1" />
-                    <p className="font-semibold text-foreground">No fragrances in catalog</p>
-                    <p className="text-[11px] max-w-sm">
-                      Click &quot;Add New Fragrance&quot; above to create your first artisanal perfume formulation.
-                    </p>
-                  </div>
+                <TableCell colSpan={6} className="h-36 text-center text-xs font-normal text-muted-foreground">
+                  No fragrances found in catalog
                 </TableCell>
               </TableRow>
             ) : (
               filteredProducts.map((p) => (
-                <TableRow key={p.id} className="hover:bg-muted/20">
+                <TableRow key={p.id} className="hover:bg-muted/20 transition-colors">
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="size-11 rounded-lg bg-muted border overflow-hidden shrink-0 relative">
+                      <div className="size-9 rounded border overflow-hidden shrink-0 relative bg-muted">
                         <Image
                           src={p.thumbnailUrl || "/navbar/fifthsenselogo.png"}
                           alt={p.name}
@@ -230,50 +212,40 @@ export default function FragranceCatalogClient({
                         />
                       </div>
                       <div>
-                        <div className="font-semibold text-xs text-foreground">
+                        <div className="text-xs font-normal text-foreground">
                           {p.name}
                         </div>
-                        <div className="text-[11px] text-muted-foreground">
-                          SKU: {p.styleCode}
+                        <div className="text-[11px] font-mono font-normal text-muted-foreground">
+                          {p.styleCode}
                         </div>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="text-[10px] font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30">
-                      {(p.specifications as any)?.concentration || "Extrait de Parfum"}
+                    <Badge variant="outline" className="text-[10px] font-normal">
+                      {(p.specifications as unknown as { concentration?: string })?.concentration || "Extrait de Parfum"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-xs font-semibold text-foreground">
+                  <TableCell className="text-xs font-normal text-foreground text-right tabular-nums">
                     BDT {p.basePrice?.toLocaleString()}
                   </TableCell>
-                  <TableCell className="text-xs font-semibold text-emerald-600">
+                  <TableCell className="text-xs font-normal text-muted-foreground text-right tabular-nums">
                     {p.discountPrice ? `BDT ${p.discountPrice.toLocaleString()}` : "—"}
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant="outline"
-                      className={`text-[10px] ${
-                        p.status === "PUBLISHED"
-                          ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/30"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
+                    <Badge variant="outline" className="font-normal text-[10px]">
                       {p.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(p.id, p.name)}
-                        className="size-7 p-0 text-muted-foreground hover:text-rose-600 cursor-pointer"
-                        title="Delete Fragrance"
-                      >
-                        <Trash2 className="size-3.5" />
-                      </Button>
-                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDeleteFragrance(p.id, p.name)}
+                      className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-destructive"
+                    >
+                      <Trash2 className="size-3.5" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
@@ -282,51 +254,53 @@ export default function FragranceCatalogClient({
         </Table>
       </Card>
 
-      {/* 3. Create Fragrance Modal */}
+      {/* Add Fragrance Dialog */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-base flex items-center gap-2">
-              <Sparkles className="size-4 text-primary" />
-              <span>Add New Luxury Fragrance</span>
+            <DialogTitle className="text-sm font-normal">
+              New Fragrance Formulation
             </DialogTitle>
-            <DialogDescription className="text-xs">
-              Formulate a new perfume profile with olfactive notes, flacon volumes, and pricing
-            </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleCreateFragrance} className="space-y-4 py-2 text-xs">
-            {/* Name & Slug */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <form onSubmit={handleCreateFragrance} className="space-y-3 py-2 text-xs font-normal">
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Name</Label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Amber Nuit Extrait"
+                className="h-8 text-xs font-normal"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label htmlFor="fragName" className="text-xs">Fragrance Title</Label>
+                <Label className="text-xs font-normal">Base Price (BDT)</Label>
                 <Input
-                  id="fragName"
-                  placeholder="e.g. Royal Oud Extrait"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="h-8 text-xs"
-                  required
+                  type="number"
+                  value={basePrice}
+                  onChange={(e) => setBasePrice(e.target.value)}
+                  className="h-8 text-xs font-normal"
                 />
               </div>
+
               <div className="space-y-1">
-                <Label htmlFor="fragSlug" className="text-xs">URL Slug</Label>
+                <Label className="text-xs font-normal">Sale Price (BDT)</Label>
                 <Input
-                  id="fragSlug"
-                  placeholder="e.g. royal-oud-extrait"
-                  value={slug}
-                  onChange={(e) => setSlug(e.target.value)}
-                  className="h-8 text-xs"
+                  type="number"
+                  value={discountPrice}
+                  onChange={(e) => setDiscountPrice(e.target.value)}
+                  className="h-8 text-xs font-normal"
                 />
               </div>
             </div>
 
-            {/* Concentration & Olfactory Family */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label className="text-xs">Concentration</Label>
+                <Label className="text-xs font-normal">Concentration</Label>
                 <Select value={concentration} onValueChange={(val) => val && setConcentration(val)}>
-                  <SelectTrigger className="h-8 text-xs">
+                  <SelectTrigger className="h-8 text-xs font-normal">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -339,109 +313,65 @@ export default function FragranceCatalogClient({
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs">Olfactory Family</Label>
+                <Label className="text-xs font-normal">Olfactory Family</Label>
                 <Select value={olfactiveFamily} onValueChange={(val) => val && setOlfactiveFamily(val)}>
-                  <SelectTrigger className="h-8 text-xs">
+                  <SelectTrigger className="h-8 text-xs font-normal">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Woody & Oriental">Woody &amp; Oriental</SelectItem>
                     <SelectItem value="Floral Atelier">Floral Atelier</SelectItem>
                     <SelectItem value="Fresh & Citrus">Fresh &amp; Citrus</SelectItem>
-                    <SelectItem value="Gourmand & Amber">Gourmand &amp; Amber</SelectItem>
-                    <SelectItem value="Smoky Leather">Smoky Leather &amp; Spices</SelectItem>
+                    <SelectItem value="Gourmand & Spiced">Gourmand &amp; Spiced</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            {/* Fragrance Notes */}
-            <div className="p-3 rounded-xl bg-muted/30 border space-y-2">
-              <span className="font-bold text-foreground">Olfactive Pyramid Notes:</span>
-              <div className="space-y-2">
-                <div>
-                  <Label className="text-[11px] text-muted-foreground">Top Notes (Opening):</Label>
-                  <Input
-                    value={topNotes}
-                    onChange={(e) => setTopNotes(e.target.value)}
-                    placeholder="e.g. Italian Bergamot, Pink Pepper, Saffron"
-                    className="h-8 text-xs bg-background"
-                  />
-                </div>
-                <div>
-                  <Label className="text-[11px] text-muted-foreground">Heart Notes (Character):</Label>
-                  <Input
-                    value={heartNotes}
-                    onChange={(e) => setHeartNotes(e.target.value)}
-                    placeholder="e.g. Taif Rose, Orris Root, Jasmine Absolute"
-                    className="h-8 text-xs bg-background"
-                  />
-                </div>
-                <div>
-                  <Label className="text-[11px] text-muted-foreground">Base Notes (Drydown):</Label>
-                  <Input
-                    value={baseNotes}
-                    onChange={(e) => setBaseNotes(e.target.value)}
-                    placeholder="e.g. Aged Agarwood, Ambergris, Bourbon Vanilla"
-                    className="h-8 text-xs bg-background"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Pricing */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label className="text-xs">Base Price (BDT)</Label>
-                <Input
-                  type="number"
-                  value={basePrice}
-                  onChange={(e) => setBasePrice(e.target.value)}
-                  className="h-8 text-xs"
-                  required
-                />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Sale Discount Price (Optional)</Label>
-                <Input
-                  type="number"
-                  value={discountPrice}
-                  onChange={(e) => setDiscountPrice(e.target.value)}
-                  className="h-8 text-xs"
-                />
-              </div>
-            </div>
-
-            {/* Thumbnail URL */}
             <div className="space-y-1">
-              <Label className="text-xs">Flacon Thumbnail Image URL</Label>
+              <Label className="text-xs font-normal">Top Notes</Label>
               <Input
-                value={thumbnailUrl}
-                onChange={(e) => setThumbnailUrl(e.target.value)}
-                placeholder="https://..."
-                className="h-8 text-xs"
+                value={topNotes}
+                onChange={(e) => setTopNotes(e.target.value)}
+                className="h-8 text-xs font-normal"
               />
             </div>
 
-            {/* Description */}
             <div className="space-y-1">
-              <Label className="text-xs">Artisanal Story / Description</Label>
+              <Label className="text-xs font-normal">Heart Notes</Label>
+              <Input
+                value={heartNotes}
+                onChange={(e) => setHeartNotes(e.target.value)}
+                className="h-8 text-xs font-normal"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Base Notes</Label>
+              <Input
+                value={baseNotes}
+                onChange={(e) => setBaseNotes(e.target.value)}
+                className="h-8 text-xs font-normal"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Description</Label>
               <Textarea
-                rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="The inspiration, olfactory mood, and artisanal formulation of this perfume..."
-                className="text-xs"
+                className="text-xs font-normal"
+                rows={2}
               />
             </div>
 
-            <DialogFooter className="gap-2 sm:gap-0 pt-2">
+            <DialogFooter className="pt-2">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsCreateOpen(false)}
-                className="h-8 text-xs"
+                className="text-xs font-normal"
               >
                 Cancel
               </Button>
@@ -449,9 +379,9 @@ export default function FragranceCatalogClient({
                 type="submit"
                 size="sm"
                 disabled={isSubmitting}
-                className="h-8 text-xs"
+                className="text-xs font-normal cursor-pointer"
               >
-                {isSubmitting ? "Creating..." : "Save Fragrance"}
+                {isSubmitting ? "Saving..." : "Create"}
               </Button>
             </DialogFooter>
           </form>

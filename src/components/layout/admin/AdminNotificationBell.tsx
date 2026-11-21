@@ -46,7 +46,7 @@ export default function AdminNotificationBell({
       >
         <Bell className="size-4.5 text-muted-foreground" />
         {totalAlerts > 0 && (
-          <span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+          <span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-foreground text-[10px] font-normal text-background">
             {totalAlerts > 9 ? "9+" : totalAlerts}
           </span>
         )}
@@ -55,7 +55,7 @@ export default function AdminNotificationBell({
       <DropdownMenuContent align="end" className="w-80 p-2 shadow-lg">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="flex items-center justify-between px-2 py-1.5 font-normal">
-            <span className="text-xs font-semibold text-foreground">
+            <span className="text-xs font-normal text-foreground">
               Operational Alerts
             </span>
             <Badge

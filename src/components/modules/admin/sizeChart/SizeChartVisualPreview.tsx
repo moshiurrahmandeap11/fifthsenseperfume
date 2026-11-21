@@ -17,7 +17,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ISizeChart } from "@/types/sizeChart.types";
-import { Droplets, Info, Ruler } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
@@ -38,39 +37,28 @@ export default function SizeChartVisualPreview({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-primary mb-1">
-            <Ruler className="size-5" />
-            <span className="text-xs font-bold uppercase tracking-wider">
-              Storefront Customer Preview
-            </span>
-          </div>
-          <DialogTitle className="text-lg font-bold">
+          <DialogTitle className="text-sm font-normal">
             {chart.title}
           </DialogTitle>
           {chart.description && (
-            <DialogDescription className="text-xs">
+            <DialogDescription className="text-xs font-normal">
               {chart.description}
             </DialogDescription>
           )}
         </DialogHeader>
 
-        {/* Fragrance Measurement Guide Banner */}
-        <div className="rounded-lg bg-primary/5 border border-primary/20 p-3.5 space-y-2">
-          <div className="flex items-center gap-2 text-xs font-bold text-foreground">
-            <Droplets className="size-4 text-primary" />
-            <span>Fragrance Application & Concentration Guide</span>
-          </div>
+        {/* Notes */}
+        <div className="rounded-lg border border-border/40 p-3 space-y-1.5 bg-muted/20 text-xs font-normal">
+          <div className="text-foreground">Application &amp; Longevity Guide</div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            1. Apply directly on pulse points (wrists, neck, collarbone) for optimum projection and sillage.<br />
-            2. Extrait de Parfum delivers 14-18 hours longevity with 30-40% artisanal perfume oil concentration.<br />
-            3. Estimated yield: 50ml flacon delivers ~750 atomized sprays; 100ml delivers ~1500 sprays.
+            Apply on pulse points (wrists, neck, collarbone) for optimum projection. Extrait de Parfum delivers 14-18 hours longevity with artisanal perfume oil concentration.
           </p>
 
           {chart.guideImage && (
-            <div className="relative w-full h-40 rounded-md border overflow-hidden mt-2 bg-background">
+            <div className="relative w-full h-36 rounded border overflow-hidden mt-2 bg-background">
               <Image
                 src={chart.guideImage}
-                alt="Fragrance Guide"
+                alt="Guide"
                 fill
                 className="object-contain"
               />
@@ -78,47 +66,41 @@ export default function SizeChartVisualPreview({
           )}
         </div>
 
-        {/* Size Conversion Table */}
-        <div className="space-y-2 pt-1">
-          <div className="flex items-center justify-between text-xs font-semibold text-foreground">
-            <span>Size Conversion Matrix</span>
-            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <Info className="size-3 text-primary" />
-              Standard Bangladesh Fit
-            </span>
-          </div>
+        {/* Volume Table */}
+        <div className="space-y-1.5 pt-1">
+          <div className="text-xs font-normal text-muted-foreground">Volume &amp; Longevity Matrix</div>
 
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-lg border border-border/50 overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/40 text-xs">
-                  <TableHead className="font-bold text-primary">EU Size</TableHead>
-                  <TableHead>UK Size</TableHead>
-                  <TableHead>US Size</TableHead>
-                  <TableHead>Foot Length (CM)</TableHead>
-                  <TableHead>Foot Length (Inches)</TableHead>
+                <TableRow className="bg-muted/30 text-xs font-normal">
+                  <TableHead className="font-normal">Volume</TableHead>
+                  <TableHead className="font-normal">Concentration</TableHead>
+                  <TableHead className="font-normal">Longevity</TableHead>
+                  <TableHead className="font-normal">Est. Sprays</TableHead>
+                  <TableHead className="font-normal">Est. Days</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {chart.rows.map((row, idx) => (
                   <TableRow
                     key={idx}
-                    className={idx % 2 === 0 ? "bg-background" : "bg-muted/15"}
+                    className="hover:bg-muted/20 font-normal text-xs"
                   >
-                    <TableCell className="font-bold text-xs text-foreground">
+                    <TableCell className="font-normal text-foreground">
                       {row.euSize}
                     </TableCell>
-                    <TableCell className="text-xs font-mono text-muted-foreground">
+                    <TableCell className="text-muted-foreground">
                       {row.ukSize || "—"}
                     </TableCell>
-                    <TableCell className="text-xs font-mono text-muted-foreground">
+                    <TableCell className="text-muted-foreground">
                       {row.usSize || "—"}
                     </TableCell>
-                    <TableCell className="text-xs text-foreground font-medium">
-                      {row.footLengthCm ? `${row.footLengthCm} cm` : "—"}
+                    <TableCell className="text-foreground tabular-nums">
+                      {row.footLengthCm ? `~${row.footLengthCm}` : "—"}
                     </TableCell>
-                    <TableCell className="text-xs text-foreground font-medium">
-                      {row.footLengthInch ? `${row.footLengthInch}"` : "—"}
+                    <TableCell className="text-foreground tabular-nums">
+                      {row.footLengthInch ? `~${row.footLengthInch} days` : "—"}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -128,8 +110,8 @@ export default function SizeChartVisualPreview({
         </div>
 
         <div className="pt-2 flex justify-end">
-          <Button variant="outline" size="sm" onClick={onClose} className="text-xs">
-            Close Preview
+          <Button variant="outline" size="sm" onClick={onClose} className="text-xs font-normal">
+            Close
           </Button>
         </div>
       </DialogContent>

@@ -16,18 +16,6 @@ import {
   INetProfitResult,
   ISizeDemandResult,
 } from "@/types/analytics.types";
-import {
-  ArrowDownRight,
-  ArrowUpRight,
-  BarChart3,
-  CheckCircle2,
-  DollarSign,
-  Droplets,
-  Headphones,
-  Percent,
-  Sparkles,
-  TrendingUp,
-} from "lucide-react";
 import React from "react";
 
 interface AnalyticsReportsClientProps {
@@ -56,113 +44,103 @@ export default function AnalyticsReportsClient({
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Top Net Profit Summary Cards */}
+    <div className="space-y-6 w-full">
+      {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Gross Fragrance Sales
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-1 space-y-0">
+            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
+              Gross Sales
             </CardTitle>
-            <TrendingUp className="size-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
+            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
               BDT {grossRev.toLocaleString()}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Total revenue from flacons &amp; discovery sets
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Total catalog revenue
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-1 space-y-0">
+            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
               Net Profit
             </CardTitle>
-            <DollarSign className="size-4 text-emerald-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-emerald-600">
+            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
               BDT {net.toLocaleString()}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              After COGS, ad spend &amp; courier deductions
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Net of COGS &amp; overhead
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Net Margin
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-1 space-y-0">
+            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
+              Operating Margin
             </CardTitle>
-            <Percent className="size-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
+            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
               {margin}%
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Haute parfumerie operating margin
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Realized margin
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              COGS &amp; Raw Formulation
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-1 space-y-0">
+            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
+              COGS
             </CardTitle>
-            <Droplets className="size-4 text-purple-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
+            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
               BDT {cogs.toLocaleString()}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Crystal glass, atomizers &amp; pure oils
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Glass, atomizers &amp; formulation
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Two Column Grid: Volume Curve & P&L Breakdown */}
+      {/* Two Column Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Flacon Volume Demand Curve */}
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="pb-3 border-b">
-            <div className="flex items-center gap-2">
-              <Droplets className="size-4 text-primary" />
-              <CardTitle className="text-sm font-bold text-foreground">
-                Flacon Volume Demand Curve
-              </CardTitle>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Customer preference breakdown across 100ml, 50ml and 30ml flacons
-            </p>
+        {/* Flacon Volume Demand */}
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-3 border-b border-border/40">
+            <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+              Flacon Demand Distribution
+            </CardTitle>
           </CardHeader>
           <CardContent className="pt-4 space-y-4">
             {flaconSizes.map((item) => (
               <div key={item.size} className="space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-foreground">
-                    {item.size.includes("ml") ? item.size : `${item.size}ml Flacon`}
+                <div className="flex items-center justify-between text-xs font-normal">
+                  <span className="text-foreground">
+                    {item.size.includes("ml") ? item.size : `${item.size}ml`}
                   </span>
-                  <span className="font-mono text-muted-foreground">
-                    {item.percentageOfTotal}% share ({item.totalPairsSold} sold)
+                  <span className="font-mono text-muted-foreground tabular-nums">
+                    {item.percentageOfTotal}% ({item.totalPairsSold} units)
                   </span>
                 </div>
-                <div className="h-2.5 w-full bg-muted rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-primary rounded-full transition-all"
+                    className="h-full bg-foreground/70 rounded-full transition-all"
                     style={{ width: `${item.percentageOfTotal}%` }}
                   />
                 </div>
                 <div className="text-[10px] text-muted-foreground flex justify-between">
                   <span>Vault Reserve: {item.totalStockAvailable} units</span>
-                  <span>Optimal formulation ratio</span>
+                  <span>Balanced stock</span>
                 </div>
               </div>
             ))}
@@ -170,81 +148,69 @@ export default function AnalyticsReportsClient({
         </Card>
 
         {/* Operating Cost Breakdown */}
-        <Card className="shadow-xs border-border/60">
-          <CardHeader className="pb-3 border-b">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="size-4 text-primary" />
-              <CardTitle className="text-sm font-bold text-foreground">
-                Expense &amp; Cost Structure
-              </CardTitle>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Comprehensive cost distribution for luxury operations
-            </p>
+        <Card className="shadow-none border-border/50 bg-card">
+          <CardHeader className="pb-3 border-b border-border/40">
+            <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+              Expense Allocation
+            </CardTitle>
           </CardHeader>
-          <CardContent className="pt-4 space-y-3">
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/30 text-xs">
-              <span className="text-muted-foreground">Meta &amp; Social Ad Spend:</span>
-              <span className="font-bold text-foreground">
+          <CardContent className="pt-4 space-y-2.5">
+            <div className="flex items-center justify-between p-2.5 rounded-md bg-muted/20 text-xs font-normal">
+              <span className="text-muted-foreground">Ad Spend:</span>
+              <span className="text-foreground tabular-nums">
                 BDT {(netProfit?.expenses?.adSpend || Math.round(totalExp * 0.45)).toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/30 text-xs">
-              <span className="text-muted-foreground">Luxury Flacon &amp; Box Packaging:</span>
-              <span className="font-bold text-foreground">
+            <div className="flex items-center justify-between p-2.5 rounded-md bg-muted/20 text-xs font-normal">
+              <span className="text-muted-foreground">Packaging &amp; Presentation:</span>
+              <span className="text-foreground tabular-nums">
                 BDT {(netProfit?.expenses?.packagingCost || Math.round(totalExp * 0.25)).toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/30 text-xs">
-              <span className="text-muted-foreground">Courier Damage &amp; Return Losses:</span>
-              <span className="font-bold text-foreground">
+            <div className="flex items-center justify-between p-2.5 rounded-md bg-muted/20 text-xs font-normal">
+              <span className="text-muted-foreground">Courier Damage &amp; Loss:</span>
+              <span className="text-foreground tabular-nums">
                 BDT {(netProfit?.expenses?.courierLoss || Math.round(totalExp * 0.1)).toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/30 text-xs">
-              <span className="text-muted-foreground">Atelier Staff &amp; Operations:</span>
-              <span className="font-bold text-foreground">
+            <div className="flex items-center justify-between p-2.5 rounded-md bg-muted/20 text-xs font-normal">
+              <span className="text-muted-foreground">Staff &amp; Operations:</span>
+              <span className="text-foreground tabular-nums">
                 BDT {(netProfit?.expenses?.operationalCost || Math.round(totalExp * 0.2)).toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-primary/10 border border-primary/20 text-xs font-semibold">
-              <span className="text-primary">Total Operating Overhead:</span>
-              <span className="text-primary font-bold">BDT {totalExp.toLocaleString()}</span>
+            <div className="flex items-center justify-between p-2.5 rounded-md border border-border/60 text-xs font-normal">
+              <span className="text-foreground">Total Operating Overhead:</span>
+              <span className="text-foreground tabular-nums">BDT {totalExp.toLocaleString()}</span>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Moderator Performance Table */}
-      <Card className="shadow-xs border-border/60">
-        <CardHeader className="pb-3 border-b">
-          <div className="flex items-center gap-2">
-            <Headphones className="size-4 text-primary" />
-            <CardTitle className="text-sm font-bold text-foreground">
-              Call Center &amp; Fragrance Concierge Performance
-            </CardTitle>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Order verification conversion rate, packing throughput, and recovery of incomplete carts
-          </p>
+      <Card className="shadow-none border-border/50 bg-card">
+        <CardHeader className="pb-3 border-b border-border/40">
+          <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+            Concierge &amp; Order Moderator Performance
+          </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader className="bg-muted/30">
               <TableRow>
-                <TableHead className="text-xs font-semibold">Concierge / Moderator</TableHead>
-                <TableHead className="text-xs font-semibold">Orders Handled</TableHead>
-                <TableHead className="text-xs font-semibold">Confirmed Orders</TableHead>
-                <TableHead className="text-xs font-semibold">Packed &amp; Dispatched</TableHead>
-                <TableHead className="text-xs font-semibold">Incomplete Recoveries</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Conversion Rate</TableHead>
+                <TableHead className="text-xs font-normal">Moderator</TableHead>
+                <TableHead className="text-xs font-normal">Handled</TableHead>
+                <TableHead className="text-xs font-normal">Confirmed</TableHead>
+                <TableHead className="text-xs font-normal">Packed</TableHead>
+                <TableHead className="text-xs font-normal">Recovered</TableHead>
+                <TableHead className="text-xs font-normal text-right">Conversion</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {moderators.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="h-32 text-center text-xs text-muted-foreground">
-                    No concierge staff order activities logged for this period
+                  <TableCell colSpan={6} className="h-32 text-center text-xs text-muted-foreground font-normal">
+                    No activity recorded for this period
                   </TableCell>
                 </TableRow>
               ) : (
@@ -252,29 +218,29 @@ export default function AnalyticsReportsClient({
                   <TableRow key={mod.staffId} className="hover:bg-muted/20">
                     <TableCell>
                       <div className="space-y-0.5">
-                        <div className="font-semibold text-xs text-foreground">{mod.staffName}</div>
+                        <div className="font-normal text-xs text-foreground">{mod.staffName}</div>
                         <div className="text-[11px] text-muted-foreground">{mod.email}</div>
                       </div>
                     </TableCell>
 
                     <TableCell>
-                      <span className="font-bold text-xs">{mod.totalOrdersHandled}</span>
+                      <span className="font-normal text-xs tabular-nums">{mod.totalOrdersHandled}</span>
                     </TableCell>
 
                     <TableCell>
-                      <span className="text-xs text-emerald-600 font-medium">{mod.confirmedOrdersCount}</span>
+                      <span className="text-xs font-normal tabular-nums">{mod.confirmedOrdersCount}</span>
                     </TableCell>
 
                     <TableCell>
-                      <span className="text-xs text-muted-foreground">{mod.packedOrdersCount}</span>
+                      <span className="text-xs font-normal text-muted-foreground tabular-nums">{mod.packedOrdersCount}</span>
                     </TableCell>
 
                     <TableCell>
-                      <span className="text-xs text-purple-600 font-medium">{mod.incompleteConvertedCount}</span>
+                      <span className="text-xs font-normal tabular-nums">{mod.incompleteConvertedCount}</span>
                     </TableCell>
 
                     <TableCell className="text-right">
-                      <Badge variant="outline" className="font-bold text-xs bg-primary/10 text-primary border-primary/20">
+                      <Badge variant="outline" className="font-normal text-xs text-muted-foreground tabular-nums">
                         {mod.conversionRate.toFixed(1)}%
                       </Badge>
                     </TableCell>
