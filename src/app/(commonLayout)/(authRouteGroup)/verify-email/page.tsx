@@ -4,8 +4,8 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Verify Your Email | EcomBD Footwear",
-  description: "Enter your 6-digit verification code to activate your account",
+  title: "Verify Email | EcomBD Footwear",
+  description: "Verify your email address",
 };
 
 export default function VerifyEmailPage() {
