@@ -22,8 +22,6 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerValidationSchema),
