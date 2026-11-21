@@ -12,7 +12,6 @@ export default function ResetPasswordPage() {
   return (
     <AuthCardWrapper
       title="Set New Password"
-      description="Enter the 6-digit OTP code sent to your email and your new password"
       backButtonLabel="Return to Sign In"
       backButtonHref="/login"
     >
