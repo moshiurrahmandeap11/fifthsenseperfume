@@ -13,8 +13,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const POPULAR_SHOE_SIZES = ["38", "39", "40", "41", "42", "43", "44", "45"];
-
 export default function RegisterForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
