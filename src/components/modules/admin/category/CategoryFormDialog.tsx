@@ -169,7 +169,7 @@ export default function CategoryFormDialog({
           <DialogDescription>
             {isEditing
               ? "Update category details and hierarchy settings."
-              : "Create a root or subcategory for footwear catalog organization."}
+              : "Create a root or subcategory for fragrance catalog organization."}
           </DialogDescription>
         </DialogHeader>
 
@@ -181,7 +181,7 @@ export default function CategoryFormDialog({
             </Label>
             <Input
               id="category-name"
-              placeholder="e.g. Formal Leather Shoes"
+              placeholder="e.g. Woody & Oriental Extrait"
               disabled={isLoading}
               {...register("name")}
             />

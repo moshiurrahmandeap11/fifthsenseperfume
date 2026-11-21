@@ -149,7 +149,7 @@ export default function SizeChartBuilderDialog({
   // Construct preview chart object
   const previewChart: ISizeChart = {
     id: initialData?.id || "preview-id",
-    title: currentTitle || "Footwear Size Chart Preview",
+    title: currentTitle || "Fragrance Concentration & Volume Preview",
     description: currentDescription || null,
     guideImage: imagePreview,
     rows: rows,
@@ -163,10 +163,10 @@ export default function SizeChartBuilderDialog({
         <DialogContent className="sm:max-w-2xl max-h-[92vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {isEditing ? "Edit Size Chart Matrix" : "Create Size Chart Matrix"}
+              {isEditing ? "Edit Concentration & Volume Guide" : "Create Concentration & Volume Guide"}
             </DialogTitle>
             <DialogDescription>
-              Build custom conversion table across EU, UK, US and Foot Length (CM/Inches).
+              Build custom volume, concentration percentages (Extrait/EDP), and spray yields specifications.
             </DialogDescription>
           </DialogHeader>
 
@@ -174,11 +174,11 @@ export default function SizeChartBuilderDialog({
             {/* Title */}
             <div className="space-y-1.5">
               <Label htmlFor="chart-title">
-                Chart Title <span className="text-destructive">*</span>
+                Guide Title <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="chart-title"
-                placeholder="e.g. Men's Formal & Oxford Shoes Size Guide"
+                placeholder="e.g. Extrait de Parfum 100ml / 50ml Volumetric & Longevity Guide"
                 disabled={isLoading}
                 {...register("title")}
               />
@@ -189,10 +189,10 @@ export default function SizeChartBuilderDialog({
 
             {/* Description */}
             <div className="space-y-1.5">
-              <Label htmlFor="chart-desc">Fitting Advice / Description</Label>
+              <Label htmlFor="chart-desc">Sillage & Longevity Notes</Label>
               <Textarea
                 id="chart-desc"
-                placeholder="e.g. Standard Bangladesh fit. If between sizes, choose one size up for wide feet."
+                placeholder="e.g. High concentration pure perfume oil (30-40%). Provides 14+ hours of lasting sillage."
                 rows={2}
                 disabled={isLoading}
                 {...register("description")}

@@ -49,7 +49,7 @@ export default function CategoryDeleteAlert({
       const err = error as { message?: string };
       toast.error(
         err?.message ||
-          "Cannot delete category. Make sure no subcategories or footwear products are attached."
+          "Cannot delete category. Make sure no subcategories or fragrance products are attached."
       );
     } finally {
       setIsDeleting(false);
@@ -82,7 +82,7 @@ export default function CategoryDeleteAlert({
                 )}
                 {productCount > 0 && (
                   <p>
-                    • There are {productCount} footwear products linked to this
+                    • There are {productCount} fragrance products linked to this
                     category.
                   </p>
                 )}

@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ISizeChart } from "@/types/sizeChart.types";
-import { Footprints, Info, Ruler } from "lucide-react";
+import { Droplets, Info, Ruler } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
@@ -54,23 +54,23 @@ export default function SizeChartVisualPreview({
           )}
         </DialogHeader>
 
-        {/* Foot Measurement Guide Banner */}
+        {/* Fragrance Measurement Guide Banner */}
         <div className="rounded-lg bg-primary/5 border border-primary/20 p-3.5 space-y-2">
           <div className="flex items-center gap-2 text-xs font-bold text-foreground">
-            <Footprints className="size-4 text-primary" />
-            <span>How to Measure Your Foot Length</span>
+            <Droplets className="size-4 text-primary" />
+            <span>Fragrance Application & Concentration Guide</span>
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            1. Stand on a blank sheet of paper with your heel lightly touching a flat wall.<br />
-            2. Mark the longest part of your foot (tip of big toe) on the paper.<br />
-            3. Measure the distance from the wall to your mark in centimeters (CM) or inches.
+            1. Apply directly on pulse points (wrists, neck, collarbone) for optimum projection and sillage.<br />
+            2. Extrait de Parfum delivers 14-18 hours longevity with 30-40% artisanal perfume oil concentration.<br />
+            3. Estimated yield: 50ml flacon delivers ~750 atomized sprays; 100ml delivers ~1500 sprays.
           </p>
 
           {chart.guideImage && (
             <div className="relative w-full h-40 rounded-md border overflow-hidden mt-2 bg-background">
               <Image
                 src={chart.guideImage}
-                alt="Foot Measuring Guide"
+                alt="Fragrance Guide"
                 fill
                 className="object-contain"
               />

@@ -34,11 +34,11 @@ export default async function AdminCategoriesPage() {
               <Layers className="size-4" />
             </div>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Category Hierarchy & Styles
+              Fragrance Collections &amp; Categories
             </h1>
           </div>
           <p className="text-xs text-muted-foreground">
-            Manage top-level footwear collections, subcategories and storefront navigation menus
+            Manage luxury fragrance collections, olfactory families and storefront navigation menus
           </p>
         </div>
       </div>

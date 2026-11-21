@@ -95,7 +95,7 @@ export default function SizeChartCardGrid({
           <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
             {searchTerm
               ? "No size chart matches your search query."
-              : "Create size conversion charts (EU, UK, US, CM, Inches) so customers can select the perfect shoe size."}
+              : "Create concentration & volume guides (30ml, 50ml, 100ml, Extrait, EDP) so customers understand sillage and spray yields."}
           </p>
           {!searchTerm && (
             <Button
@@ -128,7 +128,7 @@ export default function SizeChartCardGrid({
                         {chart.title}
                       </CardTitle>
                       <p className="text-[11px] text-muted-foreground line-clamp-1">
-                        {chart.description || "Standard footwear sizing template"}
+                        {chart.description || "Standard fragrance volume template"}
                       </p>
                     </div>
 

@@ -48,7 +48,7 @@ export default function SizeChartDeleteAlert({
       const err = error as { message?: string };
       toast.error(
         err?.message ||
-          "Cannot delete size chart. Please ensure no footwear products are using this chart."
+          "Cannot delete size chart. Please ensure no fragrance products are using this chart."
       );
     } finally {
       setIsDeleting(false);
@@ -73,7 +73,7 @@ export default function SizeChartDeleteAlert({
               <div className="p-2.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs text-amber-700 dark:text-amber-400 space-y-1">
                 <span className="font-semibold block">Warning:</span>
                 <p>
-                  • There are {productCount} footwear products linked to this size chart.
+                  • There are {productCount} fragrance products linked to this size chart.
                   Customers will not have a size guide on those product pages until reassigned.
                 </p>
               </div>

@@ -1,7 +1,7 @@
 import SizeChartCardGrid from "@/components/modules/admin/sizeChart/SizeChartCardGrid";
 import { getAllSizeCharts } from "@/services/sizeChart.services";
 import { ISizeChart } from "@/types/sizeChart.types";
-import { Ruler } from "lucide-react";
+import { Droplets } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { connection } from "next/server";
 import React from "react";
@@ -16,7 +16,7 @@ export default async function AdminSizeChartsPage() {
       sizeCharts = res.data;
     }
   } catch (err) {
-    console.error("Failed to load size charts server-side:", err);
+    console.error("Failed to load fragrance concentration charts server-side:", err);
   }
 
   const handleServerRefresh = async () => {
@@ -31,14 +31,14 @@ export default async function AdminSizeChartsPage() {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <div className="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Ruler className="size-4" />
+              <Droplets className="size-4" />
             </div>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Dynamic Size Chart Builder
+              Concentration &amp; Volume Guides
             </h1>
           </div>
           <p className="text-xs text-muted-foreground">
-            Configure footwear size conversion templates (EU, UK, US, CM, Inches) and measuring guides
+            Configure fragrance concentration standards (Extrait, EDP, EDT), spray yields, and bottle volume guides
           </p>
         </div>
       </div>

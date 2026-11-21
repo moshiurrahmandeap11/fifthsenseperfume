@@ -165,7 +165,7 @@ export default function CategoryTreeTable({
                   <p className="text-[11px] text-muted-foreground mt-0.5">
                     {searchTerm
                       ? "No categories match your search keyword."
-                      : "Create top-level collections (e.g. Men's, Women's, Kids) to structure your footwear store."}
+                      : "Create top-level collections (e.g. Extrait, EDP, Discovery Sets) to structure your luxury fragrance atelier."}
                   </p>
                 </TableCell>
               </TableRow>
