@@ -12,9 +12,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthCardWrapper
       title="Reset Password"
-      backButtonLabel="Return to Sign In"
-      backButtonHref="/login"
-    >
+      >
       <Suspense fallback={<div className="h-40 animate-pulse rounded bg-muted/40" />}>
         <ForgotPasswordForm />
       </Suspense>
