@@ -81,3 +81,34 @@ export const resetPasswordValidationSchema = z
 export type ResetPasswordFormData = z.infer<
   typeof resetPasswordValidationSchema
 >;
+
+export const verifyEmailValidationSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
+  otp: z
+    .string()
+    .length(6, "Verification code must be exactly 6 digits")
+    .regex(/^\d{6}$/, "Verification code must contain only numbers"),
+});
+
+export type VerifyEmailFormData = z.infer<typeof verifyEmailValidationSchema>;
+
+export const changePasswordValidationSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z
+      .string()
+      .min(6, "New password must be at least 6 characters")
+      .max(32, "New password cannot exceed 32 characters"),
+    confirmPassword: z.string().min(1, "Please confirm your new password"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "New passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type ChangePasswordFormData = z.infer<
+  typeof changePasswordValidationSchema
+>;

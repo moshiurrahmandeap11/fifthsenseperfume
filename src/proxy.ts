@@ -17,6 +17,7 @@ const AUTH_ROUTES = [
   "/register",
   "/forgot-password",
   "/reset-password",
+  "/verify-email",
 ];
 
 export async function proxy(request: NextRequest) {
@@ -92,5 +93,6 @@ export const config = {
     "/register",
     "/forgot-password",
     "/reset-password",
+    "/verify-email",
   ],
 };

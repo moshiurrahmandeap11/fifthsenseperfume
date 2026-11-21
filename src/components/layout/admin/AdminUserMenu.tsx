@@ -14,7 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { logoutUser } from "@/services/auth.services";
 import { IUser } from "@/types/auth.types";
-import { ChevronDown, ExternalLink, LogOut, Settings, User } from "lucide-react";
+import { ChevronDown, ExternalLink, KeyRound, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -100,6 +100,13 @@ export default function AdminUserMenu({ user }: AdminUserMenuProps) {
           <Link href="/admin/users" className="flex items-center gap-2 w-full px-2 py-1.5">
             <User className="size-3.5 text-muted-foreground" />
             <span>Staff Profile & Team</span>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem className="p-0 cursor-pointer text-xs">
+          <Link href="/customer/dashboard" className="flex items-center gap-2 w-full px-2 py-1.5">
+            <KeyRound className="size-3.5 text-muted-foreground" />
+            <span>Account & Security</span>
           </Link>
         </DropdownMenuItem>
 

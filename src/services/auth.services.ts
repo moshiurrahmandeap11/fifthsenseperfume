@@ -154,12 +154,24 @@ export const requestEmailOtp = async (
  */
 export const verifyEmail = async (
   payload: IVerifyEmailPayload
-): Promise<IMessageResponse> => {
+): Promise<any> => {
   try {
-    const res = await httpClient.post<IMessageResponse>(
+    const res = await httpClient.post<any>(
       "/auth/verify-email",
       payload
     );
+
+    if (res.data?.token) {
+      const cookieStore = await cookies();
+      cookieStore.set(SESSION_COOKIE_NAME, res.data.token, {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+      });
+    }
+
     return res.data;
   } catch (error: any) {
     const message =

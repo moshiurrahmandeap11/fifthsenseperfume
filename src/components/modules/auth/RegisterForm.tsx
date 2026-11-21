@@ -52,9 +52,10 @@ export default function RegisterForm() {
         savedShoeSize: data.savedShoeSize,
       });
 
-      toast.success("Account created successfully! Welcome.");
-      router.push("/customer/dashboard");
-      router.refresh();
+      toast.success(
+        "Account created! A 6-digit verification code has been sent to your email."
+      );
+      router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
     } catch (error: unknown) {
       const err = error as { message?: string };
       toast.error(err?.message || "Registration failed. Please try again.");
