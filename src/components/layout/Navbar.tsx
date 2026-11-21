@@ -27,6 +27,44 @@ export default function Navbar({ initialUser }: NavbarProps) {
 
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // Sync when initialUser from server layout changes
+  useEffect(() => {
+    if (initialUser !== undefined) {
+      setCurrentUser(initialUser);
+    }
+  }, [initialUser]);
+
+  // Sync if Better-Auth client session updates
+  useEffect(() => {
+    if (session?.user) {
+      setCurrentUser(
+        (prev) =>
+          ({
+            ...prev,
+            ...session.user,
+            createdAt: session.user.createdAt
+              ? String(session.user.createdAt)
+              : prev?.createdAt,
+            updatedAt: session.user.updatedAt
+              ? String(session.user.updatedAt)
+              : prev?.updatedAt,
+            role: (session.user as any).role || prev?.role || "CUSTOMER",
+          } as unknown as IUser)
+      );
+    }
+  }, [session]);
+
+  // Client-side fallback check on mount to ensure immediate sync
+  useEffect(() => {
+    if (!currentUser) {
+      getMe()
+        .then((res) => {
+          if (res) setCurrentUser(res);
+        })
+        .catch(() => {});
+    }
+  }, [currentUser]);
+
   // Detect scroll to apply liquid glassmorphism
   useEffect(() => {
     const handleScroll = () => {
