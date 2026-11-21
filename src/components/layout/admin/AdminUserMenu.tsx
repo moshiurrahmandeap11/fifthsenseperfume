@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -62,18 +63,18 @@ export default function AdminUserMenu({ user }: AdminUserMenuProps) {
         )}
         disabled={isLoggingOut}
       >
-        <Avatar className="size-8 border">
+        <Avatar className="size-7 border">
           <AvatarImage src="" alt={displayName} />
-          <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
+          <AvatarFallback className="bg-muted text-muted-foreground font-normal text-xs">
             {initials}
           </AvatarFallback>
         </Avatar>
 
         <div className="hidden md:flex flex-col text-left">
-          <span className="text-xs font-semibold text-foreground truncate max-w-28 leading-none">
+          <span className="text-xs font-normal text-foreground truncate max-w-28 leading-none">
             {displayName}
           </span>
-          <span className="text-[10px] text-muted-foreground mt-0.5 truncate max-w-28 leading-none">
+          <span className="text-[10px] text-muted-foreground mt-0.5 truncate max-w-28 leading-none font-normal">
             {displayRole}
           </span>
         </div>
@@ -82,17 +83,19 @@ export default function AdminUserMenu({ user }: AdminUserMenuProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56 p-1.5 shadow-lg">
-        <DropdownMenuLabel className="p-2 space-y-1 font-normal">
-          <div className="flex items-center justify-between">
-            <span className="font-semibold text-xs text-foreground truncate">
-              {displayName}
-            </span>
-            <Badge variant="outline" className="text-[9px] uppercase px-1.5 py-0">
-              {displayRole}
-            </Badge>
-          </div>
-          <p className="text-[11px] text-muted-foreground truncate">{displayEmail}</p>
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="p-2 space-y-1 font-normal">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-xs text-foreground truncate">
+                {displayName}
+              </span>
+              <Badge variant="outline" className="text-[9px] uppercase px-1.5 py-0">
+                {displayRole}
+              </Badge>
+            </div>
+            <p className="text-[11px] text-muted-foreground truncate">{displayEmail}</p>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 

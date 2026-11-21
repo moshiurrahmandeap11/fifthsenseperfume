@@ -1,5 +1,9 @@
 "use client";
 
+import { useSession } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
+import { getMe, logoutUser } from "@/services/auth.services";
+import { IUser } from "@/types/auth.types";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,11 +25,17 @@ import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
 import NavbarUserMenu from "./navbar/NavbarUserMenu";
 import { STOREFRONT_NAV_LINKS } from "./navbar/navLinks";
 
-export default function Navbar() {
+interface NavbarProps {
+  initialUser?: IUser | null;
+}
+
+export default function Navbar({ initialUser }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
-  const user = session?.user;
+  const [currentUser, setCurrentUser] = useState<IUser | null>(
+    initialUser ?? null
+  );
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -59,6 +69,7 @@ export default function Navbar() {
   const handleMobileLogout = async () => {
     try {
       await logoutUser();
+      setCurrentUser(null);
       toast.success("Signed out successfully");
       router.push("/");
       router.refresh();

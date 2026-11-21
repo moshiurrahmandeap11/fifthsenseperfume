@@ -1,7 +1,7 @@
 import CategoryTreeTable from "@/components/modules/admin/category/CategoryTreeTable";
+import { FluidPage } from "@/components/ui/fluid-motion";
 import { getCategoryTree } from "@/services/category.services";
 import { ICategory } from "@/types/category.types";
-import { Layers } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { connection } from "next/server";
 import React from "react";
@@ -25,29 +25,22 @@ export default async function AdminCategoriesPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Layers className="size-4" />
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Category Hierarchy & Styles
-            </h1>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Manage top-level footwear collections, subcategories and storefront navigation menus
+    <FluidPage className="w-full space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/40 pb-4">
+        <div>
+          <h1 className="text-xl font-normal tracking-tight text-foreground">
+            Fragrance Collections
+          </h1>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Catalog categories and olfactory scent families
           </p>
         </div>
       </div>
 
-      {/* Main Interactive Category Tree Table */}
       <CategoryTreeTable
         categories={categories}
         onRefresh={handleServerRefresh}
       />
-    </div>
+    </FluidPage>
   );
 }

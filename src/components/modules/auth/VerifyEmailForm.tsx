@@ -83,12 +83,12 @@ export default function VerifyEmailForm() {
     try {
       setIsResending(true);
       await requestEmailOtp({ email: currentEmail });
-      toast.success("A new 6-digit verification code has been sent!");
-      setResendCooldown(60); // 60s cooldown
+      toast.success("A new verification code has been sent!");
+      setResendCooldown(60);
     } catch (error: unknown) {
       const err = error as { message?: string };
       toast.error(
-        err?.message || "Failed to resend code. Please check your email."
+        err?.message || "Failed to resend code. Please try again."
       );
     } finally {
       setIsResending(false);
@@ -116,15 +116,16 @@ export default function VerifyEmailForm() {
         )}
       </div>
 
-      {/* 6-Digit OTP */}
+      {/* Verification Code */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <Label htmlFor="otp">6-Digit Verification Code</Label>
+          <Label htmlFor="otp">Verification Code</Label>
           <button
             type="button"
+            tabIndex={-1}
             onClick={handleResendCode}
             disabled={isResending || resendCooldown > 0 || !currentEmail}
-            className="text-xs text-primary hover:underline disabled:text-muted-foreground cursor-pointer flex items-center gap-1"
+            className="text-xs text-primary hover:underline disabled:text-muted-foreground cursor-pointer flex items-center gap-1 transition-colors"
           >
             {isResending ? (
               <RefreshCw className="size-3 animate-spin" />
@@ -149,28 +150,29 @@ export default function VerifyEmailForm() {
         {errors.otp && (
           <p className="text-xs text-destructive">{errors.otp.message}</p>
         )}
-        <p className="text-[11px] text-muted-foreground">
-          Enter the 6-digit code sent to your email. The code expires in 5 minutes.
-        </p>
       </div>
 
       {/* Submit Button */}
-      <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="w-full cursor-pointer mt-2"
+        disabled={isLoading}
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 size-4 animate-spin" />
-            Verifying code...
+            Verifying...
           </>
         ) : (
-          "Verify Email & Continue"
+          "Verify Email"
         )}
       </Button>
 
-      {/* Footer Navigation */}
+      {/* Single Back Link */}
       <div className="pt-2 text-center text-xs">
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="size-3.5" />
           <span>Return to Sign In</span>

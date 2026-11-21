@@ -4,18 +4,13 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Forgot Password | EcomBD Footwear",
+  title: "Forgot Password | FIFTH SENSE PERFUMES",
   description: "Reset your account password via email verification code",
 };
 
 export default function ForgotPasswordPage() {
   return (
-    <AuthCardWrapper
-      title="Reset Password"
-      description="Enter your email to receive a 6-digit verification code"
-      backButtonLabel="Return to Sign In"
-      backButtonHref="/login"
-    >
+    <AuthCardWrapper title="Reset Password">
       <Suspense fallback={<div className="h-40 animate-pulse rounded bg-muted/40" />}>
         <ForgotPasswordForm />
       </Suspense>

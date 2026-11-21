@@ -4,8 +4,8 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Login | EcomBD Footwear",
-  description: "Sign in to your EcomBD account",
+  title: "Sign In | FIFTH SENSE PERFUMES",
+  description: "Sign in to your FIFTH SENSE account",
 };
 
 export default function LoginPage() {

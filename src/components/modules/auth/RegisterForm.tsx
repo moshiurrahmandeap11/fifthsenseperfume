@@ -4,16 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerUser } from "@/services/auth.services";
-import { RegisterFormData, registerValidationSchema } from "@/zod/auth.validation";
+import {
+  RegisterFormData,
+  registerValidationSchema,
+} from "@/zod/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2, Lock, Mail, Phone, Ruler, User } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-
-const POPULAR_SHOE_SIZES = ["38", "39", "40", "41", "42", "43", "44", "45"];
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -24,8 +25,6 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerValidationSchema),
@@ -35,11 +34,8 @@ export default function RegisterForm() {
       phoneNumber: "",
       password: "",
       confirmPassword: "",
-      savedShoeSize: "41",
     },
   });
-
-  const selectedSize = watch("savedShoeSize");
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
@@ -47,9 +43,8 @@ export default function RegisterForm() {
       await registerUser({
         name: data.name,
         email: data.email,
-        phoneNumber: data.phoneNumber,
+        phoneNumber: data.phoneNumber ? data.phoneNumber : undefined,
         password: data.password,
-        savedShoeSize: data.savedShoeSize,
       });
 
       toast.success(
@@ -65,9 +60,9 @@ export default function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {/* Full Name */}
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <Label htmlFor="name">Full Name</Label>
         <div className="relative">
           <User className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
@@ -84,8 +79,8 @@ export default function RegisterForm() {
         )}
       </div>
 
-      {/* Email */}
-      <div className="space-y-1">
+      {/* Email Address */}
+      <div className="space-y-1.5">
         <Label htmlFor="email">Email Address</Label>
         <div className="relative">
           <Mail className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
@@ -103,9 +98,14 @@ export default function RegisterForm() {
         )}
       </div>
 
-      {/* Phone Number */}
-      <div className="space-y-1">
-        <Label htmlFor="phoneNumber">Phone Number</Label>
+      {/* Phone Number (Optional) */}
+      <div className="space-y-1.5">
+        <Label htmlFor="phoneNumber" className="flex items-center gap-1.5">
+          <span>Phone Number</span>
+          <span className="text-xs font-normal text-muted-foreground">
+            (Optional)
+          </span>
+        </Label>
         <div className="relative">
           <Phone className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
           <Input
@@ -121,32 +121,8 @@ export default function RegisterForm() {
         )}
       </div>
 
-      {/* Shoe Size Preference Selector */}
-      <div className="space-y-1.5 pt-1">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Ruler className="size-3.5" />
-          <span>Select Your Preferred Shoe Size (EU Size)</span>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {POPULAR_SHOE_SIZES.map((size) => (
-            <button
-              key={size}
-              type="button"
-              onClick={() => setValue("savedShoeSize", size)}
-              className={`flex size-8 items-center justify-center rounded-md border text-xs font-medium transition-all cursor-pointer ${
-                selectedSize === size
-                  ? "border-primary bg-primary text-primary-foreground shadow-xs"
-                  : "border-border bg-background hover:bg-muted"
-              }`}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Password */}
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <Label htmlFor="password">Password</Label>
         <div className="relative">
           <Lock className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
@@ -160,9 +136,10 @@ export default function RegisterForm() {
           />
           <button
             type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer"
             tabIndex={-1}
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? (
               <EyeOff className="size-4" />
@@ -177,7 +154,7 @@ export default function RegisterForm() {
       </div>
 
       {/* Confirm Password */}
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <Label htmlFor="confirmPassword">Confirm Password</Label>
         <div className="relative">
           <Lock className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
@@ -191,9 +168,10 @@ export default function RegisterForm() {
           />
           <button
             type="button"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer"
             tabIndex={-1}
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
           >
             {showConfirmPassword ? (
               <EyeOff className="size-4" />
@@ -210,7 +188,11 @@ export default function RegisterForm() {
       </div>
 
       {/* Submit Button */}
-      <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="w-full cursor-pointer mt-2"
+        disabled={isLoading}
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 size-4 animate-spin" />
@@ -221,9 +203,13 @@ export default function RegisterForm() {
         )}
       </Button>
 
+      {/* Sign In Link */}
       <div className="pt-2 text-center text-xs text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+        <Link
+          href="/login"
+          className="font-medium text-foreground underline underline-offset-4 hover:text-primary transition-colors"
+        >
           Sign In
         </Link>
       </div>
