@@ -83,7 +83,7 @@ export default function VerifyEmailForm() {
     try {
       setIsResending(true);
       await requestEmailOtp({ email: currentEmail });
-      toast.success("A new 6-digit verification code has been sent!");
+      toast.success("A new verification code has been sent!");
       setResendCooldown(60); // 60s cooldown
     } catch (error: unknown) {
       const err = error as { message?: string };
