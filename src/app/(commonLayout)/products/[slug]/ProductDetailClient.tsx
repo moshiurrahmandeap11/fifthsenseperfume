@@ -22,12 +22,14 @@ import { IProduct } from "@/types/product.types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/providers/CartProvider";
 
 interface ProductDetailClientProps {
   product: IProduct;
 }
 
 export default function ProductDetailClient({ product }: ProductDetailClientProps) {
+  const { addProductToCart } = useCart();
   const [selectedColorIdx, setSelectedColorIdx] = useState(0);
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -83,7 +85,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      toast.error("Please select an EU shoe size first.", {
+      toast.error("Please select a flacon volume first.", {
         style: {
           background: "#18181b",
           color: "#ffffff",
@@ -93,26 +95,16 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
       return;
     }
 
+    const matchedVariant = variants.find((v) => v.size === selectedSize);
     setIsAddingToCart(true);
+    addProductToCart(product, {
+      colorIdx: selectedColorIdx,
+      variantId: matchedVariant?.id,
+      openCart: true,
+    });
     setTimeout(() => {
       setIsAddingToCart(false);
-      toast.success(
-        <div className="text-xs font-normal">
-          <p className="font-normal text-white">Added to Olfactory Bag</p>
-          <p className="text-zinc-400 font-normal">
-            {product.name} &bull; {selectedSize} &bull; {activeColor?.colorName}
-          </p>
-        </div>,
-        {
-          duration: 4000,
-          style: {
-            background: "#09090b",
-            color: "#ffffff",
-            border: "1px solid #27272a",
-          },
-        }
-      );
-    }, 400);
+    }, 250);
   };
 
   const handleShare = () => {

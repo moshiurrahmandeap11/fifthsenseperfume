@@ -1,0 +1,59 @@
+{
+  "freeShippingThreshold": 5000,
+  "defaultShippingFee": 120,
+  "complimentaryTesterNote": "Complimentary 2ml discovery vial included on all prepaid orders.",
+  "availableCoupons": [
+    {
+      "code": "BUY2",
+      "discountPercent": 20,
+      "minQuantity": 2,
+      "description": "Enjoy 20% off on 2 or more fragrances"
+    },
+    {
+      "code": "FIFTH10",
+      "discountPercent": 10,
+      "minQuantity": 1,
+      "description": "Enjoy 10% signature welcome privilege"
+    }
+  ],
+  "initialItems": [
+    {
+      "id": "cart-item-var-01",
+      "variantId": "var-01",
+      "productId": "prod-001",
+      "productName": "Obsidian Noire Extrait de Parfum",
+      "slug": "obsidian-noire-extrait-de-parfum",
+      "styleCode": "FS-EXT-01",
+      "colorName": "Midnight Noir Flacon",
+      "size": "50ml",
+      "sku": "FS-EXT-01-50ML",
+      "imageUrl": "https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=800&auto=format&fit=crop",
+      "unitPrice": 7490,
+      "originalPrice": 8500,
+      "quantity": 1,
+      "itemTotal": 7490,
+      "stockAvailable": 14,
+      "isAvailable": true,
+      "isOutOfStock": false
+    },
+    {
+      "id": "cart-item-var-50",
+      "variantId": "var-50",
+      "productId": "prod-005",
+      "productName": "Bella Indian Attar Elixir",
+      "slug": "bella-indian-attar",
+      "styleCode": "FS-ATT-05",
+      "colorName": "Honey Flacon",
+      "size": "12ml",
+      "sku": "FS-ATT-05-12ML",
+      "imageUrl": "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?q=80&w=800&auto=format&fit=crop",
+      "unitPrice": 1500,
+      "originalPrice": 2700,
+      "quantity": 1,
+      "itemTotal": 1500,
+      "stockAvailable": 20,
+      "isAvailable": true,
+      "isOutOfStock": false
+    }
+  ]
+}

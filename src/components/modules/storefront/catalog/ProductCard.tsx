@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import { Heart, Star } from "lucide-react";
 import { IProduct } from "@/types/product.types";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/providers/CartProvider";
+import { formatFragrancePrice } from "@/components/modules/storefront/cart/cartUtils";
 
 interface ProductCardProps {
   product: IProduct;
@@ -19,6 +21,7 @@ export default function ProductCard({
   priority = false,
   initialWishlisted = false,
 }: ProductCardProps) {
+  const { addProductToCart } = useCart();
   const [isWishlisted, setIsWishlisted] = useState(initialWishlisted);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
@@ -60,28 +63,13 @@ export default function ProductCard({
     e.stopPropagation();
 
     setIsAddingToCart(true);
+    addProductToCart(product, { openCart: true });
     setTimeout(() => {
       setIsAddingToCart(false);
-      toast.success(
-        <div className="text-xs">
-          <p className="font-semibold text-white">Added to Fragrance Bag</p>
-          <p className="text-zinc-400">{product.name}</p>
-        </div>,
-        {
-          duration: 3000,
-          style: {
-            background: "#09090b",
-            color: "#ffffff",
-            border: "1px solid #27272a",
-          },
-        }
-      );
-    }, 400);
+    }, 250);
   };
 
-  const formatPrice = (val: number) => {
-    return val < 100 ? val.toFixed(2) : val.toLocaleString("en-BD");
-  };
+  const formatPrice = formatFragrancePrice;
 
   return (
     <div className="group flex flex-col w-full select-none">
