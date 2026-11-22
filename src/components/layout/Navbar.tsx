@@ -16,6 +16,7 @@ import { signOut, useSession } from "@/lib/auth-client";
 import { logoutUser } from "@/services/auth.services";
 import { cn } from "@/lib/utils";
 import { IUser } from "@/types/auth.types";
+import { useCart } from "@/providers/CartProvider";
 import toast from "react-hot-toast";
 import TopBar from "./TopBar";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
@@ -45,6 +46,8 @@ export default function Navbar({ initialUser }: NavbarProps) {
 
   const user =
     currentUser ?? (session?.user as unknown as IUser | undefined) ?? null;
+
+  const { totalQuantity, openDrawer } = useCart();
 
   const [prevPathname, setPrevPathname] = useState(pathname);
   const [showNavLinks, setShowNavLinks] = useState(true);
@@ -247,18 +250,19 @@ export default function Navbar({ initialUser }: NavbarProps) {
                 <Heart className="size-5 stroke-[1.5]" />
               </Link>
 
-              {/* Shopping Cart Link with Count Badge */}
-              <Link
-                href="/cart"
-                className="relative p-2 text-neutral-900 dark:text-neutral-100 hover:text-black dark:hover:text-white transition-colors select-none"
+              {/* Shopping Cart Slider Trigger with Live Count Badge */}
+              <button
+                type="button"
+                onClick={openDrawer}
+                className="relative p-2 text-neutral-900 dark:text-neutral-100 hover:text-black dark:hover:text-white transition-colors select-none cursor-pointer rounded-none"
+                aria-label="Open Shopping Bag"
                 title="Shopping Bag"
               >
                 <ShoppingCart className="size-5 stroke-[1.5]" />
-                {/* Subtle Cart Indicator */}
                 <span className="absolute top-1 right-0 min-w-[14px] h-[14px] px-1 text-[9px] font-mono leading-none flex items-center justify-center bg-black text-white dark:bg-white dark:text-black rounded-none">
-                  0
+                  {totalQuantity}
                 </span>
-              </Link>
+              </button>
 
               {/* User Profile / Menu (if logged in, or subtle user icon) */}
               {user ? (
