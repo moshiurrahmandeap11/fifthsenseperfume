@@ -5,6 +5,7 @@ import HeroGridSection from "@/components/modules/storefront/home/HeroGridSectio
 import FeatureTickerStrip from "@/components/modules/storefront/home/FeatureTickerStrip";
 import AttarPromoBanners from "@/components/modules/storefront/home/AttarPromoBanners";
 import FineFragranceBanner from "@/components/modules/storefront/home/FineFragranceBanner";
+import ExperienceHeritageSection from "@/components/modules/storefront/home/ExperienceHeritageSection";
 import SectionHeader from "@/components/common/SectionHeader";
 
 export default function HomePage() {
@@ -86,6 +87,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* 7. Experience & Heritage Brand Story Section (from Figma) */}
+      <ExperienceHeritageSection />
     </div>
   );
 }
