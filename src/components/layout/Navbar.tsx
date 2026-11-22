@@ -328,10 +328,10 @@ export default function Navbar({ initialUser }: NavbarProps) {
         <nav
           aria-label="Storefront Navigation"
           className={cn(
-            "flex items-center justify-center gap-7 lg:gap-10 py-3.5 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 transition-[transform,opacity] duration-200 ease-out transform-gpu",
+            "flex items-center justify-center gap-7 lg:gap-10 py-3.5 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu",
             showNavLinks
-              ? "translate-y-0 opacity-100 pointer-events-auto"
-              : "-translate-y-full opacity-0 pointer-events-none"
+              ? "translate-y-0 pointer-events-auto"
+              : "-translate-y-[105%] pointer-events-none"
           )}
         >
           {STOREFRONT_NAV_LINKS.map((link) => {
