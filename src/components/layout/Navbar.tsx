@@ -27,7 +27,7 @@ export default function Navbar() {
   const { data: session } = useSession();
   const user = session?.user;
 
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [prevPathname, setPrevPathname] = useState(pathname);
   const [showNavLinks, setShowNavLinks] = useState(true);
   const navVisibleRef = useRef(true);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -35,58 +35,81 @@ export default function Navbar() {
   const [isShopHovered, setIsShopHovered] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Keep navigation visible when switching routes
-  useEffect(() => {
-    navVisibleRef.current = true;
+  // Reset UI states cleanly when route changes without setState inside useEffect
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setShowNavLinks(true);
     setIsSearchOpen(false);
     setIsShopHovered(false);
-  }, [pathname]);
+  }
 
-  // Robust scroll direction detection with hysteresis and requestAnimationFrame to eliminate glitches
   useEffect(() => {
-    let lastScrollY = window.scrollY;
+    navVisibleRef.current = showNavLinks;
+  }, [showNavLinks]);
+
+  // Smooth, jitter-free scroll direction detection (paired with zero-reflow Row 2 transform)
+  useEffect(() => {
+    let lastScrollY = Math.max(0, window.scrollY);
+    let accumulatedDistance = 0;
+    let currentDirection: "up" | "down" | null = null;
     let ticking = false;
+
+    const updateOnScroll = () => {
+      const currentScrollY = Math.max(0, window.scrollY);
+      const delta = currentScrollY - lastScrollY;
+
+      // Always keep links visible near top of page
+      if (currentScrollY <= 30) {
+        if (!navVisibleRef.current) {
+          navVisibleRef.current = true;
+          setShowNavLinks(true);
+        }
+        accumulatedDistance = 0;
+        currentDirection = null;
+        lastScrollY = currentScrollY;
+        ticking = false;
+        return;
+      }
+
+      if (delta > 0) {
+        // Scrolling DOWN
+        if (currentDirection !== "down") {
+          currentDirection = "down";
+          accumulatedDistance = 0;
+        }
+        accumulatedDistance += delta;
+
+        if (accumulatedDistance >= 6 && currentScrollY > 60) {
+          if (navVisibleRef.current) {
+            navVisibleRef.current = false;
+            setShowNavLinks(false);
+            setIsShopHovered(false);
+          }
+        }
+      } else if (delta < 0) {
+        // Scrolling UP
+        if (currentDirection !== "up") {
+          currentDirection = "up";
+          accumulatedDistance = 0;
+        }
+        accumulatedDistance += Math.abs(delta);
+
+        if (accumulatedDistance >= 8) {
+          if (!navVisibleRef.current) {
+            navVisibleRef.current = true;
+            setShowNavLinks(true);
+          }
+        }
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    };
 
     const handleScroll = () => {
       if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = Math.max(0, window.scrollY);
-
-          // 1. Always show navigation links when near top of page
-          if (currentScrollY <= 60) {
-            if (!navVisibleRef.current) {
-              navVisibleRef.current = true;
-              setShowNavLinks(true);
-            }
-            lastScrollY = currentScrollY;
-            ticking = false;
-            return;
-          }
-
-          const diff = currentScrollY - lastScrollY;
-
-          // 2. Scrolling DOWN with deliberate movement (>15px) past 90px from top
-          if (diff > 15 && currentScrollY > 90) {
-            if (navVisibleRef.current) {
-              navVisibleRef.current = false;
-              setShowNavLinks(false);
-              setIsShopHovered(false);
-            }
-            lastScrollY = currentScrollY;
-          }
-          // 3. Scrolling UP with deliberate movement (>15px)
-          else if (diff < -15) {
-            if (!navVisibleRef.current) {
-              navVisibleRef.current = true;
-              setShowNavLinks(true);
-            }
-            lastScrollY = currentScrollY;
-          }
-
-          ticking = false;
-        });
         ticking = true;
+        window.requestAnimationFrame(updateOnScroll);
       }
     };
 
@@ -141,18 +164,23 @@ export default function Navbar() {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white dark:bg-neutral-950 rounded-none">
+    <header className="sticky top-0 z-50 w-full bg-transparent pointer-events-none rounded-none">
       {/* 1. Black Top Announcement Bar */}
-      <TopBar />
+      <div className="pointer-events-auto">
+        <TopBar />
+      </div>
 
-      {/* 2. Main Navbar Container */}
-      <div
-        className={cn(
-          "w-full bg-white dark:bg-neutral-950 transition-colors duration-200 border-b border-neutral-200 dark:border-neutral-800 shadow-none"
-        )}
-      >
+      {/* 2. Main Navbar Container (transparent wrapper; Row 1/Row 2 maintain constant layout height -> zero scroll reflow) */}
+      <div className="w-full">
         {/* ROW 1: Search Icon (Left) | Centered Logo (Center) | Wishlist & Cart (Right) */}
-        <div className="w-full relative z-20 bg-white dark:bg-neutral-950">
+        <div
+          className={cn(
+            "w-full relative z-20 bg-white dark:bg-neutral-950 pointer-events-auto border-b transition-colors duration-200 shadow-none",
+            showNavLinks || isSearchOpen
+              ? "border-neutral-100 dark:border-neutral-900"
+              : "border-neutral-200 dark:border-neutral-800"
+          )}
+        >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="h-18 sm:h-20 grid grid-cols-3 items-center">
             
@@ -237,8 +265,13 @@ export default function Navbar() {
         className={cn(
           "relative z-20 grid transition-[grid-template-rows,padding,opacity] duration-300 ease-out bg-white dark:bg-neutral-950 overflow-hidden shadow-none",
           isSearchOpen
-            ? "grid-rows-[1fr] opacity-100 py-3 border-t border-neutral-100 dark:border-neutral-900"
-            : "grid-rows-[0fr] opacity-0 py-0 border-t-0 border-transparent pointer-events-none"
+            ? cn(
+                "grid-rows-[1fr] opacity-100 py-3 border-b pointer-events-auto",
+                showNavLinks
+                  ? "border-neutral-100 dark:border-neutral-900"
+                  : "border-neutral-200 dark:border-neutral-800"
+              )
+            : "grid-rows-[0fr] opacity-0 py-0 border-b-0 border-transparent pointer-events-none"
         )}
       >
         <div className="min-h-0 overflow-hidden">
@@ -264,21 +297,21 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* ROW 2: Desktop Centered Navigation Links with Smooth Slide-Up on Scroll Down */}
+      {/* ROW 2: Desktop Centered Navigation Links — Pure GPU slide behind Row 1 without layout reflow */}
       <div
         className={cn(
-          "hidden md:block relative z-10 transition-all duration-300 ease-in-out",
-          showNavLinks
-            ? "max-h-[46px] opacity-100"
-            : "max-h-0 opacity-0 pointer-events-none overflow-hidden",
+          "hidden md:block relative z-10",
+          showNavLinks ? "pointer-events-auto" : "pointer-events-none",
           showNavLinks && isShopHovered ? "overflow-visible" : "overflow-hidden"
         )}
       >
         <nav
           aria-label="Storefront Navigation"
           className={cn(
-            "flex items-center justify-center gap-7 lg:gap-10 py-3.5 border-t border-neutral-100 dark:border-neutral-900 bg-white dark:bg-neutral-950 transition-transform duration-300 ease-in-out",
-            showNavLinks ? "translate-y-0" : "-translate-y-full"
+            "flex items-center justify-center gap-7 lg:gap-10 py-3.5 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 transition-[transform,opacity] duration-200 ease-out transform-gpu",
+            showNavLinks
+              ? "translate-y-0 opacity-100 pointer-events-auto"
+              : "-translate-y-full opacity-0 pointer-events-none"
           )}
         >
           {STOREFRONT_NAV_LINKS.map((link) => {
