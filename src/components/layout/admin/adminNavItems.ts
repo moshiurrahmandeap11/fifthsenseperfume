@@ -3,13 +3,13 @@ import {
   BarChart3,
   Boxes,
   CreditCard,
-  Footprints,
+  Droplets,
   Layers,
   LayoutDashboard,
   LucideIcon,
-  Ruler,
   Settings,
   ShoppingBag,
+  Sparkles,
   Tag,
   Truck,
   Users,
@@ -30,10 +30,10 @@ export interface IAdminNavGroup {
 
 export const ADMIN_NAV_GROUPS: IAdminNavGroup[] = [
   {
-    groupLabel: "Operations & Dashboard",
+    groupLabel: "Operations & Sales",
     items: [
       {
-        title: "Overview",
+        title: "Executive Overview",
         href: "/admin/dashboard",
         icon: LayoutDashboard,
         roles: ["SUPER_ADMIN", "ADMIN", "MANAGER"],
@@ -46,7 +46,7 @@ export const ADMIN_NAV_GROUPS: IAdminNavGroup[] = [
         badgeKey: "pendingOrders",
       },
       {
-        title: "Size Exchange & QC",
+        title: "Damages & Returns QC",
         href: "/admin/exchanges",
         icon: ArrowLeftRight,
         roles: [
@@ -61,31 +61,31 @@ export const ADMIN_NAV_GROUPS: IAdminNavGroup[] = [
     ],
   },
   {
-    groupLabel: "Catalog & Inventory",
+    groupLabel: "Fragrance & Inventory",
     items: [
       {
-        title: "Shoe Catalog",
+        title: "Fragrance Catalog",
         href: "/admin/products",
-        icon: Footprints,
+        icon: Sparkles,
         roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "INVENTORY_STAFF"],
       },
       {
-        title: "Inventory & Barcode",
+        title: "Inventory & Batch Stock",
         href: "/admin/inventory",
         icon: Boxes,
         roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "INVENTORY_STAFF"],
         badgeKey: "lowStock",
       },
       {
-        title: "Categories & Styles",
+        title: "Fragrance Collections",
         href: "/admin/categories",
         icon: Layers,
         roles: ["SUPER_ADMIN", "ADMIN", "MANAGER"],
       },
       {
-        title: "Dynamic Size Charts",
+        title: "Concentration & Volume",
         href: "/admin/size-charts",
-        icon: Ruler,
+        icon: Droplets,
         roles: ["SUPER_ADMIN", "ADMIN", "MANAGER"],
       },
     ],
@@ -117,13 +117,13 @@ export const ADMIN_NAV_GROUPS: IAdminNavGroup[] = [
     groupLabel: "System & Administration",
     items: [
       {
-        title: "Staff & CRM",
+        title: "Staff & Customer CRM",
         href: "/admin/users",
         icon: Users,
         roles: ["SUPER_ADMIN", "ADMIN"],
       },
       {
-        title: "Analytics & Reports",
+        title: "Olfactory Analytics",
         href: "/admin/analytics",
         icon: BarChart3,
         roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "ACCOUNTANT"],

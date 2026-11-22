@@ -11,11 +11,11 @@ const ROUTE_LABELS: Record<string, string> = {
   orders: "Orders",
   products: "Catalog",
   inventory: "Inventory",
-  exchanges: "Size Exchanges",
-  categories: "Categories",
-  "size-charts": "Size Charts",
+  exchanges: "Returns & QC",
+  categories: "Collections",
+  "size-charts": "Volume Guides",
   courier: "Courier",
-  coupons: "Coupons & Offers",
+  coupons: "Coupons",
   payments: "Payments",
   users: "Staff & CRM",
   analytics: "Analytics",
@@ -28,11 +28,10 @@ export default function AdminBreadcrumbs() {
 
   if (segments.length <= 1) {
     return (
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
-        <Home className="size-3.5 text-primary" />
+      <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-normal">
         <span>Admin</span>
         <ChevronRight className="size-3 text-muted-foreground/60" />
-        <span className="text-foreground font-semibold">Overview</span>
+        <span className="text-foreground font-normal">Overview</span>
       </div>
     );
   }
@@ -41,9 +40,8 @@ export default function AdminBreadcrumbs() {
     <nav aria-label="Breadcrumb" className="hidden sm:flex items-center gap-1.5 text-xs">
       <Link
         href="/admin/dashboard"
-        className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors font-medium"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors font-normal"
       >
-        <Home className="size-3.5" />
         <span>Admin</span>
       </Link>
 
@@ -58,13 +56,13 @@ export default function AdminBreadcrumbs() {
           <React.Fragment key={href}>
             <ChevronRight className="size-3 text-muted-foreground/60 shrink-0" />
             {isLast ? (
-              <span className="font-semibold text-foreground truncate max-w-40">
+              <span className="font-normal text-foreground truncate max-w-40">
                 {label}
               </span>
             ) : (
               <Link
                 href={href}
-                className="text-muted-foreground hover:text-foreground transition-colors font-medium truncate max-w-32"
+                className="text-muted-foreground hover:text-foreground transition-colors font-normal truncate max-w-32"
               >
                 {label}
               </Link>

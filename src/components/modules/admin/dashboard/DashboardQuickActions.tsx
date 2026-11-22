@@ -1,58 +1,38 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import {
-  ArrowLeftRight,
-  Footprints,
-  PhoneCall,
-  Printer,
-  Sparkles,
-} from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 export default function DashboardQuickActions() {
   const actions = [
     {
-      title: "Add New Footwear",
-      description: "Color swatches, photo gallery & size matrix",
-      href: "/admin/products/new",
-      icon: Footprints,
-      color: "text-primary bg-primary/10 hover:bg-primary/20",
+      title: "Add New Fragrance",
+      description: "Formula, notes and flacon volumes",
+      href: "/admin/products",
     },
     {
-      title: "Courier Dispatch & Labels",
-      description: "1-click Steadfast & Pathao parcel creation",
+      title: "Courier Dispatch & Tracking",
+      description: "Steadfast & Pathao parcel creation",
       href: "/admin/courier",
-      icon: Printer,
-      color: "text-blue-600 bg-blue-500/10 hover:bg-blue-500/20",
     },
     {
-      title: "Review Size Exchanges",
-      description: "Approve doorstep swap orders & QC checks",
+      title: "Review Damages & Returns",
+      description: "Atomizer leakage & return QC inspect",
       href: "/admin/exchanges",
-      icon: ArrowLeftRight,
-      color: "text-emerald-600 bg-emerald-500/10 hover:bg-emerald-500/20",
     },
     {
-      title: "Abandoned Cart Recovery",
-      description: "Call center recovery for incomplete checkout",
-      href: "/admin/orders?type=incomplete",
-      icon: PhoneCall,
-      color: "text-purple-600 bg-purple-500/10 hover:bg-purple-500/20",
+      title: "Incomplete Cart Recovery",
+      description: "Call center recovery queue",
+      href: "/admin/orders",
     },
   ];
 
   return (
-    <Card className="shadow-xs bg-muted/20 border-dashed">
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Sparkles className="size-4 text-primary" />
-          <h4 className="text-xs font-bold text-foreground">
-            Quick Operational Actions
-          </h4>
+    <Card className="shadow-none border border-border/60 bg-card">
+      <CardContent className="p-4 space-y-3">
+        <div className="text-xs font-normal text-muted-foreground uppercase tracking-wide">
+          Quick Actions
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -60,23 +40,13 @@ export default function DashboardQuickActions() {
             <Link
               key={act.title}
               href={act.href}
-              className={cn(
-                buttonVariants({ variant: "outline" }),
-                "h-auto p-3 justify-start items-start text-left bg-background hover:border-primary/50 transition-colors flex items-start gap-3 w-full"
-              )}
+              className="p-3 rounded-md border border-border/40 hover:bg-muted/40 transition-colors text-left space-y-1 block"
             >
-              <div
-                className={`size-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${act.color}`}
-              >
-                <act.icon className="size-4" />
+              <div className="text-xs font-normal text-foreground">
+                {act.title}
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-semibold text-xs text-foreground truncate">
-                  {act.title}
-                </div>
-                <div className="text-[10px] text-muted-foreground truncate mt-0.5">
-                  {act.description}
-                </div>
+              <div className="text-[11px] font-normal text-muted-foreground">
+                {act.description}
               </div>
             </Link>
           ))}

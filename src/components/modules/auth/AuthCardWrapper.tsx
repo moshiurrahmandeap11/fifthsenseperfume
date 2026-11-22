@@ -8,13 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Footprints } from "lucide-react";
 import Link from "next/link";
 import React, { ReactNode } from "react";
 
 interface AuthCardWrapperProps {
   title: string;
-  description: string;
+  description?: string;
   children: ReactNode;
   backButtonLabel?: string;
   backButtonHref?: string;
@@ -31,19 +30,15 @@ export default function AuthCardWrapper({
   return (
     <div className="flex min-h-[calc(100vh-80px)] w-full items-center justify-center p-4 py-8">
       <Card className="w-full max-w-md border-border/60 shadow-lg transition-all dark:bg-card">
-        <CardHeader className="space-y-2 pb-4 text-center">
-          <div className="flex items-center justify-center gap-2">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-              <Footprints className="size-5" />
-            </div>
-            <span className="font-bold text-xl tracking-tight">EcomBD</span>
-          </div>
+        <CardHeader className="space-y-1.5 pb-4 text-center">
           <CardTitle className="font-semibold text-2xl tracking-tight">
             {title}
           </CardTitle>
-          <CardDescription className="text-muted-foreground text-sm">
-            {description}
-          </CardDescription>
+          {description && (
+            <CardDescription className="text-muted-foreground text-sm">
+              {description}
+            </CardDescription>
+          )}
         </CardHeader>
 
         <CardContent className="space-y-4">{children}</CardContent>

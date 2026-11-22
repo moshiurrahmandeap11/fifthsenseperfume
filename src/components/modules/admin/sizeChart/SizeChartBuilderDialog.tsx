@@ -37,13 +37,11 @@ interface SizeChartBuilderDialogProps {
   initialData?: ISizeChart | null;
 }
 
-const DEFAULT_ROWS: ISizeChartRow[] = [
-  { euSize: "39", ukSize: "5.5", usSize: "6.5", footLengthCm: 24.5, footLengthInch: 9.6 },
-  { euSize: "40", ukSize: "6.5", usSize: "7.5", footLengthCm: 25.0, footLengthInch: 9.8 },
-  { euSize: "41", ukSize: "7.5", usSize: "8.5", footLengthCm: 26.0, footLengthInch: 10.2 },
-  { euSize: "42", ukSize: "8.0", usSize: "9.0", footLengthCm: 26.5, footLengthInch: 10.4 },
-  { euSize: "43", ukSize: "9.0", usSize: "10.0", footLengthCm: 27.5, footLengthInch: 10.8 },
-  { euSize: "44", ukSize: "9.5", usSize: "10.5", footLengthCm: 28.0, footLengthInch: 11.0 },
+const DEFAULT_FRAGRANCE_ROWS: ISizeChartRow[] = [
+  { euSize: "100ml", ukSize: "Extrait 35%", usSize: "16+ Hours", footLengthCm: 1500, footLengthInch: 180 },
+  { euSize: "50ml", ukSize: "Extrait 35%", usSize: "16+ Hours", footLengthCm: 750, footLengthInch: 90 },
+  { euSize: "30ml", ukSize: "Extrait 35%", usSize: "16+ Hours", footLengthCm: 450, footLengthInch: 50 },
+  { euSize: "10ml", ukSize: "Travel Flacon", usSize: "16+ Hours", footLengthCm: 150, footLengthInch: 18 },
 ];
 
 export default function SizeChartBuilderDialog({
@@ -72,7 +70,7 @@ export default function SizeChartBuilderDialog({
     defaultValues: {
       title: "",
       description: "",
-      rows: DEFAULT_ROWS,
+      rows: DEFAULT_FRAGRANCE_ROWS,
     },
   });
 
@@ -88,14 +86,14 @@ export default function SizeChartBuilderDialog({
         rows:
           initialData.rows && initialData.rows.length > 0
             ? initialData.rows
-            : DEFAULT_ROWS,
+            : DEFAULT_FRAGRANCE_ROWS,
       });
       setImagePreview(initialData.guideImage || null);
     } else {
       reset({
         title: "",
         description: "",
-        rows: DEFAULT_ROWS,
+        rows: DEFAULT_FRAGRANCE_ROWS,
       });
       setImagePreview(null);
     }
@@ -130,26 +128,25 @@ export default function SizeChartBuilderDialog({
 
       if (isEditing && initialData) {
         await updateSizeChart(initialData.id, formData);
-        toast.success("Size chart updated successfully");
+        toast.success("Volume guide updated");
       } else {
         await createSizeChart(formData);
-        toast.success("Size chart created successfully");
+        toast.success("Volume guide created");
       }
 
       onSuccess();
       onClose();
     } catch (error: unknown) {
       const err = error as { message?: string };
-      toast.error(err?.message || "Failed to save size chart");
+      toast.error(err?.message || "Failed to save guide");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Construct preview chart object
   const previewChart: ISizeChart = {
     id: initialData?.id || "preview-id",
-    title: currentTitle || "Footwear Size Chart Preview",
+    title: currentTitle || "Flacon Volume Guide",
     description: currentDescription || null,
     guideImage: imagePreview,
     rows: rows,
@@ -162,24 +159,24 @@ export default function SizeChartBuilderDialog({
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
         <DialogContent className="sm:max-w-2xl max-h-[92vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              {isEditing ? "Edit Size Chart Matrix" : "Create Size Chart Matrix"}
+            <DialogTitle className="text-sm font-normal">
+              {isEditing ? "Edit Volume Guide" : "Create Volume Guide"}
             </DialogTitle>
-            <DialogDescription>
-              Build custom conversion table across EU, UK, US and Foot Length (CM/Inches).
+            <DialogDescription className="text-xs font-normal">
+              Flacon size, concentration, and spray yields
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-2">
-            {/* Title */}
-            <div className="space-y-1.5">
-              <Label htmlFor="chart-title">
-                Chart Title <span className="text-destructive">*</span>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 pt-2">
+            <div className="space-y-1">
+              <Label htmlFor="chart-title" className="text-xs font-normal">
+                Guide Title
               </Label>
               <Input
                 id="chart-title"
-                placeholder="e.g. Men's Formal & Oxford Shoes Size Guide"
+                placeholder="e.g. Extrait de Parfum Volumetric & Longevity Guide"
                 disabled={isLoading}
+                className="text-xs h-9 font-normal"
                 {...register("title")}
               />
               {errors.title && (
@@ -187,50 +184,43 @@ export default function SizeChartBuilderDialog({
               )}
             </div>
 
-            {/* Description */}
-            <div className="space-y-1.5">
-              <Label htmlFor="chart-desc">Fitting Advice / Description</Label>
+            <div className="space-y-1">
+              <Label htmlFor="chart-desc" className="text-xs font-normal">Sillage &amp; Longevity Notes</Label>
               <Textarea
                 id="chart-desc"
-                placeholder="e.g. Standard Bangladesh fit. If between sizes, choose one size up for wide feet."
+                placeholder="Concentration notes, application tips, and sillage details"
                 rows={2}
                 disabled={isLoading}
+                className="text-xs font-normal resize-none"
                 {...register("description")}
               />
-              {errors.description && (
-                <p className="text-xs text-destructive">
-                  {errors.description.message}
-                </p>
-              )}
             </div>
 
-            {/* Guide Image Upload */}
-            <div className="space-y-1.5">
-              <Label>Foot Measurement Guide Diagram (Optional)</Label>
-              <div className="flex items-center gap-4">
+            <div className="space-y-1">
+              <Label className="text-xs font-normal">Visual Guide Diagram (Optional)</Label>
+              <div className="flex items-center gap-3">
                 {imagePreview ? (
-                  <div className="relative size-16 rounded-lg border overflow-hidden bg-muted">
+                  <div className="relative size-12 rounded border overflow-hidden bg-muted">
                     <Image
                       src={imagePreview}
-                      alt="Guide preview"
+                      alt="Guide"
                       fill
                       className="object-cover"
                     />
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      className="absolute top-0.5 right-0.5 size-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center cursor-pointer shadow-xs"
+                      className="absolute top-0.5 right-0.5 size-4 bg-foreground/70 text-background rounded-full flex items-center justify-center cursor-pointer"
                     >
-                      <X className="size-3" />
+                      <X className="size-2.5" />
                     </button>
                   </div>
                 ) : (
                   <label
                     htmlFor="guide-image-input"
-                    className="size-16 rounded-lg border border-dashed flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-primary transition-colors text-muted-foreground hover:text-foreground"
+                    className="size-12 rounded border border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-foreground transition-colors text-muted-foreground"
                   >
-                    <ImagePlus className="size-5" />
-                    <span className="text-[9px] font-medium">Upload</span>
+                    <ImagePlus className="size-4" />
                     <input
                       id="guide-image-input"
                       type="file"
@@ -241,36 +231,36 @@ export default function SizeChartBuilderDialog({
                     />
                   </label>
                 )}
-                <div className="text-[11px] text-muted-foreground">
-                  Diagram showing foot-length measuring technique for customers.
-                </div>
+                <span className="text-[11px] text-muted-foreground font-normal">
+                  Flacon proportion or spray diagram
+                </span>
               </div>
             </div>
 
             {/* Dynamic Row Editor */}
-            <div className="pt-2">
+            <div className="pt-1">
               <SizeChartRowEditor
                 rows={rows}
                 onChange={(updatedRows) => setValue("rows", updatedRows)}
                 disabled={isLoading}
               />
               {errors.rows && (
-                <p className="text-xs text-destructive mt-1">
+                <p className="text-xs text-destructive mt-1 font-normal">
                   {errors.rows.message}
                 </p>
               )}
             </div>
 
-            <DialogFooter className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t">
+            <DialogFooter className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-border/40">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsPreviewOpen(true)}
-                className="gap-1.5 text-xs cursor-pointer"
+                className="gap-1.5 text-xs font-normal cursor-pointer"
               >
-                <Eye className="size-3.5 text-primary" />
-                <span>Customer Live Preview</span>
+                <Eye className="size-3 text-muted-foreground" />
+                <span>Customer Preview</span>
               </Button>
 
               <div className="flex items-center gap-2">
@@ -280,6 +270,7 @@ export default function SizeChartBuilderDialog({
                   size="sm"
                   onClick={onClose}
                   disabled={isLoading}
+                  className="text-xs font-normal"
                 >
                   Cancel
                 </Button>
@@ -287,17 +278,17 @@ export default function SizeChartBuilderDialog({
                   type="submit"
                   size="sm"
                   disabled={isLoading}
-                  className="cursor-pointer"
+                  className="text-xs font-normal cursor-pointer"
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="mr-2 size-4 animate-spin" />
+                      <Loader2 className="mr-1.5 size-3.5 animate-spin" />
                       Saving...
                     </>
                   ) : isEditing ? (
-                    "Update Size Chart"
+                    "Update Guide"
                   ) : (
-                    "Create Size Chart"
+                    "Save Guide"
                   )}
                 </Button>
               </div>
@@ -306,7 +297,7 @@ export default function SizeChartBuilderDialog({
         </DialogContent>
       </Dialog>
 
-      {/* Customer Preview Modal */}
+      {/* Preview Modal */}
       <SizeChartVisualPreview
         chart={previewChart}
         isOpen={isPreviewOpen}

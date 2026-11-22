@@ -4,18 +4,13 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Create Account | EcomBD Footwear",
-  description: "Create your EcomBD customer account",
+  title: "Create Account | FIFTH SENSE PERFUMES",
+  description: "Create your FIFTH SENSE customer account",
 };
 
 export default function RegisterPage() {
   return (
-    <AuthCardWrapper
-      title="Create Account"
-      description="Register for hassle-free doorstep size exchanges and fast checkout"
-      backButtonLabel="Already have an account? Sign in"
-      backButtonHref="/login"
-    >
+    <AuthCardWrapper title="Create Account">
       <Suspense fallback={<div className="h-40 animate-pulse rounded bg-muted/40" />}>
         <RegisterForm />
       </Suspense>

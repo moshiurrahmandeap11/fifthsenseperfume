@@ -12,20 +12,39 @@ import {
   X,
   User,
 } from "lucide-react";
-import { useSession } from "@/lib/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
 import { logoutUser } from "@/services/auth.services";
 import { cn } from "@/lib/utils";
+import { IUser } from "@/types/auth.types";
 import toast from "react-hot-toast";
 import TopBar from "./TopBar";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
 import NavbarUserMenu from "./navbar/NavbarUserMenu";
 import { STOREFRONT_NAV_LINKS } from "./navbar/navLinks";
 
-export default function Navbar() {
+interface NavbarProps {
+  initialUser?: IUser | null;
+}
+
+export default function Navbar({ initialUser }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
-  const user = session?.user;
+  const [prevInitialUserId, setPrevInitialUserId] = useState<string | null>(
+    initialUser?.id ?? null
+  );
+  const [currentUser, setCurrentUser] = useState<IUser | null>(
+    initialUser ?? null
+  );
+
+  const nextInitialUserId = initialUser?.id ?? null;
+  if (nextInitialUserId !== prevInitialUserId) {
+    setPrevInitialUserId(nextInitialUserId);
+    setCurrentUser(initialUser ?? null);
+  }
+
+  const user =
+    currentUser ?? (session?.user as unknown as IUser | undefined) ?? null;
 
   const [prevPathname, setPrevPathname] = useState(pathname);
   const [showNavLinks, setShowNavLinks] = useState(true);
@@ -136,7 +155,8 @@ export default function Navbar() {
 
   const handleMobileLogout = async () => {
     try {
-      await logoutUser();
+      await Promise.allSettled([signOut(), logoutUser()]);
+      setCurrentUser(null);
       toast.success("Signed out successfully");
       router.push("/");
       router.refresh();

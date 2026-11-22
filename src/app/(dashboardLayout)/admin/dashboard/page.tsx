@@ -1,10 +1,10 @@
 import DailySalesTrendChart from "@/components/modules/admin/dashboard/DailySalesTrendChart";
 import DashboardOverviewCards from "@/components/modules/admin/dashboard/DashboardOverviewCards";
 import DashboardQuickActions from "@/components/modules/admin/dashboard/DashboardQuickActions";
+import FragranceDemandChart from "@/components/modules/admin/dashboard/FragranceDemandChart";
 import OperationalAlertsBanner from "@/components/modules/admin/dashboard/OperationalAlertsBanner";
 import RecentOrdersTable from "@/components/modules/admin/dashboard/RecentOrdersTable";
-import ShoeSizeDemandChart from "@/components/modules/admin/dashboard/ShoeSizeDemandChart";
-import { Badge } from "@/components/ui/badge";
+import { FluidPage } from "@/components/ui/fluid-motion";
 import {
   getDashboardAnalytics,
   getSizeDemandAnalytics,
@@ -13,7 +13,6 @@ import {
   IDashboardAnalyticsResult,
   ISizeDemandResult,
 } from "@/types/analytics.types";
-import { Activity, LayoutDashboard } from "lucide-react";
 import { connection } from "next/server";
 import React from "react";
 
@@ -39,55 +38,38 @@ export default async function AdminDashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <LayoutDashboard className="size-4" />
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              Executive Overview
-            </h1>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            EcomBD Footwear real-time sales, footwear size-demand curve and logistics operations
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Badge
-            variant="outline"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-background border-primary/20 text-foreground"
-          >
-            <Activity className="size-3.5 text-emerald-500 animate-pulse" />
-            <span>Live Database Sync</span>
-          </Badge>
-        </div>
+    <FluidPage className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-2 border-b">
+        <h1 className="text-base font-normal tracking-wide uppercase text-foreground">
+          Executive Overview
+        </h1>
+        <span className="text-xs font-mono text-muted-foreground">
+          Live
+        </span>
       </div>
 
-      {/* 1. Operational Alerts Banner (Broken-size, low-stock, pending exchanges) */}
+      {/* Operational Alerts */}
       <OperationalAlertsBanner alerts={dashboardData?.operationalAlerts} />
 
-      {/* 2. KPI Overview Cards (Gross Sales, Orders, Delivery Rate, Return Rate) */}
+      {/* KPI Overview Cards */}
       <DashboardOverviewCards
         revenue={dashboardData?.revenue}
         orders={dashboardData?.orders}
         rates={dashboardData?.rates}
       />
 
-      {/* 3. Quick Actions Grid */}
+      {/* Quick Actions Grid */}
       <DashboardQuickActions />
 
-      {/* 4. Analytics Visualizations Grid (Daily Trend & Footwear Size Demand) */}
+      {/* Visualizations Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailySalesTrendChart data={dashboardData?.dailySalesTrend} />
-        <ShoeSizeDemandChart data={sizeDemandData} />
+        <FragranceDemandChart data={sizeDemandData} />
       </div>
 
-      {/* 5. Recent 5 Customer Orders Table */}
+      {/* Recent Orders Table */}
       <RecentOrdersTable orders={dashboardData?.recentOrders} />
-    </div>
+    </FluidPage>
   );
 }
