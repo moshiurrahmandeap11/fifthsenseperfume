@@ -28,24 +28,79 @@ export default function Navbar() {
   const user = session?.user;
 
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showNavLinks, setShowNavLinks] = useState(true);
+  const navVisibleRef = useRef(true);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isShopHovered, setIsShopHovered] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Detect scroll for subtle border and shadow
+  // Keep navigation visible when switching routes
   useEffect(() => {
+    navVisibleRef.current = true;
+    setShowNavLinks(true);
+    setIsSearchOpen(false);
+    setIsShopHovered(false);
+  }, [pathname]);
+
+  // Robust scroll direction detection with hysteresis and requestAnimationFrame to eliminate glitches
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = Math.max(0, window.scrollY);
+
+          // 1. Always show navigation links when near top of page
+          if (currentScrollY <= 60) {
+            if (!navVisibleRef.current) {
+              navVisibleRef.current = true;
+              setShowNavLinks(true);
+            }
+            lastScrollY = currentScrollY;
+            ticking = false;
+            return;
+          }
+
+          const diff = currentScrollY - lastScrollY;
+
+          // 2. Scrolling DOWN with deliberate movement (>15px) past 90px from top
+          if (diff > 15 && currentScrollY > 90) {
+            if (navVisibleRef.current) {
+              navVisibleRef.current = false;
+              setShowNavLinks(false);
+              setIsShopHovered(false);
+            }
+            lastScrollY = currentScrollY;
+          }
+          // 3. Scrolling UP with deliberate movement (>15px)
+          else if (diff < -15) {
+            if (!navVisibleRef.current) {
+              navVisibleRef.current = true;
+              setShowNavLinks(true);
+            }
+            lastScrollY = currentScrollY;
+          }
+
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Focus input when search bar opens
+  // Focus input when search bar opens with smooth timing
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
+      const timer = setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 150);
+      return () => clearTimeout(timer);
     }
   }, [isSearchOpen]);
 
@@ -93,15 +148,13 @@ export default function Navbar() {
       {/* 2. Main Navbar Container */}
       <div
         className={cn(
-          "w-full bg-white dark:bg-neutral-950 transition-colors duration-200 border-b",
-          isScrolled
-            ? "border-neutral-200 dark:border-neutral-800 shadow-xs"
-            : "border-neutral-200 dark:border-neutral-800"
+          "w-full bg-white dark:bg-neutral-950 transition-colors duration-200 border-b border-neutral-200 dark:border-neutral-800 shadow-none"
         )}
       >
         {/* ROW 1: Search Icon (Left) | Centered Logo (Center) | Wishlist & Cart (Right) */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-18 sm:h-20 grid grid-cols-3 items-center">
+        <div className="w-full relative z-20 bg-white dark:bg-neutral-950">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="h-18 sm:h-20 grid grid-cols-3 items-center">
             
             {/* Left Column: Search Icon & Mobile Menu */}
             <div className="flex items-center gap-1 sm:gap-2 -ml-2">
@@ -118,14 +171,14 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="p-2 text-neutral-900 dark:text-neutral-100 hover:text-black dark:hover:text-white transition-colors cursor-pointer rounded-none"
+                className="p-2 text-neutral-900 dark:text-neutral-100 hover:text-black dark:hover:text-white transition-all cursor-pointer rounded-none"
                 aria-label="Toggle Search"
                 title="Search"
               >
                 {isSearchOpen ? (
-                  <X className="size-5 stroke-[1.5]" />
+                  <X className="size-5 stroke-[1.5] animate-in fade-in zoom-in-75 duration-200" />
                 ) : (
-                  <Search className="size-5 stroke-[1.5]" />
+                  <Search className="size-5 stroke-[1.5] animate-in fade-in zoom-in-75 duration-200" />
                 )}
               </button>
             </div>
@@ -177,36 +230,56 @@ export default function Navbar() {
 
           </div>
         </div>
+      </div>
 
-        {/* Expandable Inline Search Bar */}
-        {isSearchOpen && (
-          <div className="border-t border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 py-3 px-4 transition-all">
-            <div className="container mx-auto max-w-2xl">
-              <form onSubmit={handleSearchSubmit} className="relative flex items-center">
-                <Search className="absolute left-3 size-4 stroke-[1.5] text-neutral-400" />
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search artisanal fragrances, notes (oud, bergamot, santal)..."
-                  className="w-full pl-9 pr-20 py-2 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white rounded-none"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-1 px-3 py-1.5 text-[11px] font-sans uppercase tracking-normal bg-black text-white dark:bg-white dark:text-black rounded-none hover:opacity-90 transition-opacity"
-                >
-                  Search
-                </button>
-              </form>
-            </div>
-          </div>
+      {/* Expandable Smooth Animated Inline Search Bar */}
+      <div
+        className={cn(
+          "relative z-20 grid transition-[grid-template-rows,padding,opacity] duration-300 ease-out bg-white dark:bg-neutral-950 overflow-hidden shadow-none",
+          isSearchOpen
+            ? "grid-rows-[1fr] opacity-100 py-3 border-t border-neutral-100 dark:border-neutral-900"
+            : "grid-rows-[0fr] opacity-0 py-0 border-t-0 border-transparent pointer-events-none"
         )}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className="w-full max-w-[480px] sm:max-w-[520px] mx-auto px-4">
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
+              <Search className="absolute left-3 size-4 stroke-[1.5] text-neutral-400" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search artisanal fragrances, notes (oud, bergamot, santal)..."
+                className="w-full h-10 pl-9 pr-24 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:border-[#cfb98f] rounded-none shadow-none"
+              />
+              <button
+                type="submit"
+                className="absolute inset-y-1 right-1 px-4 flex items-center justify-center text-[11px] font-sans font-medium uppercase tracking-normal bg-[#cfb98f] hover:bg-[#bfa77a] active:bg-[#b0986b] text-white rounded-none transition-colors cursor-pointer shadow-none"
+              >
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
 
-        {/* ROW 2: Desktop Centered Navigation Links */}
+      {/* ROW 2: Desktop Centered Navigation Links with Smooth Slide-Up on Scroll Down */}
+      <div
+        className={cn(
+          "hidden md:block relative z-10 transition-all duration-300 ease-in-out",
+          showNavLinks
+            ? "max-h-[46px] opacity-100"
+            : "max-h-0 opacity-0 pointer-events-none overflow-hidden",
+          showNavLinks && isShopHovered ? "overflow-visible" : "overflow-hidden"
+        )}
+      >
         <nav
           aria-label="Storefront Navigation"
-          className="hidden md:flex items-center justify-center gap-7 lg:gap-10 py-3.5 border-t border-neutral-100 dark:border-neutral-900"
+          className={cn(
+            "flex items-center justify-center gap-7 lg:gap-10 py-3.5 border-t border-neutral-100 dark:border-neutral-900 bg-white dark:bg-neutral-950 transition-transform duration-300 ease-in-out",
+            showNavLinks ? "translate-y-0" : "-translate-y-full"
+          )}
         >
           {STOREFRONT_NAV_LINKS.map((link) => {
             const isActive =
@@ -280,6 +353,7 @@ export default function Navbar() {
             );
           })}
         </nav>
+      </div>
       </div>
     </header>
   );

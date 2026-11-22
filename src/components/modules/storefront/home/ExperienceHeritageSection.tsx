@@ -12,11 +12,11 @@ export default function ExperienceHeritageSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-12 sm:gap-y-16 lg:gap-y-0 lg:gap-x-0 items-stretch">
           
           {/* Cell 1: Experience Text (Top-Left) */}
-          <div className="flex flex-col items-start justify-center py-6 sm:py-8 lg:py-12 pr-4 sm:pr-8 lg:pr-14 xl:pr-16 order-1">
+          <div className="flex flex-col items-start justify-center py-4 sm:py-8 lg:py-14 xl:py-16 pr-4 sm:pr-8 lg:pr-14 xl:pr-16 order-1">
             <span
               className="font-script text-2xl sm:text-3xl lg:text-[34px] leading-none mb-2 sm:mb-3.5 select-none"
               style={{
-                color: "#a69a8e",
+                color: "#c6b189",
                 fontFamily: 'var(--font-script), "BrittanySignature", cursive',
               }}
             >
@@ -60,11 +60,11 @@ export default function ExperienceHeritageSection() {
           </div>
 
           {/* Cell 4: Heritage Text (Bottom-Right) */}
-          <div className="flex flex-col items-start justify-center py-6 sm:py-8 lg:py-12 pl-4 sm:pl-8 lg:pl-14 xl:pl-16 order-3 lg:order-4">
+          <div className="flex flex-col items-start justify-center py-4 sm:py-8 lg:py-14 xl:py-16 pl-4 sm:pl-8 lg:pl-14 xl:pl-16 order-3 lg:order-4">
             <span
               className="font-script text-2xl sm:text-3xl lg:text-[34px] leading-none mb-2 sm:mb-3.5 select-none"
               style={{
-                color: "#a69a8e",
+                color: "#c6b189",
                 fontFamily: 'var(--font-script), "BrittanySignature", cursive',
               }}
             >
