@@ -1,8 +1,8 @@
 "use server";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import httpClient from "@/lib/axios/httpClient";
+import httpClient, { extractErrorMessage } from "@/lib/axios/httpClient";
 import {
+  IAuthActionResult,
   IAuthResponse,
   IChangePasswordPayload,
   IForgotPasswordPayload,
@@ -17,32 +17,46 @@ import {
 import { cookies } from "next/headers";
 
 const SESSION_COOKIE_NAME = "better-auth.session_token";
+const SECURE_SESSION_COOKIE_NAME = "__Secure-better-auth.session_token";
+const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60; // Matches backend Better Auth 7d expiry
+
+const persistSessionCookie = async (token?: string | null) => {
+  if (!token) return;
+  const cookieStore = await cookies();
+  cookieStore.set(SESSION_COOKIE_NAME, token, {
+    path: "/",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: SESSION_MAX_AGE_SECONDS,
+  });
+};
+
+const clearSessionCookies = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete(SESSION_COOKIE_NAME);
+  cookieStore.delete(SECURE_SESSION_COOKIE_NAME);
+};
 
 /**
  * Register a new customer
  */
 export const registerUser = async (
   payload: IRegisterPayload
-): Promise<IAuthResponse> => {
+): Promise<IAuthActionResult<IAuthResponse>> => {
   try {
     const res = await httpClient.post<IAuthResponse>("/auth/register", payload);
-
-    if (res.data?.token) {
-      const cookieStore = await cookies();
-      cookieStore.set(SESSION_COOKIE_NAME, res.data.token, {
-        path: "/",
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 30 * 24 * 60 * 60, // 30 days
-      });
-    }
-
-    return res.data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message || error?.message || "Registration failed";
-    throw new Error(message);
+    await persistSessionCookie(res.data?.token);
+    return {
+      success: true,
+      message: res.message || "User registered successfully",
+      data: res.data,
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: extractErrorMessage(error, "Registration failed"),
+    };
   }
 };
 
@@ -51,26 +65,20 @@ export const registerUser = async (
  */
 export const loginUser = async (
   payload: ILoginPayload
-): Promise<IAuthResponse> => {
+): Promise<IAuthActionResult<IAuthResponse>> => {
   try {
     const res = await httpClient.post<IAuthResponse>("/auth/login", payload);
-
-    if (res.data?.token) {
-      const cookieStore = await cookies();
-      cookieStore.set(SESSION_COOKIE_NAME, res.data.token, {
-        path: "/",
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 30 * 24 * 60 * 60, // 30 days
-      });
-    }
-
-    return res.data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message || error?.message || "Login failed";
-    throw new Error(message);
+    await persistSessionCookie(res.data?.token);
+    return {
+      success: true,
+      message: res.message || "Logged in successfully",
+      data: res.data,
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: extractErrorMessage(error, "Login failed"),
+    };
   }
 };
 
@@ -92,18 +100,14 @@ export const getMe = async (): Promise<IUser | null> => {
 export const logoutUser = async (): Promise<IMessageResponse> => {
   try {
     const res = await httpClient.post<IMessageResponse>("/auth/logout");
-
-    const cookieStore = await cookies();
-    cookieStore.delete(SESSION_COOKIE_NAME);
-
-    return res.data || { message: "Logged out successfully" };
-  } catch (error: any) {
-    const cookieStore = await cookies();
-    cookieStore.delete(SESSION_COOKIE_NAME);
-
-    const message =
-      error?.response?.data?.message || error?.message || "Logout failed";
-    return { message, success: false };
+    await clearSessionCookies();
+    return res.data || { message: res.message || "Logged out successfully", success: true };
+  } catch (error: unknown) {
+    await clearSessionCookies();
+    return {
+      message: extractErrorMessage(error, "Logout failed"),
+      success: false,
+    };
   }
 };
 
@@ -112,19 +116,23 @@ export const logoutUser = async (): Promise<IMessageResponse> => {
  */
 export const changePassword = async (
   payload: IChangePasswordPayload
-): Promise<IMessageResponse> => {
+): Promise<IAuthActionResult<null>> => {
   try {
-    const res = await httpClient.put<IMessageResponse>(
+    const res = await httpClient.put<{ token?: string }>(
       "/auth/change-password",
       payload
     );
-    return res.data || { message: "Password changed successfully" };
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Failed to change password";
-    throw new Error(message);
+    await persistSessionCookie(res.data?.token);
+    return {
+      success: true,
+      message: res.message || "Password changed successfully",
+      data: null,
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: extractErrorMessage(error, "Failed to change password"),
+    };
   }
 };
 
@@ -133,19 +141,19 @@ export const changePassword = async (
  */
 export const requestEmailOtp = async (
   payload: IRequestOtpPayload
-): Promise<IMessageResponse> => {
+): Promise<IAuthActionResult<null>> => {
   try {
-    const res = await httpClient.post<IMessageResponse>(
-      "/auth/request-email-otp",
-      payload
-    );
-    return res.data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Failed to send email verification OTP";
-    throw new Error(message);
+    const res = await httpClient.post<null>("/auth/request-email-otp", payload);
+    return {
+      success: true,
+      message: res.message || "Verification OTP sent successfully",
+      data: null,
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: extractErrorMessage(error, "Failed to send email verification OTP"),
+    };
   }
 };
 
@@ -154,19 +162,23 @@ export const requestEmailOtp = async (
  */
 export const verifyEmail = async (
   payload: IVerifyEmailPayload
-): Promise<IMessageResponse> => {
+): Promise<IAuthActionResult<{ token?: string; user?: IUser }>> => {
   try {
-    const res = await httpClient.post<IMessageResponse>(
+    const res = await httpClient.post<{ token?: string; user?: IUser }>(
       "/auth/verify-email",
       payload
     );
-    return res.data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Failed to verify email OTP";
-    throw new Error(message);
+    await persistSessionCookie(res.data?.token);
+    return {
+      success: true,
+      message: res.message || "Email verified successfully",
+      data: res.data || {},
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: extractErrorMessage(error, "Failed to verify email OTP"),
+    };
   }
 };
 
@@ -175,19 +187,19 @@ export const verifyEmail = async (
  */
 export const forgotPassword = async (
   payload: IForgotPasswordPayload
-): Promise<IMessageResponse> => {
+): Promise<IAuthActionResult<null>> => {
   try {
-    const res = await httpClient.post<IMessageResponse>(
-      "/auth/forget-password",
-      payload
-    );
-    return res.data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Failed to send password reset OTP";
-    throw new Error(message);
+    const res = await httpClient.post<null>("/auth/forget-password", payload);
+    return {
+      success: true,
+      message: res.message || "Password reset OTP sent successfully",
+      data: null,
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: extractErrorMessage(error, "Failed to send password reset OTP"),
+    };
   }
 };
 
@@ -196,19 +208,19 @@ export const forgotPassword = async (
  */
 export const resetPassword = async (
   payload: IResetPasswordPayload
-): Promise<IMessageResponse> => {
+): Promise<IAuthActionResult<null>> => {
   try {
-    const res = await httpClient.post<IMessageResponse>(
-      "/auth/reset-password",
-      payload
-    );
-    return res.data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Failed to reset password";
-    throw new Error(message);
+    const res = await httpClient.post<null>("/auth/reset-password", payload);
+    return {
+      success: true,
+      message: res.message || "Password reset successfully",
+      data: null,
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: extractErrorMessage(error, "Failed to reset password"),
+    };
   }
 };
 
@@ -220,4 +232,3 @@ export const getGoogleLoginUrl = async (): Promise<string> => {
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api/v1";
   return `${baseUrl}/auth/login/google`;
 };
-

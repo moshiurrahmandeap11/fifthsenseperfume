@@ -14,7 +14,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { deleteSizeChart } from "@/services/sizeChart.services";
 import { ISizeChart } from "@/types/sizeChart.types";
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -41,14 +41,14 @@ export default function SizeChartDeleteAlert({
     try {
       setIsDeleting(true);
       await deleteSizeChart(chart.id);
-      toast.success("Size chart deleted successfully");
+      toast.success("Volume guide deleted");
       onSuccess();
       onClose();
     } catch (error: unknown) {
       const err = error as { message?: string };
       toast.error(
         err?.message ||
-          "Cannot delete size chart. Please ensure no footwear products are using this chart."
+          "Cannot delete guide while fragrance products are linked."
       );
     } finally {
       setIsDeleting(false);
@@ -59,29 +59,22 @@ export default function SizeChartDeleteAlert({
     <AlertDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <div className="size-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center mb-2">
-            <AlertTriangle className="size-5" />
-          </div>
-          <AlertDialogTitle>
-            Delete Size Chart &ldquo;{chart.title}&rdquo;?
+          <AlertDialogTitle className="text-sm font-normal">
+            Delete Guide &ldquo;{chart.title}&rdquo;?
           </AlertDialogTitle>
-          <AlertDialogDescription className="space-y-2">
+          <AlertDialogDescription className="space-y-2 text-xs font-normal">
             <p>
-              Are you sure you want to permanently remove this size chart template?
+              Are you sure you want to delete this volume guide template?
             </p>
             {productCount > 0 && (
-              <div className="p-2.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs text-amber-700 dark:text-amber-400 space-y-1">
-                <span className="font-semibold block">Warning:</span>
-                <p>
-                  • There are {productCount} footwear products linked to this size chart.
-                  Customers will not have a size guide on those product pages until reassigned.
-                </p>
+              <div className="p-2.5 rounded border border-border/50 text-xs text-muted-foreground font-normal">
+                • {productCount} fragrance products are linked to this guide.
               </div>
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting} onClick={onClose}>
+          <AlertDialogCancel disabled={isDeleting} onClick={onClose} className="text-xs font-normal">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
@@ -90,15 +83,15 @@ export default function SizeChartDeleteAlert({
               handleDelete();
             }}
             disabled={isDeleting}
-            className={cn(buttonVariants({ variant: "destructive" }), "cursor-pointer")}
+            className={cn(buttonVariants({ variant: "destructive" }), "text-xs font-normal cursor-pointer")}
           >
             {isDeleting ? (
               <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
+                <Loader2 className="mr-1.5 size-3.5 animate-spin" />
                 Deleting...
               </>
             ) : (
-              "Yes, Delete Size Chart"
+              "Delete Guide"
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

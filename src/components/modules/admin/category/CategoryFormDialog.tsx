@@ -138,10 +138,10 @@ export default function CategoryFormDialog({
 
       if (isEditing && initialData) {
         await updateCategory(initialData.id, formData);
-        toast.success("Category updated successfully");
+        toast.success("Category updated");
       } else {
         await createCategory(formData);
-        toast.success("Category created successfully");
+        toast.success("Category created");
       }
 
       onSuccess();
@@ -154,7 +154,6 @@ export default function CategoryFormDialog({
     }
   };
 
-  // Prevent selecting itself or its children as parent when editing
   const eligibleParents = parentCategories.filter(
     (c) => !initialData || c.id !== initialData.id
   );
@@ -163,26 +162,24 @@ export default function CategoryFormDialog({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Edit Category" : "Add New Category"}
+          <DialogTitle className="text-sm font-normal">
+            {isEditing ? "Edit Category" : "Add Category"}
           </DialogTitle>
-          <DialogDescription>
-            {isEditing
-              ? "Update category details and hierarchy settings."
-              : "Create a root or subcategory for footwear catalog organization."}
+          <DialogDescription className="text-xs font-normal">
+            Category details and hierarchy
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-2">
-          {/* Category Name */}
-          <div className="space-y-1.5">
-            <Label htmlFor="category-name">
-              Category Name <span className="text-destructive">*</span>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 pt-2">
+          <div className="space-y-1">
+            <Label htmlFor="category-name" className="text-xs font-normal">
+              Category Name
             </Label>
             <Input
               id="category-name"
-              placeholder="e.g. Formal Leather Shoes"
+              placeholder="e.g. Woody & Oriental"
               disabled={isLoading}
+              className="text-xs h-9 font-normal"
               {...register("name")}
             />
             {errors.name && (
@@ -190,20 +187,23 @@ export default function CategoryFormDialog({
             )}
           </div>
 
-          {/* Bengali Name (Optional for multilingual BD market) */}
-          <div className="space-y-1.5">
-            <Label htmlFor="category-name-bn">Name in Local Language (Optional)</Label>
+          <div className="space-y-1">
+            <Label htmlFor="category-name-bn" className="text-xs font-normal">
+              Local Name (Optional)
+            </Label>
             <Input
               id="category-name-bn"
-              placeholder="e.g. Local translated title"
+              placeholder="Local name"
               disabled={isLoading}
+              className="text-xs h-9 font-normal"
               {...register("nameBn")}
             />
           </div>
 
-          {/* Parent Category Selector */}
-          <div className="space-y-1.5">
-            <Label htmlFor="parent-category">Parent Category</Label>
+          <div className="space-y-1">
+            <Label htmlFor="parent-category" className="text-xs font-normal">
+              Parent Category
+            </Label>
             <Select
               value={selectedParentId || "none"}
               onValueChange={(val) =>
@@ -211,15 +211,15 @@ export default function CategoryFormDialog({
               }
               disabled={isLoading}
             >
-              <SelectTrigger id="parent-category" className="w-full text-xs cursor-pointer">
+              <SelectTrigger id="parent-category" className="w-full text-xs h-9 font-normal">
                 <SelectValue placeholder="Select Parent Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">
-                  None (Top-Level Root Category)
+                <SelectItem value="none" className="text-xs font-normal">
+                  None (Root Category)
                 </SelectItem>
                 {eligibleParents.map((parent) => (
-                  <SelectItem key={parent.id} value={parent.id}>
+                  <SelectItem key={parent.id} value={parent.id} className="text-xs font-normal">
                     {parent.name}
                   </SelectItem>
                 ))}
@@ -227,33 +227,31 @@ export default function CategoryFormDialog({
             </Select>
           </div>
 
-          {/* Category Image Upload & Preview */}
-          <div className="space-y-1.5">
-            <Label>Category Thumbnail / Banner</Label>
-            <div className="flex items-center gap-4">
+          <div className="space-y-1">
+            <Label className="text-xs font-normal">Category Thumbnail</Label>
+            <div className="flex items-center gap-3">
               {imagePreview ? (
-                <div className="relative size-16 rounded-lg border overflow-hidden bg-muted">
+                <div className="relative size-12 rounded border overflow-hidden bg-muted">
                   <Image
                     src={imagePreview}
-                    alt="Category preview"
+                    alt="Category"
                     fill
                     className="object-cover"
                   />
                   <button
                     type="button"
                     onClick={handleRemoveImage}
-                    className="absolute top-0.5 right-0.5 size-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center cursor-pointer shadow-xs"
+                    className="absolute top-0.5 right-0.5 size-4 bg-foreground/70 text-background rounded-full flex items-center justify-center cursor-pointer"
                   >
-                    <X className="size-3" />
+                    <X className="size-2.5" />
                   </button>
                 </div>
               ) : (
                 <label
                   htmlFor="category-image-input"
-                  className="size-16 rounded-lg border border-dashed flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-primary transition-colors text-muted-foreground hover:text-foreground"
+                  className="size-12 rounded border border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-foreground transition-colors text-muted-foreground"
                 >
-                  <ImagePlus className="size-5" />
-                  <span className="text-[9px] font-medium">Upload</span>
+                  <ImagePlus className="size-4" />
                   <input
                     id="category-image-input"
                     type="file"
@@ -264,47 +262,46 @@ export default function CategoryFormDialog({
                   />
                 </label>
               )}
-              <div className="text-[11px] text-muted-foreground">
-                Square or horizontal thumbnail for store navigation (Max 2MB).
-              </div>
+              <span className="text-[11px] text-muted-foreground font-normal">
+                Optional image thumbnail
+              </span>
             </div>
           </div>
 
-          {/* Description */}
-          <div className="space-y-1.5">
-            <Label htmlFor="category-description">Description</Label>
+          <div className="space-y-1">
+            <Label htmlFor="category-description" className="text-xs font-normal">
+              Description (Optional)
+            </Label>
             <Textarea
               id="category-description"
-              placeholder="Brief description for SEO and category landing page..."
+              placeholder="Short description"
               rows={2}
               disabled={isLoading}
+              className="text-xs font-normal resize-none"
               {...register("description")}
             />
-            {errors.description && (
-              <p className="text-xs text-destructive">
-                {errors.description.message}
-              </p>
-            )}
           </div>
 
-          {/* Sort Order & Active Switch */}
-          <div className="grid grid-cols-2 gap-4 pt-1">
-            <div className="space-y-1.5">
-              <Label htmlFor="category-sort">Sort Priority</Label>
+          <div className="grid grid-cols-2 gap-3 pt-1">
+            <div className="space-y-1">
+              <Label htmlFor="category-sort" className="text-xs font-normal">
+                Sort Order
+              </Label>
               <Input
                 id="category-sort"
                 type="number"
                 min={0}
                 placeholder="0"
                 disabled={isLoading}
+                className="text-xs h-9 font-normal"
                 {...register("sortOrder", { valueAsNumber: true })}
               />
             </div>
 
-            <div className="flex flex-col justify-end space-y-1.5 pb-1">
+            <div className="flex flex-col justify-end space-y-1 pb-1">
               <div className="flex items-center justify-between">
-                <Label htmlFor="category-active" className="cursor-pointer">
-                  Active Status
+                <Label htmlFor="category-active" className="text-xs font-normal cursor-pointer">
+                  Active
                 </Label>
                 <Switch
                   id="category-active"
@@ -313,31 +310,30 @@ export default function CategoryFormDialog({
                   disabled={isLoading}
                 />
               </div>
-              <span className="text-[10px] text-muted-foreground">
-                Visible to customers on storefront
-              </span>
             </div>
           </div>
 
-          <DialogFooter className="pt-3">
+          <DialogFooter className="pt-2">
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={onClose}
               disabled={isLoading}
+              className="text-xs font-normal"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading} className="cursor-pointer">
+            <Button type="submit" size="sm" disabled={isLoading} className="text-xs font-normal cursor-pointer">
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
+                  <Loader2 className="mr-1.5 size-3.5 animate-spin" />
                   Saving...
                 </>
               ) : isEditing ? (
                 "Update Category"
               ) : (
-                "Create Category"
+                "Save Category"
               )}
             </Button>
           </DialogFooter>
