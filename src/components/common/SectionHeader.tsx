@@ -30,7 +30,7 @@ export default function SectionHeader({
             scriptClassName
           )}
           style={{
-            color: "#b0987e",
+            color: "#c6b189",
             fontFamily: 'var(--font-script), "BrittanySignature", cursive',
           }}
         >

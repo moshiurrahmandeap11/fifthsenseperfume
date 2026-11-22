@@ -5,6 +5,9 @@ import HeroGridSection from "@/components/modules/storefront/home/HeroGridSectio
 import FeatureTickerStrip from "@/components/modules/storefront/home/FeatureTickerStrip";
 import AttarPromoBanners from "@/components/modules/storefront/home/AttarPromoBanners";
 import FineFragranceBanner from "@/components/modules/storefront/home/FineFragranceBanner";
+import ExperienceHeritageSection from "@/components/modules/storefront/home/ExperienceHeritageSection";
+import ClientReviewsSection from "@/components/modules/storefront/home/ClientReviewsSection";
+import NewsletterSection from "@/components/modules/storefront/home/NewsletterSection";
 import SectionHeader from "@/components/common/SectionHeader";
 
 export default function HomePage() {
@@ -86,6 +89,15 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* 7. Experience & Heritage Brand Story Section (from Figma) */}
+      <ExperienceHeritageSection />
+
+      {/* 8. Client Reviews Testimonial Section (from Figma) */}
+      <ClientReviewsSection />
+
+      {/* 9. Newsletter Subscription Section (from Figma) */}
+      <NewsletterSection />
     </div>
   );
 }
