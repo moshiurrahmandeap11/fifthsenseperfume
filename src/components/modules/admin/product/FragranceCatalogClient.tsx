@@ -170,7 +170,9 @@ export default function FragranceCatalogClient({
                     BDT {p.basePrice?.toLocaleString()}
                   </TableCell>
                   <TableCell className="text-xs font-normal text-muted-foreground text-right tabular-nums">
-                    {p.discountPrice ? `BDT ${p.discountPrice.toLocaleString()}` : "—"}
+                    {p.discountPrice
+                      ? `BDT ${p.discountPrice.toLocaleString()}`
+                      : "—"}
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-normal text-[10px]">
