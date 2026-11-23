@@ -9,22 +9,22 @@ interface FeatureItem {
 
 const FEATURE_ITEMS: FeatureItem[] = [
   {
-    icon: "/hero/perfume 2.svg",
+    icon: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431911/ecombd/site-assets/perfume-2.svg",
     alt: "Long Lasting Perfume",
     text: "LONG LASTING",
   },
   {
-    icon: "/hero/leaf.svg",
+    icon: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431909/ecombd/site-assets/leaf.svg",
     alt: "Natural Scents Leaf",
     text: "NATURAL SCENTS",
   },
   {
-    icon: "/hero/diamond.svg",
+    icon: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431896/ecombd/site-assets/diamond.svg",
     alt: "Luxury Perfumes Diamond",
     text: "LUXURY PERFUMES",
   },
   {
-    icon: "/hero/experty.svg",
+    icon: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431897/ecombd/site-assets/experty.svg",
     alt: "Expertly Crafted Seal",
     text: "EXPERTLY CRAFTED",
   },

@@ -111,7 +111,7 @@ export default function HeroGridSection() {
             {/* Video 1: hero_video.mp4 */}
             <video
               ref={video1Ref}
-              src="/hero/hero_video.mp4"
+              src="https://res.cloudinary.com/rhjebh23/video/upload/q_auto,f_auto/v1795431901/ecombd/videos/hero_video.mp4"
               autoPlay
               muted
               playsInline
@@ -128,7 +128,7 @@ export default function HeroGridSection() {
             {/* Video 2: hero_video_2.mp4 */}
             <video
               ref={video2Ref}
-              src="/hero/hero_video_2.mp4"
+              src="https://res.cloudinary.com/rhjebh23/video/upload/q_auto,f_auto/v1795431903/ecombd/videos/hero_video_2.mp4"
               muted
               playsInline
               preload="auto"

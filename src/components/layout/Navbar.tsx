@@ -17,6 +17,7 @@ import { logoutUser } from "@/services/auth.services";
 import { cn } from "@/lib/utils";
 import { IUser } from "@/types/auth.types";
 import { useCart } from "@/providers/CartProvider";
+import { useBrand } from "@/providers/BrandProvider";
 import toast from "react-hot-toast";
 import TopBar from "./TopBar";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
@@ -168,16 +169,18 @@ export default function Navbar({ initialUser }: NavbarProps) {
     }
   };
 
-  // Brand Logo: Original brand logo from /navbar/fifthsenselogo.png
+  const brand = useBrand();
+
+  // Brand Logo: Dynamic from Admin Brand Settings (falls back to Cloudinary default)
   const BrandLogo = (
     <Link
       href="/"
       className="flex items-center justify-center group select-none py-1"
-      title="Fifth Sense"
+      title={brand.brandName}
     >
       <Image
-        src="/navbar/fifthsenselogo.png"
-        alt="Fifth Sense"
+        src={brand.logoUrl}
+        alt={brand.brandName}
         width={160}
         height={48}
         priority

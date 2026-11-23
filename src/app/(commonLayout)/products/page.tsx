@@ -1,7 +1,10 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
+import { connection } from "next/server";
 import CatalogView from "@/components/modules/storefront/catalog/CatalogView";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getAllProducts } from "@/services/product.services";
+import { IProduct } from "@/types/product.types";
 
 export const metadata: Metadata = {
   title: "Fragrance Catalog & Archive | FIFTH SENSE PERFUMES",
@@ -35,10 +38,22 @@ function CatalogSkeleton() {
   );
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  await connection();
+  let products: IProduct[] = [];
+
+  try {
+    const res = await getAllProducts({ status: "PUBLISHED", limit: 100 });
+    if (res?.data) {
+      products = res.data;
+    }
+  } catch (err) {
+    console.error("Failed to load storefront products:", err);
+  }
+
   return (
     <Suspense fallback={<CatalogSkeleton />}>
-      <CatalogView />
+      <CatalogView initialProducts={products} />
     </Suspense>
   );
 }

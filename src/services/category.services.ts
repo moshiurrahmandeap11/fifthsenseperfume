@@ -49,11 +49,15 @@ export const getAllCategories = async (
  * Fetch nested category hierarchy tree (for MegaMenu & navigation)
  */
 export const getCategoryTree = async (
-  isActive: boolean = true
+  isActive?: boolean
 ): Promise<ApiResponse<ICategory[]>> => {
   try {
+    const params: Record<string, unknown> = { tree: true };
+    if (isActive !== undefined) {
+      params.isActive = isActive;
+    }
     const res = await httpClient.get<ICategory[]>("/categories", {
-      params: { tree: true, isActive },
+      params,
     });
     return res;
   } catch (error: any) {

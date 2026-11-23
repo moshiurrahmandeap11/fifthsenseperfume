@@ -28,7 +28,11 @@ const DEFAULT_FILTERS: CatalogFilterState = {
   sortBy: "featured",
 };
 
-export default function CatalogView() {
+interface CatalogViewProps {
+  initialProducts?: IProduct[];
+}
+
+export default function CatalogView({ initialProducts }: CatalogViewProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -111,9 +115,13 @@ export default function CatalogView() {
     return count;
   }, [filters]);
 
-  // Filter and sort dummy products
+  // Filter and sort live database products (fallback to dummy if empty)
   const filteredProducts = useMemo(() => {
-    let list: IProduct[] = [...DUMMY_PRODUCTS];
+    const source =
+      initialProducts && initialProducts.length > 0
+        ? initialProducts
+        : DUMMY_PRODUCTS;
+    let list: IProduct[] = [...source];
 
     // 1. Search Filter
     if (filters.search.trim()) {

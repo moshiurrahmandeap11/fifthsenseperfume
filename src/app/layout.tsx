@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { connection } from "next/server";
 import "./globals.css";
 import QueryProvider from "@/providers/QueryProvider";
+import { BrandProvider } from "@/providers/BrandProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { getPlatformSettings } from "@/services/system.services";
+import { IPlatformSettings } from "@/types/system.types";
 
 // Body Font: Clean, modern sans-serif from Figma
 const inter = Inter({
@@ -35,17 +39,39 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "FIFTH SENSE | Luxury Niche Perfumes & Haute Parfumerie",
-  description:
-    "Artisanal fragrances crafted with pure Grasse absolutes, aged Cambodian oud, and rare Mysore sandalwood.",
-};
+async function fetchBrandSettings(): Promise<IPlatformSettings | null> {
+  try {
+    const res = await getPlatformSettings();
+    return res?.data || null;
+  } catch {
+    return null;
+  }
+}
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  await connection();
+  const settings = await fetchBrandSettings();
+  const name = settings?.brandName || "FIFTH SENSE";
+  const tagline =
+    settings?.tagline || "Luxury Niche Perfumes & Haute Parfumerie";
+
+  return {
+    title: `${name} | ${tagline}`,
+    description:
+      settings?.footerDescription ||
+      "Artisanal fragrances crafted with pure Grasse absolutes, aged Cambodian oud, and rare Mysore sandalwood.",
+    ...(settings?.faviconUrl ? { icons: { icon: settings.faviconUrl } } : {}),
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await connection();
+  const settings = await fetchBrandSettings();
+
   return (
     <html
       lang="en"
@@ -62,9 +88,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
         <QueryProvider>
-          <TooltipProvider>
-            {children}
-          </TooltipProvider>
+          <BrandProvider initialSettings={settings}>
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
+          </BrandProvider>
           <Toaster
             position="top-right"
             toastOptions={{

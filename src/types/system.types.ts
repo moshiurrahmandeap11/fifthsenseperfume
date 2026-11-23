@@ -109,8 +109,14 @@ export interface IPlatformSettings {
   id: string;
   brandName: string;
   brandNameBn: string | null;
+  brandSlug?: string | null;
+  tagline?: string | null;
   logoUrl: string | null;
   faviconUrl: string | null;
+  primaryColor?: string;
+  secondaryColor?: string;
+  accentColor?: string;
+  footerDescription?: string | null;
   supportPhone: string | null;
   whatsappNumber: string | null;
   messengerLink: string | null;
@@ -132,8 +138,14 @@ export interface IPlatformSettings {
 export interface IUpdatePlatformSettingsPayload {
   brandName?: string;
   brandNameBn?: string;
+  brandSlug?: string;
+  tagline?: string;
   logoUrl?: string;
   faviconUrl?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  accentColor?: string;
+  footerDescription?: string;
   supportPhone?: string;
   whatsappNumber?: string;
   messengerLink?: string;

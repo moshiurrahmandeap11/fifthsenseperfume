@@ -1,10 +1,15 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail } from "lucide-react";
 import CurrentYear from "@/components/common/CurrentYear";
+import { useBrand } from "@/providers/BrandProvider";
 
 export default function Footer() {
+  const brand = useBrand();
+
   return (
     <footer className="w-full bg-[#070504] border-t border-[#444240] text-white select-none">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-16 sm:pt-20 lg:pt-24 pb-8 sm:pb-10">
@@ -13,11 +18,11 @@ export default function Footer() {
           <Link
             href="/"
             className="inline-block transition-opacity duration-200 hover:opacity-85"
-            title="Fifth Sense Perfumes"
+            title={brand.brandName}
           >
             <Image
-              src="/navbar/fifthsenselogo.png"
-              alt="Fifth Sense Perfumes"
+              src={brand.logoUrl}
+              alt={brand.brandName}
               width={200}
               height={60}
               className="h-10 sm:h-11 md:h-12 w-auto object-contain brightness-0 invert"
@@ -185,7 +190,7 @@ export default function Footer() {
         {/* 3. Bottom Copyright Bar */}
         <div className="pt-6 sm:pt-8 border-t border-[#333130] text-center font-sans text-xs text-neutral-500">
           <p>
-            &copy; Copyright <CurrentYear /> Fifth Sense Perfumes. All Rights Reserved
+            &copy; Copyright <CurrentYear /> {brand.brandName}. All Rights Reserved
           </p>
         </div>
       </div>

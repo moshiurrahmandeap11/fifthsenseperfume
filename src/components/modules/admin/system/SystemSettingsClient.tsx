@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { confirmAction } from "@/lib/swal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -44,8 +45,11 @@ import {
 } from "@/types/system.types";
 import { ImageIcon, Plus, Save, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState, useTransition } from "react";
 import toast from "react-hot-toast";
+import { ThumbnailDropzone } from "@/components/modules/admin/product/ImageUploadZone";
+import { Textarea } from "@/components/ui/textarea";
 
 interface SystemSettingsClientProps {
   initialSettings?: IPlatformSettings | null;
@@ -58,12 +62,23 @@ export default function SystemSettingsClient({
   initialBanners,
   initialShowrooms,
 }: SystemSettingsClientProps) {
+  const router = useRouter();
   const [settings, setSettings] = useState<Partial<IPlatformSettings>>(
     initialSettings || {
-      brandName: "FIFTH SENSE PERFUMES",
+      brandName: "FIFTH SENSE",
+      brandSlug: "fifth-sense",
+      tagline: "Luxury Niche Perfumes & Haute Parfumerie",
+      logoUrl:
+        "https://res.cloudinary.com/rhjebh23/image/upload/v1795431915/ecombd/site-assets/fifthsenselogo.webp",
+      primaryColor: "#09090b",
+      secondaryColor: "#c5a059",
+      accentColor: "#18181b",
+      footerDescription:
+        "Artisanal fragrances crafted with pure Grasse absolutes, aged Cambodian oud, and rare Mysore sandalwood.",
       supportPhone: "+880 1700-000000",
       whatsappNumber: "+880 1700-000000",
-      announcementText: "Complimentary discovery sample included with each flacon.",
+      announcementText:
+        "Complimentary discovery sample included with each flacon.",
     }
   );
   const [banners, setBanners] = useState<IBanner[]>(initialBanners);
@@ -91,12 +106,21 @@ export default function SystemSettingsClient({
       try {
         await updatePlatformSettings({
           brandName: settings.brandName,
+          brandSlug: settings.brandSlug || undefined,
+          tagline: settings.tagline || undefined,
+          logoUrl: settings.logoUrl || undefined,
+          faviconUrl: settings.faviconUrl || undefined,
+          primaryColor: settings.primaryColor || "#09090b",
+          secondaryColor: settings.secondaryColor || "#c5a059",
+          accentColor: settings.accentColor || "#18181b",
+          footerDescription: settings.footerDescription || undefined,
           supportPhone: settings.supportPhone || undefined,
           whatsappNumber: settings.whatsappNumber || undefined,
           announcementText: settings.announcementText || undefined,
         });
 
-        toast.success("Settings saved");
+        router.refresh();
+        toast.success("Brand & settings saved");
       } catch (err: unknown) {
         const error = err as { message?: string };
         toast.error(error.message || "Failed to update platform settings");
@@ -136,8 +160,13 @@ export default function SystemSettingsClient({
     });
   };
 
-  const handleDeleteBanner = (id: string) => {
-    if (!confirm("Delete banner?")) return;
+  const handleDeleteBanner = async (id: string) => {
+    const confirmed = await confirmAction({
+      title: "Delete banner?",
+      text: "This storefront banner will be removed permanently.",
+      confirmText: "Delete",
+    });
+    if (!confirmed) return;
 
     startTransition(async () => {
       try {
@@ -263,46 +292,306 @@ export default function SystemSettingsClient({
               <Card className="shadow-none border-border/50 bg-card">
                 <CardHeader className="pb-3 border-b border-border/40">
                   <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
-                    Storefront Identity &amp; Contact
+                    Storefront Identity, Logo &amp; Brand Colors
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-4 space-y-4">
+                <CardContent className="pt-5 space-y-6">
+                  {/* Brand Logo & Favicon */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-5 border-b border-border/40">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-normal">
+                        Website Logo (Header, Footer &amp; Admin)
+                      </Label>
+                      <ThumbnailDropzone
+                        value={settings.logoUrl || ""}
+                        onChange={(url) =>
+                          setSettings({ ...settings, logoUrl: url })
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-xs font-normal">
+                        Browser Favicon (Optional)
+                      </Label>
+                      <ThumbnailDropzone
+                        value={settings.faviconUrl || ""}
+                        onChange={(url) =>
+                          setSettings({ ...settings, faviconUrl: url })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {/* Brand Name, Slug & Tagline */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <Label className="text-xs font-normal">Brand Name</Label>
                       <Input
                         value={settings.brandName || ""}
-                        onChange={(e) => setSettings({ ...settings, brandName: e.target.value })}
+                        onChange={(e) => {
+                          const nextName = e.target.value;
+                          const nextSlug = nextName
+                            .toLowerCase()
+                            .trim()
+                            .replace(/[^a-z0-9]+/g, "-")
+                            .replace(/^-|-$/g, "");
+                          setSettings({
+                            ...settings,
+                            brandName: nextName,
+                            brandSlug: nextSlug,
+                          });
+                        }}
                         className="text-xs h-9 font-normal"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <Label className="text-xs font-normal">Hotline Phone</Label>
+                      <Label className="text-xs font-normal">Brand Slug</Label>
                       <Input
-                        value={settings.supportPhone || ""}
-                        onChange={(e) => setSettings({ ...settings, supportPhone: e.target.value })}
-                        className="text-xs h-9 font-normal"
+                        value={settings.brandSlug || ""}
+                        onChange={(e) =>
+                          setSettings({ ...settings, brandSlug: e.target.value })
+                        }
+                        placeholder="fifth-sense"
+                        className="text-xs h-9 font-mono font-normal"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <Label className="text-xs font-normal">WhatsApp Number</Label>
+                      <Label className="text-xs font-normal">
+                        Brand Tagline / Subtitle
+                      </Label>
                       <Input
-                        value={settings.whatsappNumber || ""}
-                        onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
+                        value={settings.tagline || ""}
+                        onChange={(e) =>
+                          setSettings({ ...settings, tagline: e.target.value })
+                        }
+                        placeholder="Luxury Niche Perfumes & Haute Parfumerie"
                         className="text-xs h-9 font-normal"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <Label className="text-xs font-normal">Header Announcement Ticker</Label>
+                      <Label className="text-xs font-normal">
+                        Header Announcement Ticker
+                      </Label>
                       <Input
                         value={settings.announcementText || ""}
-                        onChange={(e) => setSettings({ ...settings, announcementText: e.target.value })}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            announcementText: e.target.value,
+                          })
+                        }
                         placeholder="Complimentary sample with each flacon"
+                        className="text-xs h-9 font-normal"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label className="text-xs font-normal">
+                      Footer Brand Description
+                    </Label>
+                    <Textarea
+                      value={settings.footerDescription || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          footerDescription: e.target.value,
+                        })
+                      }
+                      rows={2}
+                      className="text-xs font-normal"
+                    />
+                  </div>
+
+                  {/* Multi-Color Brand Theme */}
+                  <div className="space-y-3 pt-4 border-t border-border/40">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div>
+                        <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                          Brand Color Palette
+                        </Label>
+                        <p className="text-[11px] font-normal text-muted-foreground">
+                          Customize primary, secondary, and accent colors across buttons and highlights.
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {[
+                          {
+                            label: "Midnight & Gold",
+                            primary: "#09090b",
+                            secondary: "#c5a059",
+                            accent: "#18181b",
+                          },
+                          {
+                            label: "Monochrome",
+                            primary: "#111111",
+                            secondary: "#71717a",
+                            accent: "#27272a",
+                          },
+                          {
+                            label: "Emerald & Ivory",
+                            primary: "#064e3b",
+                            secondary: "#d4af37",
+                            accent: "#065f46",
+                          },
+                          {
+                            label: "Noir & Rose",
+                            primary: "#1f1218",
+                            secondary: "#b76e79",
+                            accent: "#3b1d2a",
+                          },
+                        ].map((preset) => (
+                          <button
+                            key={preset.label}
+                            type="button"
+                            onClick={() =>
+                              setSettings({
+                                ...settings,
+                                primaryColor: preset.primary,
+                                secondaryColor: preset.secondary,
+                                accentColor: preset.accent,
+                              })
+                            }
+                            className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-border/60 text-[11px] font-normal hover:bg-muted/40 transition-colors cursor-pointer"
+                          >
+                            <span
+                              className="size-2.5 rounded-full border border-border/40"
+                              style={{ backgroundColor: preset.primary }}
+                            />
+                            <span
+                              className="size-2.5 rounded-full border border-border/40"
+                              style={{ backgroundColor: preset.secondary }}
+                            />
+                            <span>{preset.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-normal">
+                          Primary Color
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={settings.primaryColor || "#09090b"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                primaryColor: e.target.value,
+                              })
+                            }
+                            className="h-9 w-12 rounded border border-border/60 bg-transparent p-0.5 cursor-pointer"
+                          />
+                          <Input
+                            value={settings.primaryColor || "#09090b"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                primaryColor: e.target.value,
+                              })
+                            }
+                            className="h-9 text-xs font-mono font-normal"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-normal">
+                          Secondary / Gold Color
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={settings.secondaryColor || "#c5a059"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                secondaryColor: e.target.value,
+                              })
+                            }
+                            className="h-9 w-12 rounded border border-border/60 bg-transparent p-0.5 cursor-pointer"
+                          />
+                          <Input
+                            value={settings.secondaryColor || "#c5a059"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                secondaryColor: e.target.value,
+                              })
+                            }
+                            className="h-9 text-xs font-mono font-normal"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-normal">
+                          Accent Color
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={settings.accentColor || "#18181b"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                accentColor: e.target.value,
+                              })
+                            }
+                            className="h-9 w-12 rounded border border-border/60 bg-transparent p-0.5 cursor-pointer"
+                          />
+                          <Input
+                            value={settings.accentColor || "#18181b"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                accentColor: e.target.value,
+                              })
+                            }
+                            className="h-9 text-xs font-mono font-normal"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contact */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border/40">
+                    <div className="space-y-1">
+                      <Label className="text-xs font-normal">Hotline Phone</Label>
+                      <Input
+                        value={settings.supportPhone || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            supportPhone: e.target.value,
+                          })
+                        }
+                        className="text-xs h-9 font-normal"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-xs font-normal">
+                        WhatsApp Number
+                      </Label>
+                      <Input
+                        value={settings.whatsappNumber || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            whatsappNumber: e.target.value,
+                          })
+                        }
                         className="text-xs h-9 font-normal"
                       />
                     </div>

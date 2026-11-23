@@ -3,22 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -27,11 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
-import { createProduct, deleteProduct } from "@/services/product.services";
-import { ICreateProductPayload, IProduct } from "@/types/product.types";
-import { Plus, Search, Trash2 } from "lucide-react";
+import { confirmAction } from "@/lib/swal";
+import { deleteProduct, getAllProducts } from "@/services/product.services";
+import { IProduct } from "@/types/product.types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -42,116 +29,52 @@ interface FragranceCatalogClientProps {
 export default function FragranceCatalogClient({
   initialProducts,
 }: FragranceCatalogClientProps) {
-  const [products, setProducts] = useState<IProduct[]>(initialProducts || []);
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form State
-  const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
-  const [shortDesc, setShortDesc] = useState("");
-  const [description, setDescription] = useState("");
-  const [concentration, setConcentration] = useState("Extrait de Parfum");
-  const [olfactiveFamily, setOlfactiveFamily] = useState("Woody & Oriental");
-  const [topNotes, setTopNotes] = useState("Bergamot, Pink Pepper");
-  const [heartNotes, setHeartNotes] = useState("Turkish Rose, Jasmine");
-  const [baseNotes, setBaseNotes] = useState("Amber, Agarwood");
-  const [basePrice, setBasePrice] = useState("4500");
-  const [discountPrice, setDiscountPrice] = useState("3800");
-  const [thumbnailUrl, setThumbnailUrl] = useState("https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop");
+  const { data: products = [] } = useQuery<IProduct[]>({
+    queryKey: ["admin-products"],
+    queryFn: async () => {
+      const res = await getAllProducts({ limit: 100 });
+      return res?.data || [];
+    },
+    initialData: initialProducts || [],
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteProduct(id),
+    onSuccess: (_data, deletedId) => {
+      queryClient.setQueryData<IProduct[]>(["admin-products"], (old = []) =>
+        old.filter((p) => p.id !== deletedId)
+      );
+      void queryClient.invalidateQueries({ queryKey: ["admin-products"] });
+      toast.success("Fragrance deleted");
+    },
+    onError: () => {
+      toast.error("Failed to delete fragrance");
+    },
+  });
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      const matchesSearch =
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.slug.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesSearch;
+      const q = searchQuery.toLowerCase();
+      return (
+        p.name.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
+        p.styleCode.toLowerCase().includes(q)
+      );
     });
   }, [products, searchQuery]);
 
-  const handleCreateFragrance = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !basePrice) {
-      toast.error("Please fill in fragrance name and base price");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      const generatedSlug =
-        slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-      const styleCode = `FS-${Date.now().toString().slice(-6)}`;
-
-      const payload = {
-        name,
-        slug: generatedSlug,
-        styleCode,
-        shortDescription: shortDesc,
-        description: `${description}\n\nTop: ${topNotes} | Heart: ${heartNotes} | Base: ${baseNotes}`,
-        basePrice: parseFloat(basePrice),
-        discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
-        costPrice: parseFloat(basePrice) * 0.4,
-        thumbnailUrl: thumbnailUrl || "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop",
-        status: "PUBLISHED",
-        specifications: {
-          concentration,
-          olfactiveFamily,
-          topNotes,
-          heartNotes,
-          baseNotes,
-          volumesAvailable: ["30ml", "50ml", "100ml"],
-        },
-        colors: [
-          {
-            colorName: "Signature Flacon",
-            images: [thumbnailUrl],
-            isDefault: true,
-            variants: [
-              {
-                size: "100ml",
-                sku: `${styleCode}-100ML`,
-                stockQuantity: 25,
-                lowStockThreshold: 5,
-              },
-              {
-                size: "50ml",
-                sku: `${styleCode}-50ML`,
-                stockQuantity: 40,
-                lowStockThreshold: 8,
-              },
-            ],
-          },
-        ],
-      };
-
-      const res = await createProduct(payload as unknown as ICreateProductPayload);
-      if (res?.data) {
-        setProducts((prev) => [res.data, ...prev]);
-        toast.success(`Fragrance '${name}' created`);
-        setIsCreateOpen(false);
-        setName("");
-        setSlug("");
-        setShortDesc("");
-        setDescription("");
-      }
-    } catch {
-      toast.error("Failed to create fragrance");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleDeleteFragrance = async (id: string, fragName: string) => {
-    if (!confirm(`Delete fragrance '${fragName}'?`)) return;
+    const confirmed = await confirmAction({
+      title: `Delete "${fragName}"?`,
+      text: "This perfume will be archived from the catalog.",
+      confirmText: "Delete",
+    });
+    if (!confirmed) return;
 
-    try {
-      await deleteProduct(id);
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-      toast.success("Fragrance deleted");
-    } catch {
-      toast.error("Failed to delete fragrance");
-    }
+    deleteMutation.mutate(id);
   };
 
   return (
@@ -168,14 +91,15 @@ export default function FragranceCatalogClient({
           />
         </div>
 
-        <Button
-          size="sm"
-          onClick={() => setIsCreateOpen(true)}
-          className="h-8 px-3 text-xs gap-1.5 cursor-pointer font-normal"
-        >
-          <Plus className="size-3.5" />
-          <span>Add Fragrance</span>
-        </Button>
+        <Link href="/admin/products/new">
+          <Button
+            size="sm"
+            className="h-8 px-3 text-xs gap-1.5 cursor-pointer font-normal"
+          >
+            <Plus className="size-3.5" />
+            <span>Add Perfume</span>
+          </Button>
+        </Link>
       </div>
 
       {/* Fragrances Table */}
@@ -183,29 +107,41 @@ export default function FragranceCatalogClient({
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow>
-              <TableHead className="text-xs font-normal">Fragrance</TableHead>
-              <TableHead className="text-xs font-normal">Concentration</TableHead>
-              <TableHead className="text-xs font-normal text-right">Base Price</TableHead>
-              <TableHead className="text-xs font-normal text-right">Sale Price</TableHead>
+              <TableHead className="text-xs font-normal">Perfume</TableHead>
+              <TableHead className="text-xs font-normal">Strength</TableHead>
+              <TableHead className="text-xs font-normal text-right">
+                Base Price
+              </TableHead>
+              <TableHead className="text-xs font-normal text-right">
+                Sale Price
+              </TableHead>
               <TableHead className="text-xs font-normal">Status</TableHead>
-              <TableHead className="text-xs font-normal text-right">Actions</TableHead>
+              <TableHead className="text-xs font-normal text-right">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-36 text-center text-xs font-normal text-muted-foreground">
+                <TableCell
+                  colSpan={6}
+                  className="h-36 text-center text-xs font-normal text-muted-foreground"
+                >
                   No fragrances found in catalog
                 </TableCell>
               </TableRow>
             ) : (
               filteredProducts.map((p) => (
-                <TableRow key={p.id} className="hover:bg-muted/20 transition-colors">
+                <TableRow
+                  key={p.id}
+                  className="hover:bg-muted/20 transition-colors"
+                >
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="size-9 rounded border overflow-hidden shrink-0 relative bg-muted">
                         <Image
-                          src={p.thumbnailUrl || "/navbar/fifthsenselogo.png"}
+                          src={p.thumbnailUrl || "https://res.cloudinary.com/rhjebh23/image/upload/v1795431915/ecombd/site-assets/fifthsenselogo.webp"}
                           alt={p.name}
                           fill
                           className="object-cover"
@@ -223,14 +159,20 @@ export default function FragranceCatalogClient({
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="text-[10px] font-normal">
-                      {(p.specifications as unknown as { concentration?: string })?.concentration || "Extrait de Parfum"}
+                      {(
+                        p.specifications as unknown as {
+                          concentration?: string;
+                        }
+                      )?.concentration || "Extrait de Parfum"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-xs font-normal text-foreground text-right tabular-nums">
                     BDT {p.basePrice?.toLocaleString()}
                   </TableCell>
                   <TableCell className="text-xs font-normal text-muted-foreground text-right tabular-nums">
-                    {p.discountPrice ? `BDT ${p.discountPrice.toLocaleString()}` : "—"}
+                    {p.discountPrice
+                      ? `BDT ${p.discountPrice.toLocaleString()}`
+                      : "—"}
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-normal text-[10px]">
@@ -238,14 +180,27 @@ export default function FragranceCatalogClient({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleDeleteFragrance(p.id, p.name)}
-                      className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-destructive"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </Button>
+                    <div className="inline-flex items-center justify-end gap-1">
+                      <Link href={`/admin/products/${p.id}/edit`}>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-foreground"
+                          aria-label={`Edit ${p.name}`}
+                        >
+                          <Pencil className="size-3.5" />
+                        </Button>
+                      </Link>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDeleteFragrance(p.id, p.name)}
+                        className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-destructive"
+                        aria-label={`Delete ${p.name}`}
+                      >
+                        <Trash2 className="size-3.5" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -253,140 +208,6 @@ export default function FragranceCatalogClient({
           </TableBody>
         </Table>
       </Card>
-
-      {/* Add Fragrance Dialog */}
-      <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-sm font-normal">
-              New Fragrance Formulation
-            </DialogTitle>
-          </DialogHeader>
-
-          <form onSubmit={handleCreateFragrance} className="space-y-3 py-2 text-xs font-normal">
-            <div className="space-y-1">
-              <Label className="text-xs font-normal">Name</Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Amber Nuit Extrait"
-                className="h-8 text-xs font-normal"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label className="text-xs font-normal">Base Price (BDT)</Label>
-                <Input
-                  type="number"
-                  value={basePrice}
-                  onChange={(e) => setBasePrice(e.target.value)}
-                  className="h-8 text-xs font-normal"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs font-normal">Sale Price (BDT)</Label>
-                <Input
-                  type="number"
-                  value={discountPrice}
-                  onChange={(e) => setDiscountPrice(e.target.value)}
-                  className="h-8 text-xs font-normal"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label className="text-xs font-normal">Concentration</Label>
-                <Select value={concentration} onValueChange={(val) => val && setConcentration(val)}>
-                  <SelectTrigger className="h-8 text-xs font-normal">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Extrait de Parfum">Extrait de Parfum (30%+)</SelectItem>
-                    <SelectItem value="Eau de Parfum">Eau de Parfum (18-20%)</SelectItem>
-                    <SelectItem value="Eau de Toilette">Eau de Toilette (10-12%)</SelectItem>
-                    <SelectItem value="Attar / Oil">Pure Attar Perfume Oil</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs font-normal">Olfactory Family</Label>
-                <Select value={olfactiveFamily} onValueChange={(val) => val && setOlfactiveFamily(val)}>
-                  <SelectTrigger className="h-8 text-xs font-normal">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Woody & Oriental">Woody &amp; Oriental</SelectItem>
-                    <SelectItem value="Floral Atelier">Floral Atelier</SelectItem>
-                    <SelectItem value="Fresh & Citrus">Fresh &amp; Citrus</SelectItem>
-                    <SelectItem value="Gourmand & Spiced">Gourmand &amp; Spiced</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-xs font-normal">Top Notes</Label>
-              <Input
-                value={topNotes}
-                onChange={(e) => setTopNotes(e.target.value)}
-                className="h-8 text-xs font-normal"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-xs font-normal">Heart Notes</Label>
-              <Input
-                value={heartNotes}
-                onChange={(e) => setHeartNotes(e.target.value)}
-                className="h-8 text-xs font-normal"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-xs font-normal">Base Notes</Label>
-              <Input
-                value={baseNotes}
-                onChange={(e) => setBaseNotes(e.target.value)}
-                className="h-8 text-xs font-normal"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-xs font-normal">Description</Label>
-              <Textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="text-xs font-normal"
-                rows={2}
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIsCreateOpen(false)}
-                className="text-xs font-normal"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                disabled={isSubmitting}
-                className="text-xs font-normal cursor-pointer"
-              >
-                {isSubmitting ? "Saving..." : "Create"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

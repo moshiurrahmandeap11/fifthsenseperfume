@@ -39,7 +39,7 @@ export default function ExperienceHeritageSection() {
           {/* Bottom-left corner of this image meets top-right corner of bottom image at center (50%, row boundary) */}
           <div className="relative w-full aspect-[601/413] overflow-hidden bg-neutral-100 dark:bg-neutral-900 rounded-none shadow-none order-2 z-10">
             <Image
-              src="/hero/top.png"
+              src="https://res.cloudinary.com/rhjebh23/image/upload/v1795431914/ecombd/site-assets/top.webp"
               alt="More than just a fragrance - Gishaq perfume crafting experience"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -51,7 +51,7 @@ export default function ExperienceHeritageSection() {
           {/* Top-right corner of this image meets bottom-left corner of top image at center (50%, row boundary) */}
           <div className="relative w-full aspect-[601/413] overflow-hidden bg-neutral-100 dark:bg-neutral-900 rounded-none shadow-none order-4 lg:order-3 z-10 lg:-mt-[1px]">
             <Image
-              src="/hero/bottom.png"
+              src="https://res.cloudinary.com/rhjebh23/image/upload/v1795431892/ecombd/site-assets/bottom.webp"
               alt="Since 1875 - A tradition of trust in fragrance craftsmanship"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"

@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { DUMMY_PRODUCTS, NEW_ARRIVALS_PRODUCTS } from "@/data/dummyProducts";
+import { getAllProducts } from "@/services/product.services";
+import { IProduct } from "@/types/product.types";
 import ProductCard from "@/components/modules/storefront/catalog/ProductCard";
 import HeroGridSection from "@/components/modules/storefront/home/HeroGridSection";
 import FeatureTickerStrip from "@/components/modules/storefront/home/FeatureTickerStrip";
@@ -10,7 +13,33 @@ import ClientReviewsSection from "@/components/modules/storefront/home/ClientRev
 import NewsletterSection from "@/components/modules/storefront/home/NewsletterSection";
 import SectionHeader from "@/components/common/SectionHeader";
 
-export default function HomePage() {
+export default async function HomePage() {
+  await connection();
+
+  let bestSellers: IProduct[] = [];
+  let newArrivals: IProduct[] = [];
+
+  try {
+    const [bestRes, newRes] = await Promise.all([
+      getAllProducts({ status: "PUBLISHED", isBestSeller: true, limit: 4 }),
+      getAllProducts({ status: "PUBLISHED", isNewArrival: true, limit: 4 }),
+    ]);
+
+    bestSellers = bestRes?.data || [];
+    newArrivals = newRes?.data || [];
+
+    if (bestSellers.length === 0) {
+      const fallbackRes = await getAllProducts({ status: "PUBLISHED", limit: 4 });
+      bestSellers = fallbackRes?.data || [];
+    }
+  } catch (err) {
+    console.error("Failed to load home page products:", err);
+  }
+
+  const displayedBestSellers =
+    bestSellers.length > 0 ? bestSellers : DUMMY_PRODUCTS.slice(0, 4);
+  const displayedNewArrivals =
+    newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS_PRODUCTS;
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-zinc-950">
       {/* 1. Cinematic Hero Grid: Video on Left + 2 Perfume Horizontal Sliders on Right */}
@@ -34,7 +63,7 @@ export default function HomePage() {
 
           {/* 4 Column Luxury Fragrance Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6">
-            {DUMMY_PRODUCTS.slice(0, 4).map((prod, idx) => (
+            {displayedBestSellers.map((prod, idx) => (
               <ProductCard
                 key={prod.id}
                 product={prod}
@@ -70,7 +99,7 @@ export default function HomePage() {
 
           {/* 4 Column Luxury Fragrance Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6">
-            {NEW_ARRIVALS_PRODUCTS.map((prod, idx) => (
+            {displayedNewArrivals.map((prod) => (
               <ProductCard
                 key={prod.id}
                 product={prod}

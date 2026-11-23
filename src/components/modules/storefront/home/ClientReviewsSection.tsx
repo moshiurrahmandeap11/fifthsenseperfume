@@ -13,14 +13,14 @@ const CLIENT_REVIEWS: ReviewItem[] = [
   {
     id: "review-1",
     name: "Tanvisha Gupta",
-    avatar: "/reviews/tanvisha.png",
+    avatar: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431924/ecombd/site-assets/tanvisha.webp",
     quote:
       "I've tried a lot of fragrances, but this one genuinely stands out. It's subtle, long-lasting, and I keep getting compliments without it ever feeling overpowering.",
   },
   {
     id: "review-2",
     name: "Tanya Banerjee",
-    avatar: "/reviews/tanya.png",
+    avatar: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431925/ecombd/site-assets/tanya.webp",
     quote:
       "The scent feels incredibly well-balanced; fresh at first, then it settles into something warm and memorable. It's become part of my everyday routine.",
   },

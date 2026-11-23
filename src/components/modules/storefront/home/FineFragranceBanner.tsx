@@ -7,7 +7,7 @@ export default function FineFragranceBanner() {
     <section
       className="relative w-full h-screen min-h-[640px] max-h-[1080px] flex items-center bg-fixed bg-cover bg-no-repeat bg-[position:80%_center] sm:bg-[position:72%_center] md:bg-center overflow-hidden select-none"
       style={{
-        backgroundImage: "url('/hero/sectionimage.jpg')",
+        backgroundImage: "url('https://res.cloudinary.com/rhjebh23/image/upload/v1795431912/ecombd/site-assets/sectionimage.webp')",
       }}
     >
       {/* Content Layer - Centered in Full Height Screen */}
@@ -16,7 +16,7 @@ export default function FineFragranceBanner() {
           {/* Brush Stroke with Script Accent */}
           <div className="relative inline-flex items-center justify-center mb-3 sm:mb-4">
             <Image
-              src="/hero/brush.svg"
+              src="https://res.cloudinary.com/rhjebh23/image/upload/v1795431894/ecombd/site-assets/brush.svg"
               alt=""
               width={522}
               height={81}

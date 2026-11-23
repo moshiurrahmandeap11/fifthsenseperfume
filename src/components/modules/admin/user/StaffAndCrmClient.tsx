@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { confirmAction } from "@/lib/swal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -129,8 +130,13 @@ export default function StaffAndCrmClient({
     });
   };
 
-  const handleDeleteStaff = (staffId: string, name: string) => {
-    if (!confirm(`Revoke access for ${name}?`)) return;
+  const handleDeleteStaff = async (staffId: string, name: string) => {
+    const confirmed = await confirmAction({
+      title: `Revoke access for ${name}?`,
+      text: "This staff member will immediately lose admin dashboard permissions.",
+      confirmText: "Revoke Access",
+    });
+    if (!confirmed) return;
 
     startTransition(async () => {
       try {

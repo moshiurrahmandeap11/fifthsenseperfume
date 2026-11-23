@@ -28,8 +28,9 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "motion/react";
-import { updateOrderStatus } from "@/services/order.services";
+import { getAllOrders, updateOrderStatus } from "@/services/order.services";
 import { OrderStatus } from "@/types/order.types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Eye, Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
@@ -66,12 +67,35 @@ interface OrderManagementClientProps {
 export default function OrderManagementClient({
   initialOrders,
 }: OrderManagementClientProps) {
-  const [orders, setOrders] = useState<AdminOrder[]>(initialOrders || []);
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("ALL");
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
-  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [newStatus, setNewStatus] = useState<string>("");
+
+  const { data: orders = [] } = useQuery<AdminOrder[]>({
+    queryKey: ["admin-orders"],
+    queryFn: async () => {
+      const res = await getAllOrders({ limit: 100 });
+      return (res?.data || []) as unknown as AdminOrder[];
+    },
+    initialData: initialOrders || [],
+  });
+
+  const statusMutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: OrderStatus }) =>
+      updateOrderStatus(id, { status }),
+    onSuccess: (_data, variables) => {
+      queryClient.setQueryData<AdminOrder[]>(["admin-orders"], (old = []) =>
+        old.map((o) =>
+          o.id === variables.id ? { ...o, status: variables.status } : o
+        )
+      );
+      void queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
+    },
+  });
+
+  const isUpdatingStatus = statusMutation.isPending;
 
   const filteredOrders = useMemo(() => {
     return orders.filter((ord) => {
@@ -102,19 +126,14 @@ export default function OrderManagementClient({
     if (!selectedOrder || !newStatus) return;
 
     try {
-      setIsUpdatingStatus(true);
-      await updateOrderStatus(selectedOrder.id, { status: newStatus as OrderStatus });
-      setOrders((prev) =>
-        prev.map((o) =>
-          o.id === selectedOrder.id ? { ...o, status: newStatus } : o
-        )
-      );
+      await statusMutation.mutateAsync({
+        id: selectedOrder.id,
+        status: newStatus as OrderStatus,
+      });
       toast.success(`Order #${selectedOrder.orderNumber} updated to ${newStatus}`);
       setSelectedOrder(null);
     } catch {
       toast.error("Failed to update order status");
-    } finally {
-      setIsUpdatingStatus(false);
     }
   };
 
