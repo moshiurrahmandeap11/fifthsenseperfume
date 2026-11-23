@@ -45,8 +45,9 @@ export async function generateMetadata({
 }
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
+  await connection();
   const { slug } = await params;
-  const product = DUMMY_PRODUCTS.find((p) => p.slug === slug);
+  const product = await resolveProduct(slug);
 
   if (!product) {
     notFound();
