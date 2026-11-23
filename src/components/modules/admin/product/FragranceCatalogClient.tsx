@@ -124,7 +124,10 @@ export default function FragranceCatalogClient({
           <TableBody>
             {filteredProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-36 text-center text-xs font-normal text-muted-foreground">
+                <TableCell
+                  colSpan={6}
+                  className="h-36 text-center text-xs font-normal text-muted-foreground"
+                >
                   No fragrances found in catalog
                 </TableCell>
               </TableRow>
