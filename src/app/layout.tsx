@@ -39,13 +39,32 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "FIFTH SENSE | Luxury Niche Perfumes & Haute Parfumerie",
-  description:
-    "Artisanal fragrances crafted with pure Grasse absolutes, aged Cambodian oud, and rare Mysore sandalwood.",
-};
+async function fetchBrandSettings(): Promise<IPlatformSettings | null> {
+  try {
+    const res = await getPlatformSettings();
+    return res?.data || null;
+  } catch {
+    return null;
+  }
+}
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  await connection();
+  const settings = await fetchBrandSettings();
+  const name = settings?.brandName || "FIFTH SENSE";
+  const tagline =
+    settings?.tagline || "Luxury Niche Perfumes & Haute Parfumerie";
+
+  return {
+    title: `${name} | ${tagline}`,
+    description:
+      settings?.footerDescription ||
+      "Artisanal fragrances crafted with pure Grasse absolutes, aged Cambodian oud, and rare Mysore sandalwood.",
+    ...(settings?.faviconUrl ? { icons: { icon: settings.faviconUrl } } : {}),
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
