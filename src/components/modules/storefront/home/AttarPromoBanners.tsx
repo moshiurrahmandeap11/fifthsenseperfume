@@ -30,7 +30,7 @@ const PROMO_BANNERS: PromoBannerItem[] = [
     scriptTitle: "Essential Oils",
     scriptColor: "#c89f78",
     description: "Natural extracts created for purity, wellness, and balance",
-    imageSrc: "/hero/img2.jpg",
+    imageSrc: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431907/ecombd/site-assets/img2.webp",
     imageAlt: "Essential Oils and Natural Elixirs",
     href: "/products?category=oils",
     buttonText: "SHOP NOW",
