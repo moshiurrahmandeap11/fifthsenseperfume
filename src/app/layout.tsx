@@ -69,6 +69,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await connection();
+  const settings = await fetchBrandSettings();
+
   return (
     <html
       lang="en"
