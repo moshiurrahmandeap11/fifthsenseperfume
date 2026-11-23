@@ -169,7 +169,9 @@ export default function Navbar({ initialUser }: NavbarProps) {
     }
   };
 
-  // Brand Logo: Original brand logo from /navbar/fifthsenselogo.png
+  const brand = useBrand();
+
+  // Brand Logo: Dynamic from Admin Brand Settings (falls back to Cloudinary default)
   const BrandLogo = (
     <Link
       href="/"
