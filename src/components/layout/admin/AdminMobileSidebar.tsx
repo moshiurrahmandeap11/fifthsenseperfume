@@ -33,6 +33,7 @@ export default function AdminMobileSidebar({
 }: AdminMobileSidebarProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const brand = useBrand();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
