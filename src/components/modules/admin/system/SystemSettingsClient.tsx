@@ -292,10 +292,38 @@ export default function SystemSettingsClient({
               <Card className="shadow-none border-border/50 bg-card">
                 <CardHeader className="pb-3 border-b border-border/40">
                   <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
-                    Storefront Identity &amp; Contact
+                    Storefront Identity, Logo &amp; Brand Colors
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-4 space-y-4">
+                <CardContent className="pt-5 space-y-6">
+                  {/* Brand Logo & Favicon */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-5 border-b border-border/40">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-normal">
+                        Website Logo (Header, Footer &amp; Admin)
+                      </Label>
+                      <ThumbnailDropzone
+                        value={settings.logoUrl || ""}
+                        onChange={(url) =>
+                          setSettings({ ...settings, logoUrl: url })
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-xs font-normal">
+                        Browser Favicon (Optional)
+                      </Label>
+                      <ThumbnailDropzone
+                        value={settings.faviconUrl || ""}
+                        onChange={(url) =>
+                          setSettings({ ...settings, faviconUrl: url })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {/* Brand Name, Slug & Tagline */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <Label className="text-xs font-normal">Brand Name</Label>
