@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   experimental: {
     agentFeedback: true,
     agentUpgrade: "security",
+    serverActions: {
+      bodySizeLimit: "20mb",
+    },
   },
   reactCompiler: true,
   images: {
