@@ -392,6 +392,211 @@ export default function SystemSettingsClient({
                     </div>
                   </div>
 
+                  <div className="space-y-1">
+                    <Label className="text-xs font-normal">
+                      Footer Brand Description
+                    </Label>
+                    <Textarea
+                      value={settings.footerDescription || ""}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          footerDescription: e.target.value,
+                        })
+                      }
+                      rows={2}
+                      className="text-xs font-normal"
+                    />
+                  </div>
+
+                  {/* Multi-Color Brand Theme */}
+                  <div className="space-y-3 pt-4 border-t border-border/40">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div>
+                        <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                          Brand Color Palette
+                        </Label>
+                        <p className="text-[11px] font-normal text-muted-foreground">
+                          Customize primary, secondary, and accent colors across buttons and highlights.
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {[
+                          {
+                            label: "Midnight & Gold",
+                            primary: "#09090b",
+                            secondary: "#c5a059",
+                            accent: "#18181b",
+                          },
+                          {
+                            label: "Monochrome",
+                            primary: "#111111",
+                            secondary: "#71717a",
+                            accent: "#27272a",
+                          },
+                          {
+                            label: "Emerald & Ivory",
+                            primary: "#064e3b",
+                            secondary: "#d4af37",
+                            accent: "#065f46",
+                          },
+                          {
+                            label: "Noir & Rose",
+                            primary: "#1f1218",
+                            secondary: "#b76e79",
+                            accent: "#3b1d2a",
+                          },
+                        ].map((preset) => (
+                          <button
+                            key={preset.label}
+                            type="button"
+                            onClick={() =>
+                              setSettings({
+                                ...settings,
+                                primaryColor: preset.primary,
+                                secondaryColor: preset.secondary,
+                                accentColor: preset.accent,
+                              })
+                            }
+                            className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-border/60 text-[11px] font-normal hover:bg-muted/40 transition-colors cursor-pointer"
+                          >
+                            <span
+                              className="size-2.5 rounded-full border border-border/40"
+                              style={{ backgroundColor: preset.primary }}
+                            />
+                            <span
+                              className="size-2.5 rounded-full border border-border/40"
+                              style={{ backgroundColor: preset.secondary }}
+                            />
+                            <span>{preset.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-normal">
+                          Primary Color
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={settings.primaryColor || "#09090b"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                primaryColor: e.target.value,
+                              })
+                            }
+                            className="h-9 w-12 rounded border border-border/60 bg-transparent p-0.5 cursor-pointer"
+                          />
+                          <Input
+                            value={settings.primaryColor || "#09090b"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                primaryColor: e.target.value,
+                              })
+                            }
+                            className="h-9 text-xs font-mono font-normal"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-normal">
+                          Secondary / Gold Color
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={settings.secondaryColor || "#c5a059"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                secondaryColor: e.target.value,
+                              })
+                            }
+                            className="h-9 w-12 rounded border border-border/60 bg-transparent p-0.5 cursor-pointer"
+                          />
+                          <Input
+                            value={settings.secondaryColor || "#c5a059"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                secondaryColor: e.target.value,
+                              })
+                            }
+                            className="h-9 text-xs font-mono font-normal"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-normal">
+                          Accent Color
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={settings.accentColor || "#18181b"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                accentColor: e.target.value,
+                              })
+                            }
+                            className="h-9 w-12 rounded border border-border/60 bg-transparent p-0.5 cursor-pointer"
+                          />
+                          <Input
+                            value={settings.accentColor || "#18181b"}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                accentColor: e.target.value,
+                              })
+                            }
+                            className="h-9 text-xs font-mono font-normal"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contact */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border/40">
+                    <div className="space-y-1">
+                      <Label className="text-xs font-normal">Hotline Phone</Label>
+                      <Input
+                        value={settings.supportPhone || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            supportPhone: e.target.value,
+                          })
+                        }
+                        className="text-xs h-9 font-normal"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-xs font-normal">
+                        WhatsApp Number
+                      </Label>
+                      <Input
+                        value={settings.whatsappNumber || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            whatsappNumber: e.target.value,
+                          })
+                        }
+                        className="text-xs h-9 font-normal"
+                      />
+                    </div>
+                  </div>
+
                   <div className="pt-2 flex justify-end">
                     <Button
                       size="sm"
