@@ -160,8 +160,13 @@ export default function SystemSettingsClient({
     });
   };
 
-  const handleDeleteBanner = (id: string) => {
-    if (!confirm("Delete banner?")) return;
+  const handleDeleteBanner = async (id: string) => {
+    const confirmed = await confirmAction({
+      title: "Delete banner?",
+      text: "This storefront banner will be removed permanently.",
+      confirmText: "Delete",
+    });
+    if (!confirmed) return;
 
     startTransition(async () => {
       try {
