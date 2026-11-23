@@ -5,8 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail } from "lucide-react";
 import CurrentYear from "@/components/common/CurrentYear";
+import { useBrand } from "@/providers/BrandProvider";
 
 export default function Footer() {
+  const brand = useBrand();
+
   return (
     <footer className="w-full bg-[#070504] border-t border-[#444240] text-white select-none">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-16 sm:pt-20 lg:pt-24 pb-8 sm:pb-10">
