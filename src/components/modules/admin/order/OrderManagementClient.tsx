@@ -28,8 +28,9 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "motion/react";
-import { updateOrderStatus } from "@/services/order.services";
+import { getAllOrders, updateOrderStatus } from "@/services/order.services";
 import { OrderStatus } from "@/types/order.types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Eye, Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
