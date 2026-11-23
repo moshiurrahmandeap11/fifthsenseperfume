@@ -29,24 +29,31 @@ interface FragranceCatalogClientProps {
 export default function FragranceCatalogClient({
   initialProducts,
 }: FragranceCatalogClientProps) {
-  const [products, setProducts] = useState<IProduct[]>(initialProducts || []);
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form State
-  const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
-  const [shortDesc, setShortDesc] = useState("");
-  const [description, setDescription] = useState("");
-  const [concentration, setConcentration] = useState("Extrait de Parfum");
-  const [olfactiveFamily, setOlfactiveFamily] = useState("Woody & Oriental");
-  const [topNotes, setTopNotes] = useState("Bergamot, Pink Pepper");
-  const [heartNotes, setHeartNotes] = useState("Turkish Rose, Jasmine");
-  const [baseNotes, setBaseNotes] = useState("Amber, Agarwood");
-  const [basePrice, setBasePrice] = useState("4500");
-  const [discountPrice, setDiscountPrice] = useState("3800");
-  const [thumbnailUrl, setThumbnailUrl] = useState("https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop");
+  const { data: products = [] } = useQuery<IProduct[]>({
+    queryKey: ["admin-products"],
+    queryFn: async () => {
+      const res = await getAllProducts({ limit: 100 });
+      return res?.data || [];
+    },
+    initialData: initialProducts || [],
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteProduct(id),
+    onSuccess: (_data, deletedId) => {
+      queryClient.setQueryData<IProduct[]>(["admin-products"], (old = []) =>
+        old.filter((p) => p.id !== deletedId)
+      );
+      void queryClient.invalidateQueries({ queryKey: ["admin-products"] });
+      toast.success("Fragrance deleted");
+    },
+    onError: () => {
+      toast.error("Failed to delete fragrance");
+    },
+  });
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
