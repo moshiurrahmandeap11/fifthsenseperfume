@@ -20,7 +20,7 @@ const PROMO_BANNERS: PromoBannerItem[] = [
     scriptTitle: "House of Attars",
     scriptColor: "#9c8a65",
     description: "Pure, alcohol-free compositions, rooted in Indian tradition and depth",
-    imageSrc: "/hero/img1.jpg",
+    imageSrc: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431906/ecombd/site-assets/img1.webp",
     imageAlt: "House of Attars Artisanal Perfume",
     href: "/products?category=attars",
     buttonText: "SHOP NOW",
