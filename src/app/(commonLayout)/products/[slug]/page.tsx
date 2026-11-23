@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { DUMMY_PRODUCTS } from "@/data/dummyProducts";
+import { connection } from "next/server";
+import { DUMMY_PRODUCTS, NEW_ARRIVALS_PRODUCTS } from "@/data/dummyProducts";
+import { getProductByIdOrSlug } from "@/services/product.services";
+import { IProduct } from "@/types/product.types";
 import ProductDetailClient from "./ProductDetailClient";
 
 interface ProductPageProps {
