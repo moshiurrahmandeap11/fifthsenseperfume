@@ -39,7 +39,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${product.name} | Luxury Footwear | FIFTH SENSE`,
+    title: `${product.name} | FIFTH SENSE PERFUMES`,
     description: product.shortDescription || product.description,
   };
 }
