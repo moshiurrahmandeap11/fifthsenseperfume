@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { connection } from "next/server";
 import "./globals.css";
 import QueryProvider from "@/providers/QueryProvider";
+import { BrandProvider } from "@/providers/BrandProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
