@@ -18,11 +18,11 @@ export default function Footer() {
           <Link
             href="/"
             className="inline-block transition-opacity duration-200 hover:opacity-85"
-            title="Fifth Sense Perfumes"
+            title={brand.brandName}
           >
             <Image
-              src="/navbar/fifthsenselogo.png"
-              alt="Fifth Sense Perfumes"
+              src={brand.logoUrl}
+              alt={brand.brandName}
               width={200}
               height={60}
               className="h-10 sm:h-11 md:h-12 w-auto object-contain brightness-0 invert"
