@@ -24,7 +24,7 @@ const FEATURE_ITEMS: FeatureItem[] = [
     text: "LUXURY PERFUMES",
   },
   {
-    icon: "/hero/experty.svg",
+    icon: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431897/ecombd/site-assets/experty.svg",
     alt: "Expertly Crafted Seal",
     text: "EXPERTLY CRAFTED",
   },
