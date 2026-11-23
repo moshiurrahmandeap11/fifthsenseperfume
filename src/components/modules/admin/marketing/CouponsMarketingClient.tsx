@@ -27,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { confirmAction } from "@/lib/swal";
 import { createCoupon, deleteCoupon, updateCoupon } from "@/services/marketing.services";
 import { DiscountType, ICoupon } from "@/types/marketing.types";
 import { Plus, Search, Trash2 } from "lucide-react";
