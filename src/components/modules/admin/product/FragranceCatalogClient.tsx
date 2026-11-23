@@ -141,7 +141,7 @@ export default function FragranceCatalogClient({
                     <div className="flex items-center gap-3">
                       <div className="size-9 rounded border overflow-hidden shrink-0 relative bg-muted">
                         <Image
-                          src={p.thumbnailUrl || "/navbar/fifthsenselogo.png"}
+                          src={p.thumbnailUrl || "https://res.cloudinary.com/rhjebh23/image/upload/v1795431915/ecombd/site-assets/fifthsenselogo.webp"}
                           alt={p.name}
                           fill
                           className="object-cover"
