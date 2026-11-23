@@ -13,7 +13,33 @@ import ClientReviewsSection from "@/components/modules/storefront/home/ClientRev
 import NewsletterSection from "@/components/modules/storefront/home/NewsletterSection";
 import SectionHeader from "@/components/common/SectionHeader";
 
-export default function HomePage() {
+export default async function HomePage() {
+  await connection();
+
+  let bestSellers: IProduct[] = [];
+  let newArrivals: IProduct[] = [];
+
+  try {
+    const [bestRes, newRes] = await Promise.all([
+      getAllProducts({ status: "PUBLISHED", isBestSeller: true, limit: 4 }),
+      getAllProducts({ status: "PUBLISHED", isNewArrival: true, limit: 4 }),
+    ]);
+
+    bestSellers = bestRes?.data || [];
+    newArrivals = newRes?.data || [];
+
+    if (bestSellers.length === 0) {
+      const fallbackRes = await getAllProducts({ status: "PUBLISHED", limit: 4 });
+      bestSellers = fallbackRes?.data || [];
+    }
+  } catch (err) {
+    console.error("Failed to load home page products:", err);
+  }
+
+  const displayedBestSellers =
+    bestSellers.length > 0 ? bestSellers : DUMMY_PRODUCTS.slice(0, 4);
+  const displayedNewArrivals =
+    newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS_PRODUCTS;
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-zinc-950">
       {/* 1. Cinematic Hero Grid: Video on Left + 2 Perfume Horizontal Sliders on Right */}
