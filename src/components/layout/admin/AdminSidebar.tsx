@@ -29,12 +29,17 @@ export default function AdminSidebar({
   return (
     <aside className="hidden lg:flex w-64 flex-col border-r bg-card/80 backdrop-blur-md shrink-0 h-screen sticky top-0 select-none">
       {/* Brand Header */}
-      <div className="flex h-14 items-center justify-between border-b px-5">
-        <Link href="/admin/dashboard" className="flex items-center gap-2.5">
-          <span className="font-normal tracking-wide text-foreground text-sm uppercase">
-            FIFTH SENSE
-          </span>
-          <span className="text-[10px] font-normal text-muted-foreground border px-1.5 py-0.5 rounded">
+      <div className="flex h-16 items-center justify-between border-b px-5 shrink-0">
+        <Link href="/admin/dashboard" className="flex items-center gap-2">
+          <Image
+            src={brand.logoUrl}
+            alt={brand.brandName}
+            width={128}
+            height={38}
+            priority
+            className="h-5 w-auto max-w-[130px] object-contain dark:invert"
+          />
+          <span className="text-[10px] font-normal text-muted-foreground border px-1.5 py-0.5 rounded shrink-0">
             Admin
           </span>
         </Link>
