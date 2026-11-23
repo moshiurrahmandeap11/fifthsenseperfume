@@ -19,7 +19,7 @@ const FEATURE_ITEMS: FeatureItem[] = [
     text: "NATURAL SCENTS",
   },
   {
-    icon: "/hero/diamond.svg",
+    icon: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431896/ecombd/site-assets/diamond.svg",
     alt: "Luxury Perfumes Diamond",
     text: "LUXURY PERFUMES",
   },
