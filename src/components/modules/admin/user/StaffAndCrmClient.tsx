@@ -130,8 +130,13 @@ export default function StaffAndCrmClient({
     });
   };
 
-  const handleDeleteStaff = (staffId: string, name: string) => {
-    if (!confirm(`Revoke access for ${name}?`)) return;
+  const handleDeleteStaff = async (staffId: string, name: string) => {
+    const confirmed = await confirmAction({
+      title: `Revoke access for ${name}?`,
+      text: "This staff member will immediately lose admin dashboard permissions.",
+      confirmText: "Revoke Access",
+    });
+    if (!confirmed) return;
 
     startTransition(async () => {
       try {
