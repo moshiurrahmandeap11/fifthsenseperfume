@@ -347,11 +347,14 @@ export default function SystemSettingsClient({
                     </div>
 
                     <div className="space-y-1">
-                      <Label className="text-xs font-normal">Hotline Phone</Label>
+                      <Label className="text-xs font-normal">Brand Slug</Label>
                       <Input
-                        value={settings.supportPhone || ""}
-                        onChange={(e) => setSettings({ ...settings, supportPhone: e.target.value })}
-                        className="text-xs h-9 font-normal"
+                        value={settings.brandSlug || ""}
+                        onChange={(e) =>
+                          setSettings({ ...settings, brandSlug: e.target.value })
+                        }
+                        placeholder="fifth-sense"
+                        className="text-xs h-9 font-mono font-normal"
                       />
                     </div>
                   </div>
