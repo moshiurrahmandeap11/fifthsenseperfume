@@ -28,7 +28,11 @@ const DEFAULT_FILTERS: CatalogFilterState = {
   sortBy: "featured",
 };
 
-export default function CatalogView() {
+interface CatalogViewProps {
+  initialProducts?: IProduct[];
+}
+
+export default function CatalogView({ initialProducts }: CatalogViewProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
