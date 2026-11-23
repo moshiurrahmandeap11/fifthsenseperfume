@@ -24,6 +24,7 @@ export default function AdminSidebar({
   badgeCounts,
 }: AdminSidebarProps) {
   const pathname = usePathname();
+  const brand = useBrand();
 
   return (
     <aside className="hidden lg:flex w-64 flex-col border-r bg-card/80 backdrop-blur-md shrink-0 h-screen sticky top-0 select-none">
