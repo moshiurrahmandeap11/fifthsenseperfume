@@ -67,7 +67,7 @@ interface OrderManagementClientProps {
 export default function OrderManagementClient({
   initialOrders,
 }: OrderManagementClientProps) {
-  const [orders, setOrders] = useState<AdminOrder[]>(initialOrders || []);
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("ALL");
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
