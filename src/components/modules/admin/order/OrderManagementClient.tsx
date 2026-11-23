@@ -71,8 +71,31 @@ export default function OrderManagementClient({
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("ALL");
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
-  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [newStatus, setNewStatus] = useState<string>("");
+
+  const { data: orders = [] } = useQuery<AdminOrder[]>({
+    queryKey: ["admin-orders"],
+    queryFn: async () => {
+      const res = await getAllOrders({ limit: 100 });
+      return (res?.data || []) as unknown as AdminOrder[];
+    },
+    initialData: initialOrders || [],
+  });
+
+  const statusMutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: OrderStatus }) =>
+      updateOrderStatus(id, { status }),
+    onSuccess: (_data, variables) => {
+      queryClient.setQueryData<AdminOrder[]>(["admin-orders"], (old = []) =>
+        old.map((o) =>
+          o.id === variables.id ? { ...o, status: variables.status } : o
+        )
+      );
+      void queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
+    },
+  });
+
+  const isUpdatingStatus = statusMutation.isPending;
 
   const filteredOrders = useMemo(() => {
     return orders.filter((ord) => {
