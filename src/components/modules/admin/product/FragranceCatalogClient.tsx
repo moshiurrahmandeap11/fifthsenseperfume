@@ -159,7 +159,11 @@ export default function FragranceCatalogClient({
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="text-[10px] font-normal">
-                      {(p.specifications as unknown as { concentration?: string })?.concentration || "Extrait de Parfum"}
+                      {(
+                        p.specifications as unknown as {
+                          concentration?: string;
+                        }
+                      )?.concentration || "Extrait de Parfum"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-xs font-normal text-foreground text-right tabular-nums">
