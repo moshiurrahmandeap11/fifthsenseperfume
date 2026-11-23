@@ -16,7 +16,7 @@ export default function FineFragranceBanner() {
           {/* Brush Stroke with Script Accent */}
           <div className="relative inline-flex items-center justify-center mb-3 sm:mb-4">
             <Image
-              src="/hero/brush.svg"
+              src="https://res.cloudinary.com/rhjebh23/image/upload/v1795431894/ecombd/site-assets/brush.svg"
               alt=""
               width={522}
               height={81}
