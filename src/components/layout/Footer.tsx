@@ -190,7 +190,7 @@ export default function Footer() {
         {/* 3. Bottom Copyright Bar */}
         <div className="pt-6 sm:pt-8 border-t border-[#333130] text-center font-sans text-xs text-neutral-500">
           <p>
-            &copy; Copyright <CurrentYear /> Fifth Sense Perfumes. All Rights Reserved
+            &copy; Copyright <CurrentYear /> {brand.brandName}. All Rights Reserved
           </p>
         </div>
       </div>
