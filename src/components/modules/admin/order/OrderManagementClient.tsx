@@ -134,8 +134,6 @@ export default function OrderManagementClient({
       setSelectedOrder(null);
     } catch {
       toast.error("Failed to update order status");
-    } finally {
-      setIsUpdatingStatus(false);
     }
   };
 
