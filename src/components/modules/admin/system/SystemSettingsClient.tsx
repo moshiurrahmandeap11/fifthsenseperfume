@@ -375,10 +375,17 @@ export default function SystemSettingsClient({
                     </div>
 
                     <div className="space-y-1">
-                      <Label className="text-xs font-normal">Header Announcement Ticker</Label>
+                      <Label className="text-xs font-normal">
+                        Header Announcement Ticker
+                      </Label>
                       <Input
                         value={settings.announcementText || ""}
-                        onChange={(e) => setSettings({ ...settings, announcementText: e.target.value })}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            announcementText: e.target.value,
+                          })
+                        }
                         placeholder="Complimentary sample with each flacon"
                         className="text-xs h-9 font-normal"
                       />
