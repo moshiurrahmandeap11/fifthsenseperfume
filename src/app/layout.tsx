@@ -88,9 +88,11 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
         <QueryProvider>
-          <TooltipProvider>
-            {children}
-          </TooltipProvider>
+          <BrandProvider initialSettings={settings}>
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
+          </BrandProvider>
           <Toaster
             position="top-right"
             toastOptions={{
