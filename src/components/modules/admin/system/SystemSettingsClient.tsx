@@ -361,10 +361,15 @@ export default function SystemSettingsClient({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <Label className="text-xs font-normal">WhatsApp Number</Label>
+                      <Label className="text-xs font-normal">
+                        Brand Tagline / Subtitle
+                      </Label>
                       <Input
-                        value={settings.whatsappNumber || ""}
-                        onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
+                        value={settings.tagline || ""}
+                        onChange={(e) =>
+                          setSettings({ ...settings, tagline: e.target.value })
+                        }
+                        placeholder="Luxury Niche Perfumes & Haute Parfumerie"
                         className="text-xs h-9 font-normal"
                       />
                     </div>
