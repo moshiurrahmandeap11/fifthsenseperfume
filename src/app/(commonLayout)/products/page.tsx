@@ -38,10 +38,22 @@ function CatalogSkeleton() {
   );
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  await connection();
+  let products: IProduct[] = [];
+
+  try {
+    const res = await getAllProducts({ status: "PUBLISHED", limit: 100 });
+    if (res?.data) {
+      products = res.data;
+    }
+  } catch (err) {
+    console.error("Failed to load storefront products:", err);
+  }
+
   return (
     <Suspense fallback={<CatalogSkeleton />}>
-      <CatalogView />
+      <CatalogView initialProducts={products} />
     </Suspense>
   );
 }
