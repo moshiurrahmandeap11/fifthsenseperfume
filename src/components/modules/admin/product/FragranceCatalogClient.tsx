@@ -91,14 +91,15 @@ export default function FragranceCatalogClient({
           />
         </div>
 
-        <Button
-          size="sm"
-          onClick={() => setIsCreateOpen(true)}
-          className="h-8 px-3 text-xs gap-1.5 cursor-pointer font-normal"
-        >
-          <Plus className="size-3.5" />
-          <span>Add Fragrance</span>
-        </Button>
+        <Link href="/admin/products/new">
+          <Button
+            size="sm"
+            className="h-8 px-3 text-xs gap-1.5 cursor-pointer font-normal"
+          >
+            <Plus className="size-3.5" />
+            <span>Add Perfume</span>
+          </Button>
+        </Link>
       </div>
 
       {/* Fragrances Table */}
