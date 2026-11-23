@@ -106,6 +106,14 @@ export default function SystemSettingsClient({
       try {
         await updatePlatformSettings({
           brandName: settings.brandName,
+          brandSlug: settings.brandSlug || undefined,
+          tagline: settings.tagline || undefined,
+          logoUrl: settings.logoUrl || undefined,
+          faviconUrl: settings.faviconUrl || undefined,
+          primaryColor: settings.primaryColor || "#09090b",
+          secondaryColor: settings.secondaryColor || "#c5a059",
+          accentColor: settings.accentColor || "#18181b",
+          footerDescription: settings.footerDescription || undefined,
           supportPhone: settings.supportPhone || undefined,
           whatsappNumber: settings.whatsappNumber || undefined,
           announcementText: settings.announcementText || undefined,
