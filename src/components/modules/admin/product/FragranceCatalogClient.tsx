@@ -57,10 +57,12 @@ export default function FragranceCatalogClient({
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      const matchesSearch =
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.slug.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesSearch;
+      const q = searchQuery.toLowerCase();
+      return (
+        p.name.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
+        p.styleCode.toLowerCase().includes(q)
+      );
     });
   }, [products, searchQuery]);
 
