@@ -12,11 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
-import { createProduct, deleteProduct } from "@/services/product.services";
-import { ICreateProductPayload, IProduct } from "@/types/product.types";
-import { Plus, Search, Trash2 } from "lucide-react";
+import { confirmAction } from "@/lib/swal";
+import { deleteProduct, getAllProducts } from "@/services/product.services";
+import { IProduct } from "@/types/product.types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
