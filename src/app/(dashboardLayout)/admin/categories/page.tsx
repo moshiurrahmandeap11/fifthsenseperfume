@@ -11,7 +11,7 @@ export default async function AdminCategoriesPage() {
   let categories: ICategory[] = [];
 
   try {
-    const res = await getCategoryTree(false);
+    const res = await getCategoryTree();
     if (res?.data) {
       categories = res.data;
     }
