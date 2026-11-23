@@ -133,7 +133,10 @@ export default function FragranceCatalogClient({
               </TableRow>
             ) : (
               filteredProducts.map((p) => (
-                <TableRow key={p.id} className="hover:bg-muted/20 transition-colors">
+                <TableRow
+                  key={p.id}
+                  className="hover:bg-muted/20 transition-colors"
+                >
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="size-9 rounded border overflow-hidden shrink-0 relative bg-muted">
