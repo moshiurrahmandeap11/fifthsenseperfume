@@ -176,11 +176,11 @@ export default function Navbar({ initialUser }: NavbarProps) {
     <Link
       href="/"
       className="flex items-center justify-center group select-none py-1"
-      title="Fifth Sense"
+      title={brand.brandName}
     >
       <Image
-        src="/navbar/fifthsenselogo.png"
-        alt="Fifth Sense"
+        src={brand.logoUrl}
+        alt={brand.brandName}
         width={160}
         height={48}
         priority
