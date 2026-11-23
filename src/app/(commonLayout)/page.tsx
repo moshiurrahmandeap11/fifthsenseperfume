@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { DUMMY_PRODUCTS, NEW_ARRIVALS_PRODUCTS } from "@/data/dummyProducts";
+import { getAllProducts } from "@/services/product.services";
+import { IProduct } from "@/types/product.types";
 import ProductCard from "@/components/modules/storefront/catalog/ProductCard";
 import HeroGridSection from "@/components/modules/storefront/home/HeroGridSection";
 import FeatureTickerStrip from "@/components/modules/storefront/home/FeatureTickerStrip";
