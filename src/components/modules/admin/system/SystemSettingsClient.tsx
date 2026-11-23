@@ -45,8 +45,11 @@ import {
 } from "@/types/system.types";
 import { ImageIcon, Plus, Save, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState, useTransition } from "react";
 import toast from "react-hot-toast";
+import { ThumbnailDropzone } from "@/components/modules/admin/product/ImageUploadZone";
+import { Textarea } from "@/components/ui/textarea";
 
 interface SystemSettingsClientProps {
   initialSettings?: IPlatformSettings | null;
