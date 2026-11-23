@@ -48,11 +48,15 @@ export default function AdminMobileSidebar({
       </SheetTrigger>
 
       <SheetContent side="left" className="w-64 p-0 flex flex-col">
-        <SheetHeader className="h-14 px-5 border-b flex flex-row items-center justify-between">
+        <SheetHeader className="h-16 px-5 border-b flex flex-row items-center justify-between shrink-0">
           <SheetTitle className="flex items-center gap-2 text-left">
-            <span className="font-normal text-foreground text-sm uppercase tracking-wide">
-              FIFTH SENSE
-            </span>
+            <Image
+              src={brand.logoUrl}
+              alt={brand.brandName}
+              width={120}
+              height={36}
+              className="h-7 w-auto object-contain dark:invert"
+            />
           </SheetTitle>
         </SheetHeader>
 
