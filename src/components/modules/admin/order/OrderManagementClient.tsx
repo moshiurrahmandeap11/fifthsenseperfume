@@ -126,13 +126,10 @@ export default function OrderManagementClient({
     if (!selectedOrder || !newStatus) return;
 
     try {
-      setIsUpdatingStatus(true);
-      await updateOrderStatus(selectedOrder.id, { status: newStatus as OrderStatus });
-      setOrders((prev) =>
-        prev.map((o) =>
-          o.id === selectedOrder.id ? { ...o, status: newStatus } : o
-        )
-      );
+      await statusMutation.mutateAsync({
+        id: selectedOrder.id,
+        status: newStatus as OrderStatus,
+      });
       toast.success(`Order #${selectedOrder.orderNumber} updated to ${newStatus}`);
       setSelectedOrder(null);
     } catch {
