@@ -329,7 +329,19 @@ export default function SystemSettingsClient({
                       <Label className="text-xs font-normal">Brand Name</Label>
                       <Input
                         value={settings.brandName || ""}
-                        onChange={(e) => setSettings({ ...settings, brandName: e.target.value })}
+                        onChange={(e) => {
+                          const nextName = e.target.value;
+                          const nextSlug = nextName
+                            .toLowerCase()
+                            .trim()
+                            .replace(/[^a-z0-9]+/g, "-")
+                            .replace(/^-|-$/g, "");
+                          setSettings({
+                            ...settings,
+                            brandName: nextName,
+                            brandSlug: nextSlug,
+                          });
+                        }}
                         className="text-xs h-9 font-normal"
                       />
                     </div>
