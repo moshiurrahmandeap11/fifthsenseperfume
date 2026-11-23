@@ -66,88 +66,15 @@ export default function FragranceCatalogClient({
     });
   }, [products, searchQuery]);
 
-  const handleCreateFragrance = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !basePrice) {
-      toast.error("Please fill in fragrance name and base price");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      const generatedSlug =
-        slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-      const styleCode = `FS-${Date.now().toString().slice(-6)}`;
-
-      const payload = {
-        name,
-        slug: generatedSlug,
-        styleCode,
-        shortDescription: shortDesc,
-        description: `${description}\n\nTop: ${topNotes} | Heart: ${heartNotes} | Base: ${baseNotes}`,
-        basePrice: parseFloat(basePrice),
-        discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
-        costPrice: parseFloat(basePrice) * 0.4,
-        thumbnailUrl: thumbnailUrl || "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop",
-        status: "PUBLISHED",
-        specifications: {
-          concentration,
-          olfactiveFamily,
-          topNotes,
-          heartNotes,
-          baseNotes,
-          volumesAvailable: ["30ml", "50ml", "100ml"],
-        },
-        colors: [
-          {
-            colorName: "Signature Flacon",
-            images: [thumbnailUrl],
-            isDefault: true,
-            variants: [
-              {
-                size: "100ml",
-                sku: `${styleCode}-100ML`,
-                stockQuantity: 25,
-                lowStockThreshold: 5,
-              },
-              {
-                size: "50ml",
-                sku: `${styleCode}-50ML`,
-                stockQuantity: 40,
-                lowStockThreshold: 8,
-              },
-            ],
-          },
-        ],
-      };
-
-      const res = await createProduct(payload as unknown as ICreateProductPayload);
-      if (res?.data) {
-        setProducts((prev) => [res.data, ...prev]);
-        toast.success(`Fragrance '${name}' created`);
-        setIsCreateOpen(false);
-        setName("");
-        setSlug("");
-        setShortDesc("");
-        setDescription("");
-      }
-    } catch {
-      toast.error("Failed to create fragrance");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleDeleteFragrance = async (id: string, fragName: string) => {
-    if (!confirm(`Delete fragrance '${fragName}'?`)) return;
+    const confirmed = await confirmAction({
+      title: `Delete "${fragName}"?`,
+      text: "This perfume will be archived from the catalog.",
+      confirmText: "Delete",
+    });
+    if (!confirmed) return;
 
-    try {
-      await deleteProduct(id);
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-      toast.success("Fragrance deleted");
-    } catch {
-      toast.error("Failed to delete fragrance");
-    }
+    deleteMutation.mutate(id);
   };
 
   return (
