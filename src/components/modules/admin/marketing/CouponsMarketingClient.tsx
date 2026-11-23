@@ -112,8 +112,13 @@ export default function CouponsMarketingClient({
     });
   };
 
-  const handleDelete = (id: string, couponCode: string) => {
-    if (!confirm(`Delete coupon "${couponCode}"?`)) return;
+  const handleDelete = async (id: string, couponCode: string) => {
+    const confirmed = await confirmAction({
+      title: `Delete coupon "${couponCode}"?`,
+      text: "This privilege code will be permanently deactivated.",
+      confirmText: "Delete",
+    });
+    if (!confirmed) return;
 
     startTransition(async () => {
       try {
