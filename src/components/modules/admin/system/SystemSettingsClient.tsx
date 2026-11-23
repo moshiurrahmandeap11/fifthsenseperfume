@@ -62,12 +62,23 @@ export default function SystemSettingsClient({
   initialBanners,
   initialShowrooms,
 }: SystemSettingsClientProps) {
+  const router = useRouter();
   const [settings, setSettings] = useState<Partial<IPlatformSettings>>(
     initialSettings || {
-      brandName: "FIFTH SENSE PERFUMES",
+      brandName: "FIFTH SENSE",
+      brandSlug: "fifth-sense",
+      tagline: "Luxury Niche Perfumes & Haute Parfumerie",
+      logoUrl:
+        "https://res.cloudinary.com/rhjebh23/image/upload/v1795431915/ecombd/site-assets/fifthsenselogo.webp",
+      primaryColor: "#09090b",
+      secondaryColor: "#c5a059",
+      accentColor: "#18181b",
+      footerDescription:
+        "Artisanal fragrances crafted with pure Grasse absolutes, aged Cambodian oud, and rare Mysore sandalwood.",
       supportPhone: "+880 1700-000000",
       whatsappNumber: "+880 1700-000000",
-      announcementText: "Complimentary discovery sample included with each flacon.",
+      announcementText:
+        "Complimentary discovery sample included with each flacon.",
     }
   );
   const [banners, setBanners] = useState<IBanner[]>(initialBanners);
