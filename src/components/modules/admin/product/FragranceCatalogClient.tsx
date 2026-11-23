@@ -180,14 +180,27 @@ export default function FragranceCatalogClient({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleDeleteFragrance(p.id, p.name)}
-                      className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-destructive"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </Button>
+                    <div className="inline-flex items-center justify-end gap-1">
+                      <Link href={`/admin/products/${p.id}/edit`}>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-foreground"
+                          aria-label={`Edit ${p.name}`}
+                        >
+                          <Pencil className="size-3.5" />
+                        </Button>
+                      </Link>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDeleteFragrance(p.id, p.name)}
+                        className="size-7 p-0 cursor-pointer text-muted-foreground hover:text-destructive"
+                        aria-label={`Delete ${p.name}`}
+                      >
+                        <Trash2 className="size-3.5" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
