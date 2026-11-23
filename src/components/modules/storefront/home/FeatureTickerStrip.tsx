@@ -9,7 +9,7 @@ interface FeatureItem {
 
 const FEATURE_ITEMS: FeatureItem[] = [
   {
-    icon: "/hero/perfume 2.svg",
+    icon: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431911/ecombd/site-assets/perfume-2.svg",
     alt: "Long Lasting Perfume",
     text: "LONG LASTING",
   },
