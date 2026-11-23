@@ -14,7 +14,7 @@ const FEATURE_ITEMS: FeatureItem[] = [
     text: "LONG LASTING",
   },
   {
-    icon: "/hero/leaf.svg",
+    icon: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431909/ecombd/site-assets/leaf.svg",
     alt: "Natural Scents Leaf",
     text: "NATURAL SCENTS",
   },
