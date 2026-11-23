@@ -20,7 +20,7 @@ const CLIENT_REVIEWS: ReviewItem[] = [
   {
     id: "review-2",
     name: "Tanya Banerjee",
-    avatar: "/reviews/tanya.png",
+    avatar: "https://res.cloudinary.com/rhjebh23/image/upload/v1795431925/ecombd/site-assets/tanya.webp",
     quote:
       "The scent feels incredibly well-balanced; fresh at first, then it settles into something warm and memorable. It's become part of my everyday routine.",
   },
