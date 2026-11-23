@@ -10,6 +10,21 @@ interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
+async function resolveProduct(slug: string): Promise<IProduct | null> {
+  try {
+    const res = await getProductByIdOrSlug(slug);
+    if (res?.data) {
+      return res.data;
+    }
+  } catch {
+    // Fallback to static catalog if not found in DB
+  }
+  return (
+    [...DUMMY_PRODUCTS, ...NEW_ARRIVALS_PRODUCTS].find((p) => p.slug === slug) ||
+    null
+  );
+}
+
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
