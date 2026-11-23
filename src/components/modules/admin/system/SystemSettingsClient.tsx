@@ -119,7 +119,8 @@ export default function SystemSettingsClient({
           announcementText: settings.announcementText || undefined,
         });
 
-        toast.success("Settings saved");
+        router.refresh();
+        toast.success("Brand & settings saved");
       } catch (err: unknown) {
         const error = err as { message?: string };
         toast.error(error.message || "Failed to update platform settings");
