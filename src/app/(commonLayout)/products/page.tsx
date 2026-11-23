@@ -1,7 +1,10 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
+import { connection } from "next/server";
 import CatalogView from "@/components/modules/storefront/catalog/CatalogView";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getAllProducts } from "@/services/product.services";
+import { IProduct } from "@/types/product.types";
 
 export const metadata: Metadata = {
   title: "Fragrance Catalog & Archive | FIFTH SENSE PERFUMES",
