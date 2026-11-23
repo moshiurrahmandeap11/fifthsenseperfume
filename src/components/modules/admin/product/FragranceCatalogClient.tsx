@@ -107,12 +107,18 @@ export default function FragranceCatalogClient({
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow>
-              <TableHead className="text-xs font-normal">Fragrance</TableHead>
-              <TableHead className="text-xs font-normal">Concentration</TableHead>
-              <TableHead className="text-xs font-normal text-right">Base Price</TableHead>
-              <TableHead className="text-xs font-normal text-right">Sale Price</TableHead>
+              <TableHead className="text-xs font-normal">Perfume</TableHead>
+              <TableHead className="text-xs font-normal">Strength</TableHead>
+              <TableHead className="text-xs font-normal text-right">
+                Base Price
+              </TableHead>
+              <TableHead className="text-xs font-normal text-right">
+                Sale Price
+              </TableHead>
               <TableHead className="text-xs font-normal">Status</TableHead>
-              <TableHead className="text-xs font-normal text-right">Actions</TableHead>
+              <TableHead className="text-xs font-normal text-right">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
