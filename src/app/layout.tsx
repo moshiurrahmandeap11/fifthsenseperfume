@@ -8,6 +8,8 @@ import { BrandProvider } from "@/providers/BrandProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { getPlatformSettings } from "@/services/system.services";
+import { IPlatformSettings } from "@/types/system.types";
 
 // Body Font: Clean, modern sans-serif from Figma
 const inter = Inter({
