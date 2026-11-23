@@ -28,8 +28,9 @@ async function resolveProduct(slug: string): Promise<IProduct | null> {
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
+  await connection();
   const { slug } = await params;
-  const product = DUMMY_PRODUCTS.find((p) => p.slug === slug);
+  const product = await resolveProduct(slug);
 
   if (!product) {
     return {
