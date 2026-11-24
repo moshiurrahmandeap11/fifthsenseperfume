@@ -399,8 +399,72 @@ export default function SystemSettingsClient({
                     />
                   </div>
 
+                  {/* Contact */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border/40">
+                    <div className="space-y-1">
+                      <Label className="text-xs font-normal">Hotline Phone</Label>
+                      <Input
+                        value={settings.supportPhone || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            supportPhone: e.target.value,
+                          })
+                        }
+                        className="text-xs h-9 font-normal"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-xs font-normal">
+                        WhatsApp Number
+                      </Label>
+                      <Input
+                        value={settings.whatsappNumber || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            whatsappNumber: e.target.value,
+                          })
+                        }
+                        className="text-xs h-9 font-normal"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex justify-end">
+                    <Button
+                      size="sm"
+                      onClick={handleSaveSettings}
+                      disabled={isPending}
+                      className="text-xs font-normal cursor-pointer gap-1.5"
+                    >
+                      <Save className="size-3.5" />
+                      <span>{isPending ? "Saving..." : "Save Brand & Contact"}</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {activeTab === "THEME" && (
+            <motion.div
+              key="theme-tab"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Card className="shadow-none border-border/50 bg-card">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                    Luxury Brand Color Palette &amp; Presets
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-5 space-y-6">
                   {/* Multi-Color Brand Theme */}
-                  <div className="space-y-3 pt-4 border-t border-border/40">
+                  <div className="space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
                         <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
@@ -554,39 +618,37 @@ export default function SystemSettingsClient({
                     </div>
                   </div>
 
-                  {/* Contact */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border/40">
-                    <div className="space-y-1">
-                      <Label className="text-xs font-normal">Hotline Phone</Label>
-                      <Input
-                        value={settings.supportPhone || ""}
-                        onChange={(e) =>
-                          setSettings({
-                            ...settings,
-                            supportPhone: e.target.value,
-                          })
-                        }
-                        className="text-xs h-9 font-normal"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <Label className="text-xs font-normal">
-                        WhatsApp Number
-                      </Label>
-                      <Input
-                        value={settings.whatsappNumber || ""}
-                        onChange={(e) =>
-                          setSettings({
-                            ...settings,
-                            whatsappNumber: e.target.value,
-                          })
-                        }
-                        className="text-xs h-9 font-normal"
-                      />
-                    </div>
+                  <div className="pt-2 flex justify-end">
+                    <Button
+                      size="sm"
+                      onClick={handleSaveSettings}
+                      disabled={isPending}
+                      className="text-xs font-normal cursor-pointer gap-1.5"
+                    >
+                      <Save className="size-3.5" />
+                      <span>{isPending ? "Saving..." : "Save Theme"}</span>
+                    </Button>
                   </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
 
+          {activeTab === "SHIPPING_PAYMENTS" && (
+            <motion.div
+              key="shipping-payments-tab"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Card className="shadow-none border-border/50 bg-card">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                    Delivery Charges &amp; Checkout Payment Methods
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-5 space-y-6">
                   {/* Delivery & Shipping Charges */}
                   <div className="space-y-3 pt-4 border-t border-border/40">
                     <div>
