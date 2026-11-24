@@ -27,6 +27,8 @@ export default function CartPromoBanner({ className }: CartPromoBannerProps) {
           border: "1px solid #27272a",
         },
       });
+    } else {
+      toast.error(result.message);
     }
   };
 
