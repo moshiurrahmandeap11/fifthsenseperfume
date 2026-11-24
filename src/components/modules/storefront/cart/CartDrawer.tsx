@@ -74,13 +74,8 @@ export default function CartDrawer() {
   }, [isDrawerOpen, closeDrawer]);
 
   const handleCheckout = () => {
-    toast.success("Proceeding to Fifth Sense luxury checkout soon.", {
-      style: {
-        background: "#09090b",
-        color: "#ffffff",
-        border: "1px solid #27272a",
-      },
-    });
+    closeDrawer();
+    router.push("/checkout");
   };
 
   if (!mounted) return null;
