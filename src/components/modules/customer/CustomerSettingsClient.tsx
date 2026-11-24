@@ -182,3 +182,26 @@ export default function CustomerSettingsClient({
           </div>
 
           <div>
+            <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+              Bio / Fragrance Notes Preference
+            </label>
+            <textarea
+              rows={2}
+              maxLength={250}
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="e.g. Love woody oud, amber, and fresh bergamot scents..."
+              className="w-full p-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 resize-none"
+            />
+          </div>
+
+          <div className="pt-2 flex justify-end">
+            <button
+              type="submit"
+              disabled={isPending}
+              className="px-6 py-2.5 bg-[#09090b] text-white dark:bg-white dark:text-black text-xs font-sans uppercase inline-flex items-center gap-2 cursor-pointer disabled:opacity-60"
+            >
+              {isPending ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : (
+                <Save className="size-3.5" />
