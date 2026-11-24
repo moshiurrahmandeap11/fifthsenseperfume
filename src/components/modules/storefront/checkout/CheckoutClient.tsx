@@ -88,3 +88,18 @@ const PAYMENT_OPTIONS: Array<{
     value: "SSLCOMMERZ",
     label: "Card / Online Banking",
     subtitle: "Visa, Mastercard, AMEX & Net Banking",
+  },
+  {
+    value: "AAMARPAY",
+    label: "aamarPay",
+    subtitle: "Cards, Mobile Wallets & Net Banking",
+  },
+];
+
+export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
+  const brand = useBrand();
+  const {
+    items,
+    subtotal,
+    discountAmount,
+    activeCoupon,
