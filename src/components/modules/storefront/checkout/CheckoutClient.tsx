@@ -73,3 +73,18 @@ const PAYMENT_OPTIONS: Array<{
     value: "BKASH",
     label: "bKash",
     subtitle: "Instant mobile wallet payment",
+  },
+  {
+    value: "NAGAD",
+    label: "Nagad",
+    subtitle: "Fast digital wallet checkout",
+  },
+  {
+    value: "ROCKET",
+    label: "Rocket",
+    subtitle: "DBBL Rocket mobile banking",
+  },
+  {
+    value: "SSLCOMMERZ",
+    label: "Card / Online Banking",
+    subtitle: "Visa, Mastercard, AMEX & Net Banking",
