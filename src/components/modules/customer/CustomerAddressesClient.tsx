@@ -88,3 +88,33 @@ export default function CustomerAddressesClient({
   });
 
   const divisions = divisionsRes?.data?.divisions ?? [];
+  const districts = districtsRes?.data?.districts ?? [];
+  const thanas = thanasRes?.data?.thanas ?? [];
+
+  const openCreateForm = () => {
+    setEditingId(null);
+    setLabel("Home");
+    setRecipientName(defaultRecipientName);
+    setPhoneNumber(defaultPhoneNumber);
+    setDivision("Dhaka");
+    setDistrict("Dhaka");
+    setThana("");
+    setFullAddress("");
+    setIsDefault(addresses.length === 0);
+    setIsFormOpen(true);
+  };
+
+  const openEditForm = (addr: ICustomerAddress) => {
+    setEditingId(addr.id);
+    setLabel(addr.label || "Home");
+    setRecipientName(addr.recipientName);
+    setPhoneNumber(addr.phoneNumber);
+    setDivision(addr.division);
+    setDistrict(addr.district);
+    setThana(addr.thana);
+    setFullAddress(addr.fullAddress);
+    setIsDefault(addr.isDefault);
+    setIsFormOpen(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
