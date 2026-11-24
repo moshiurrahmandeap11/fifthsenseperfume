@@ -86,3 +86,25 @@ export default function CustomerOrdersClient({
           <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white">
             No Orders Found
           </h2>
+          <p className="text-xs font-sans text-neutral-500 max-w-sm mx-auto">
+            {filter === "ALL"
+              ? "You haven't placed any fragrance orders yet."
+              : `No orders found under the ${filter.toLowerCase()} filter.`}
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#09090b] text-white dark:bg-white dark:text-black text-xs font-sans uppercase"
+          >
+            <span>Browse Collection</span>
+            <ArrowRight className="size-3.5" />
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredOrders.map((order) => {
+            const isExpanded = expandedId === order.id;
+            return (
+              <div
+                key={order.id}
+                className="border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950"
+              >
