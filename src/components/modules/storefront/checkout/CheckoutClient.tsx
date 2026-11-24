@@ -823,3 +823,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                         </span>
                       </div>
                       <p className="text-[11px] font-sans text-neutral-500">
+                        {opt.subtitle}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Order Summary */}
+          <div className="lg:col-span-5 lg:sticky lg:top-24 border border-neutral-200 dark:border-neutral-800 bg-[#f9f6ed]/40 dark:bg-neutral-900/40 p-5 sm:p-7 space-y-6">
+            <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal border-b border-neutral-200 dark:border-neutral-800 pb-3.5">
+              Order Summary ({items.length})
+            </h2>
+
