@@ -196,3 +196,25 @@ export default function CustomerOrdersClient({
 
                     {/* Shipping & Courier Info */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-neutral-200 dark:border-neutral-800 text-xs font-sans">
+                      <div className="space-y-1">
+                        <p className="text-[10px] uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
+                          <MapPin className="size-3.5 text-[#c5a059]" />
+                          <span>Delivery Destination</span>
+                        </p>
+                        <p className="text-neutral-900 dark:text-neutral-100 font-medium">
+                          {order.customerName} ({order.customerPhone})
+                        </p>
+                        <p className="text-neutral-600 dark:text-neutral-400">
+                          {order.shippingAddress}, {order.thana}, {order.district},{" "}
+                          {order.division}
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <p className="text-[10px] uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
+                          <Truck className="size-3.5 text-[#c5a059]" />
+                          <span>Shipment &amp; Breakdown</span>
+                        </p>
+                        <p className="text-neutral-600 dark:text-neutral-400">
+                          Subtotal: ৳{formatFragrancePrice(order.subtotal)} &bull;
+                          Delivery: ৳{formatFragrancePrice(order.shippingCharge)}
