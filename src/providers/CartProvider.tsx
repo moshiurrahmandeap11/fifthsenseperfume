@@ -16,15 +16,18 @@ import {
   AddProductOptions,
   buildCartItemFromProduct,
 } from "@/components/modules/storefront/cart/cartUtils";
+import { applyCoupon as applyCouponApi } from "@/services/marketing.services";
+import { DiscountType } from "@/types/marketing.types";
 
 const CART_ITEMS_STORAGE_KEY = "fifthsense_cart_items_v2";
 const CART_COUPON_STORAGE_KEY = "fifthsense_cart_coupon_v2";
 
 export interface CartCouponRule {
   code: string;
-  discountPercent: number;
-  minQuantity: number;
-  description: string;
+  discountType: DiscountType;
+  discountValue: number;
+  discountAmount: number;
+  discountPercent?: number;
 }
 
 interface StoredCartState {
