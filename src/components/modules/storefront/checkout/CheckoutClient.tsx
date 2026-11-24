@@ -388,3 +388,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
         district: cleanDistrict,
         thana: cleanThana,
         deliveryZone,
+        paymentMethod,
+        source: "WEBSITE",
+        couponCode: activeCoupon?.code || undefined,
+        customerNote: customerNote.trim() || undefined,
+        items: items.map((item) => ({
+          variantId: item.variantId,
+          quantity: item.quantity,
+        })),
+      });
+
+      if (response?.data) {
+        setCompletedOrder(response.data);
+        clearCart();
+        try {
+          window.localStorage.removeItem(CHECKOUT_DRAFT_STORAGE_KEY);
