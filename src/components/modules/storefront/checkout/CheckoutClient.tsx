@@ -158,12 +158,7 @@ export default function CheckoutClient({
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("COD");
 
   const availablePaymentOptions = useMemo(() => {
-    const enabled = brand.enabledPaymentMethods || [
-      "COD",
-      "BKASH",
-      "NAGAD",
-      "SSLCOMMERZ",
-    ];
+    const enabled = brand.enabledPaymentMethods || ["COD", "STRIPE"];
     const filtered = PAYMENT_OPTIONS.filter((opt) =>
       enabled.includes(opt.value)
     );
