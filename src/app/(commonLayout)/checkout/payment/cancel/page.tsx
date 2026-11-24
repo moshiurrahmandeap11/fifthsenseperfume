@@ -93,3 +93,4 @@ export default function StripePaymentCancelPage() {
     </Suspense>
   );
 }
+// Stripe cancel redirect note 3
