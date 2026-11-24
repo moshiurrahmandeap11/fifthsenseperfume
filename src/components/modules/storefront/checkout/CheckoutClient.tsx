@@ -718,3 +718,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300">
+                    Assigned Delivery Zone &amp; Charge
+                  </label>
+                  <span className="text-[10px] font-sans uppercase tracking-wider text-[#9d8354]">
+                    Auto-calculated by address
+                  </span>
+                </div>
+                <div className="w-full p-3.5 border border-black/80 dark:border-white/80 bg-[#f9f6ed]/70 dark:bg-neutral-900 flex items-center justify-between select-none">
+                  <div>
+                    <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white flex items-center gap-2">
+                      <Truck className="size-3.5 text-[#c5a059]" />
+                      <span>
+                        {shippingQuote?.label ||
+                          (district
+                            ? "Calculating delivery zone..."
+                            : "Select your division & district above")}
