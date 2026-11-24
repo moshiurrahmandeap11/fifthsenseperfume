@@ -299,7 +299,12 @@ export default function CheckoutClient({
   const shippingQuote = shippingQuoteRes?.data;
   const deliveryZone: DeliveryZone =
     shippingQuote?.deliveryZone || "INSIDE_DHAKA";
-  const selectedZoneCharge = shippingQuote ? shippingQuote.charge : brand.insideDhakaShipping;
+  const selectedZoneCharge =
+    activeCoupon?.discountType === "FREE_SHIPPING"
+      ? 0
+      : shippingQuote
+      ? shippingQuote.charge
+      : brand.insideDhakaShipping;
   const effectiveFreeThreshold =
     shippingQuote?.freeShippingThreshold ?? freeShippingThreshold;
 
