@@ -181,6 +181,7 @@ export interface ICheckoutPayload {
   paymentMethod?: PaymentMethod;
   source?: OrderSource;
   couponCode?: string;
+  redeemPoints?: number;
   customerNote?: string;
   items: ICheckoutItemInput[];
   fbp?: string;
