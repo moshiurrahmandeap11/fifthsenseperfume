@@ -253,3 +253,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
     setCustomerEmail((prev) => prev || initialUser.email || "");
     setShippingAddress((prev) => prev || initialUser.address || "");
   }, [initialUser]);
+
+  const { data: shippingQuoteRes, isFetching: isQuoteFetching } = useQuery({
+    queryKey: ["shipping-quote", division, district, thana, subtotal],
+    queryFn: () =>
+      getShippingQuote({
+        division,
+        district,
+        thana,
+        subtotal,
+      }),
+    enabled: Boolean(division && district),
+  });
+
+  const shippingQuote = shippingQuoteRes?.data;
+  const deliveryZone: DeliveryZone =
