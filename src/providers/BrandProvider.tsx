@@ -24,6 +24,8 @@ export interface BrandContextValue {
   outsideDhakaShipping: number;
   freeShippingThreshold: number;
   enabledPaymentMethods: string[];
+  loyaltyPointsPer100Bdt: number;
+  loyaltyPointValueBdt: number;
 }
 
 const DEFAULT_BRAND: BrandContextValue = {
