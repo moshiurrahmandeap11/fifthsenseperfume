@@ -208,3 +208,33 @@ export default function CustomerAddressesClient({
     <div className="space-y-6">
       <div className="border-b border-neutral-200 dark:border-neutral-800 pb-4 flex flex-wrap items-center justify-between gap-4">
         <div>
+          <h1 className="font-heading font-serif text-2xl sm:text-3xl font-normal text-neutral-950 dark:text-white uppercase">
+            Saved Addresses
+          </h1>
+          <p className="text-xs font-sans text-neutral-500 mt-1">
+            Manage your delivery destinations for faster fragrance checkout.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={openCreateForm}
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#09090b] text-white dark:bg-white dark:text-black text-xs font-sans uppercase cursor-pointer hover:opacity-90 transition-opacity"
+        >
+          <Plus className="size-3.5" />
+          <span>Add New Address</span>
+        </button>
+      </div>
+
+      {/* Add / Edit Address Form */}
+      {isFormOpen && (
+        <form
+          onSubmit={handleSubmit}
+          className="border border-neutral-300 dark:border-neutral-700 bg-[#f9f6ed]/40 dark:bg-neutral-900/40 p-5 sm:p-6 space-y-4"
+        >
+          <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 pb-3">
+            <h2 className="font-heading font-serif text-lg font-normal text-neutral-950 dark:text-white uppercase">
+              {editingId ? "Edit Address" : "New Delivery Address"}
+            </h2>
+            <button
+              type="button"
