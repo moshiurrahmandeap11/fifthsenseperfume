@@ -178,3 +178,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completedOrder, setCompletedOrder] = useState<IOrder | null>(null);
 
+  const lastCapturedPhoneRef = useRef<string>("");
+  const hasHydratedDraftRef = useRef(false);
+  const sessionKeyRef = useRef<string>(
+    `chk_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+  );
+
+  // Restore saved checkout draft from localStorage on mount (before user fallback)
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(CHECKOUT_DRAFT_STORAGE_KEY);
+      if (raw) {
+        const draft = JSON.parse(raw) as CheckoutDraft;
+        if (typeof draft.customerName === "string") setCustomerName(draft.customerName);
+        if (typeof draft.customerPhone === "string") setCustomerPhone(draft.customerPhone);
+        if (typeof draft.customerEmail === "string") setCustomerEmail(draft.customerEmail);
