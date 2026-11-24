@@ -98,3 +98,4 @@ export default function StripePaymentCancelPage() {
 // Stripe cancel redirect note 9
 // Stripe cancel redirect note 12
 // Stripe cancel redirect note 15
+// Stripe cancel redirect note 18
