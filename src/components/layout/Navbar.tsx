@@ -213,7 +213,24 @@ export default function Navbar({ initialUser }: NavbarProps) {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-transparent pointer-events-none rounded-none">
+    <>
+      <div
+        aria-hidden="true"
+        className={cn("w-full shrink-0", !headerHeight && "h-[116px] sm:h-[132px]")}
+        style={headerHeight ? { height: `${headerHeight}px` } : undefined}
+      />
+      <motion.header
+        ref={headerRef}
+        animate={{
+          width: isDrawerOpen && !isMobile ? "calc(100% - 440px)" : "100%",
+        }}
+        transition={{
+          duration: 0.38,
+          ease: [0.22, 1, 0.36, 1],
+          delay: isDrawerOpen ? 0 : 0.02,
+        }}
+        className="fixed top-0 left-0 z-40 w-full bg-transparent pointer-events-none rounded-none"
+      >
       {/* 1. Black Top Announcement Bar */}
       <div className="pointer-events-auto">
         <TopBar message={brand.announcementText} />
