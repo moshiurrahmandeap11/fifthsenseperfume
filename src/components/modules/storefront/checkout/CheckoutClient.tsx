@@ -868,3 +868,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
               ))}
             </div>
 
+            {/* Coupon Input */}
+            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800">
+              {activeCoupon ? (
+                <div className="flex items-center justify-between px-3 py-2 bg-[#f9f6ed] dark:bg-neutral-900 border border-[#c5a059]/50 text-xs font-sans">
+                  <div className="flex items-center gap-2 text-[#9d8354] dark:text-[#cfb98f]">
+                    <Tag className="size-3.5" />
+                    <span>
+                      {activeCoupon.code} (-{activeCoupon.discountPercent}%)
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={removeCoupon}
+                    className="text-[11px] underline text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white cursor-pointer"
+                  >
