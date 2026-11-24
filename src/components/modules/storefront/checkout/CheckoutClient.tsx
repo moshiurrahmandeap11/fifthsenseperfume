@@ -418,3 +418,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
   };
 
   // 1. Order Confirmation / Thank You Screen
+  if (completedOrder) {
+    return (
+      <section className="min-h-[75vh] bg-white dark:bg-neutral-950 py-14 sm:py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto border border-neutral-200 dark:border-neutral-800 bg-[#f9f6ed]/40 dark:bg-neutral-900/40 p-7 sm:p-12 text-center">
+          <div className="size-16 mx-auto mb-6 flex items-center justify-center bg-[#09090b] text-[#c5a059]">
+            <CheckCircle2 className="size-8 stroke-[1.5]" />
+          </div>
+
+          <p className="text-[11px] font-sans uppercase tracking-[0.2em] text-[#9d8354] mb-2">
+            Order Confirmed
+          </p>
+          <h1 className="font-heading font-serif text-3xl sm:text-4xl font-normal text-neutral-950 dark:text-white mb-3">
+            Thank You, {completedOrder.customerName}
+          </h1>
+          <p className="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-md mx-auto leading-relaxed mb-8">
