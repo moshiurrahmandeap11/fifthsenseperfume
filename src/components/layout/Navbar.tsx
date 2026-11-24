@@ -49,7 +49,29 @@ export default function Navbar({ initialUser }: NavbarProps) {
   const user =
     currentUser ?? (session?.user as unknown as IUser | undefined) ?? null;
 
-  const { totalQuantity, openDrawer } = useCart();
+  const { totalQuantity, openDrawer, isDrawerOpen } = useCart();
+
+  const headerRef = useRef<HTMLElement>(null);
+  const [headerHeight, setHeaderHeight] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const updateHeight = () => setHeaderHeight(el.offsetHeight);
+    updateHeight();
+    const ro = new ResizeObserver(updateHeight);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const [prevPathname, setPrevPathname] = useState(pathname);
   const [showNavLinks, setShowNavLinks] = useState(true);
