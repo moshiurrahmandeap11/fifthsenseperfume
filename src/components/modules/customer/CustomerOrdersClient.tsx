@@ -64,3 +64,25 @@ export default function CustomerOrdersClient({
                 key={tab}
                 type="button"
                 onClick={() => setFilter(tab)}
+                className={cn(
+                  "px-3 py-1.5 text-[11px] font-sans uppercase border transition-colors cursor-pointer",
+                  filter === tab
+                    ? "bg-[#09090b] text-white border-[#09090b] dark:bg-white dark:text-black dark:border-white"
+                    : "border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:border-neutral-400"
+                )}
+              >
+                {tab}
+              </button>
+            )
+          )}
+        </div>
+      </div>
+
+      {filteredOrders.length === 0 ? (
+        <div className="border border-neutral-200 dark:border-neutral-800 p-10 text-center space-y-4">
+          <div className="size-14 mx-auto flex items-center justify-center bg-[#f9f6ed] dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+            <Package className="size-6 text-[#c5a059]" />
+          </div>
+          <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white">
+            No Orders Found
+          </h2>
