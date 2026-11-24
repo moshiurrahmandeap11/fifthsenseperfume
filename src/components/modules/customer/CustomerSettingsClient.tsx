@@ -21,3 +21,26 @@ interface CustomerSettingsClientProps {
 }
 
 export default function CustomerSettingsClient({
+  user,
+}: CustomerSettingsClientProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const [name, setName] = useState(user.name || "");
+  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
+  const [gender, setGender] = useState<Gender | "">(user.gender || "");
+  const [address, setAddress] = useState(user.address || "");
+  const [bio, setBio] = useState(user.bio || "");
+  const [image, setImage] = useState(user.image || "");
+
+  const handlePhotoChange = (url: string) => {
+    setImage(url);
+    startTransition(async () => {
+      try {
+        await updateMyProfile({ image: url });
+        toast.success(url ? "Profile photo updated" : "Profile photo removed");
+        router.refresh();
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        toast.error(error?.message || "Failed to save profile photo");
+      }
