@@ -307,37 +307,59 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     writeCartItems(INITIAL_CART_ITEMS, null);
   }, []);
 
-  const applyCoupon = useCallback((rawCode: string) => {
-    const normalized = rawCode.trim().toUpperCase();
-    if (!normalized) {
-      return { ok: false, message: "Please enter a privilege code." };
-    }
+  const applyCoupon = useCallback(
+    async (rawCode: string, options?: { isPrepaid?: boolean }) => {
+      const normalized = rawCode.trim().toUpperCase();
+      if (!normalized) {
+        return { ok: false, message: "Please enter a coupon code." };
+      }
 
-    const rule = AVAILABLE_COUPONS.find(
-      (c) => c.code.toUpperCase() === normalized
-    );
-    if (!rule) {
-      return {
-        ok: false,
-        message: "Invalid code. Try BUY2 (20% off 2+ items) or FIFTH10.",
-      };
-    }
+      const current = readCartSnapshot();
+      const cartSubtotal = current.items.reduce((sum, i) => sum + i.itemTotal, 0);
+      const qtyTotal = current.items.reduce((sum, i) => sum + i.quantity, 0);
 
-    const current = readCartSnapshot();
-    const qtyTotal = current.items.reduce((sum, i) => sum + i.quantity, 0);
-    if (qtyTotal < rule.minQuantity) {
-      return {
-        ok: false,
-        message: `Add at least ${rule.minQuantity} fragrances to unlock ${rule.code} (${rule.discountPercent}% off).`,
-      };
-    }
+      try {
+        const res = await applyCouponApi({
+          code: normalized,
+          cartSubtotal,
+          totalPairs: qtyTotal || 1,
+          isPrepaid: options?.isPrepaid,
+        });
 
-    writeCartItems(current.items, rule.code);
-    return {
-      ok: true,
-      message: `${rule.code} applied — ${rule.discountPercent}% privilege unlocked.`,
-    };
-  }, []);
+        const data = res?.data;
+        if (!data || !data.isValid) {
+          return {
+            ok: false,
+            message: res?.message || "Invalid or inactive coupon code.",
+          };
+        }
+
+        const rule: CartCouponRule = {
+          code: data.code,
+          discountType: data.discountType,
+          discountValue: data.discountValue,
+          discountAmount: data.discountAmount,
+          discountPercent:
+            data.discountType === "PERCENTAGE" ? data.discountValue : undefined,
+        };
+
+        writeCartItems(current.items, JSON.stringify(rule));
+        return {
+          ok: true,
+          message:
+            data.message ||
+            `${data.code} applied — ৳${data.discountAmount} discount unlocked.`,
+        };
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        return {
+          ok: false,
+          message: error?.message || "Invalid or inactive coupon code.",
+        };
+      }
+    },
+    []
+  );
 
   const removeCoupon = useCallback(() => {
     const current = readCartSnapshot();
