@@ -12,6 +12,10 @@ import { formatFragrancePrice } from "./cartUtils";
 import CartQuantityStepper from "./CartQuantityStepper";
 import { cn } from "@/lib/utils";
 
+/**
+ * Slide-over fragrance bag drawer with desktop side-by-side layout shrink,
+ * outside-click dismissal, and direct checkout navigation.
+ */
 export default function CartDrawer() {
   const {
     items,
