@@ -73,29 +73,9 @@ const PAYMENT_OPTIONS: Array<{
     subtitle: "Pay in cash upon receiving your fragrance parcel",
   },
   {
-    value: "BKASH",
-    label: "bKash",
-    subtitle: "Instant mobile wallet payment",
-  },
-  {
-    value: "NAGAD",
-    label: "Nagad",
-    subtitle: "Fast digital wallet checkout",
-  },
-  {
-    value: "ROCKET",
-    label: "Rocket",
-    subtitle: "DBBL Rocket mobile banking",
-  },
-  {
-    value: "SSLCOMMERZ",
-    label: "Card / Online Banking",
-    subtitle: "Visa, Mastercard, AMEX & Net Banking",
-  },
-  {
-    value: "AAMARPAY",
-    label: "aamarPay",
-    subtitle: "Cards, Mobile Wallets & Net Banking",
+    value: "STRIPE",
+    label: "Card Payment",
+    subtitle: "Pay securely with Visa, Mastercard or AMEX via Stripe",
   },
 ];
 
