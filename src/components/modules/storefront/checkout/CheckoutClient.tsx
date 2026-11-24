@@ -688,3 +688,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                     Thana / Area <span className="text-red-500">*</span>
                   </label>
                   <Select
+                    value={thana}
+                    onValueChange={(val) => setThana(val || "")}
+                    disabled={!district || isThanasLoading || thanas.length === 0}
+                  >
+                    <SelectTrigger className="w-full h-11 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs font-sans">
+                      <SelectValue
+                        placeholder={
+                          isThanasLoading
+                            ? "Loading areas..."
+                            : district
+                              ? "Select thana / area"
+                              : "Select district first"
+                        }
+                      />
+                    </SelectTrigger>
