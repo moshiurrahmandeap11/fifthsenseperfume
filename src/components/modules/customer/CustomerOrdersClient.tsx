@@ -130,3 +130,25 @@ export default function CustomerOrdersClient({
                     </div>
                     <p className="text-[11px] font-sans text-neutral-500">
                       Placed on{" "}
+                      {new Date(order.createdAt).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}{" "}
+                      &bull; {order.items?.length || 0} fragrance item(s)
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <span className="block text-[10px] uppercase text-neutral-400">
+                        Total
+                      </span>
+                      <span className="text-sm font-sans font-medium text-neutral-950 dark:text-white tabular-nums">
+                        ৳{formatFragrancePrice(order.totalAmount)}
+                      </span>
+                    </div>
+                    {isExpanded ? (
+                      <ChevronUp className="size-4 text-neutral-500" />
+                    ) : (
+                      <ChevronDown className="size-4 text-neutral-500" />
