@@ -103,3 +103,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
     subtotal,
     discountAmount,
     activeCoupon,
+    applyCoupon,
+    removeCoupon,
+    clearCart,
+  } = useCart();
+
+  const freeShippingThreshold = brand.freeShippingThreshold || 5000;
+
+  const [customerName, setCustomerName] = useState(initialUser?.name || "");
+  const [customerPhone, setCustomerPhone] = useState(initialUser?.phoneNumber || "");
+  const [customerEmail, setCustomerEmail] = useState(initialUser?.email || "");
+  const [division, setDivision] = useState("Dhaka");
+  const [district, setDistrict] = useState("Dhaka");
+  const [thana, setThana] = useState("");
+
+  const { data: divisionsRes, isLoading: isDivisionsLoading } = useQuery({
