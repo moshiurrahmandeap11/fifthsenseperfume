@@ -6,3 +6,12 @@ import CustomerOrdersClient from "@/components/modules/customer/CustomerOrdersCl
 
 export const metadata: Metadata = {
   title: "My Orders | FIFTH SENSE PERFUMES",
+  description: "Track and manage your fragrance orders.",
+};
+
+export default async function CustomerOrdersPage() {
+  await connection();
+  const res = await getMyOrders().catch(() => ({ data: [] }));
+
+  return <CustomerOrdersClient initialOrders={res?.data || []} />;
+}
