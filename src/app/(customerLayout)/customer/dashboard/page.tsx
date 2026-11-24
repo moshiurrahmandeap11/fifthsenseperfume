@@ -159,3 +159,26 @@ export default async function CustomerDashboardPage() {
               >
                 <div>
                   <p className="font-mono font-medium text-neutral-950 dark:text-white">
+                    {order.orderNumber}
+                  </p>
+                  <p className="text-[11px] text-neutral-500 mt-0.5">
+                    {new Date(order.createdAt).toLocaleDateString()} &bull;{" "}
+                    {order.items?.length || 0} item(s)
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <span className="px-2.5 py-1 text-[10px] uppercase tracking-wider border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200">
+                    {order.status.replace(/_/g, " ")}
+                  </span>
+                  <span className="font-medium text-neutral-950 dark:text-white tabular-nums">
+                    ৳{formatFragrancePrice(order.totalAmount)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Quick Profile Snapshot */}
