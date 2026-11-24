@@ -808,3 +808,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
                           {opt.label}
+                        </span>
+                        <span
+                          className={cn(
+                            "size-3.5 rounded-full border flex items-center justify-center",
+                            isSelected
+                              ? "border-black dark:border-white"
+                              : "border-neutral-400"
+                          )}
+                        >
+                          {isSelected && (
+                            <span className="size-2 rounded-full bg-black dark:bg-white" />
+                          )}
+                        </span>
+                      </div>
+                      <p className="text-[11px] font-sans text-neutral-500">
