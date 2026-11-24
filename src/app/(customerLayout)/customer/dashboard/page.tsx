@@ -136,3 +136,26 @@ export default async function CustomerDashboardPage() {
             <ArrowRight className="size-3.5" />
           </Link>
         </div>
+
+        {recentOrders.length === 0 ? (
+          <div className="py-8 text-center space-y-3">
+            <p className="text-xs font-sans text-neutral-500">
+              You haven&apos;t placed any fragrance orders yet.
+            </p>
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#09090b] text-white dark:bg-white dark:text-black text-xs font-sans uppercase"
+            >
+              <span>Explore Fragrances</span>
+              <ArrowRight className="size-3.5" />
+            </Link>
+          </div>
+        ) : (
+          <div className="divide-y divide-neutral-100 dark:divide-neutral-900">
+            {recentOrders.map((order) => (
+              <div
+                key={order.id}
+                className="py-3.5 flex flex-wrap items-center justify-between gap-3 text-xs font-sans"
+              >
+                <div>
+                  <p className="font-mono font-medium text-neutral-950 dark:text-white">
