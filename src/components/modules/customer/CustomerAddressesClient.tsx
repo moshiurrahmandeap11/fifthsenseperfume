@@ -178,3 +178,33 @@ export default function CustomerAddressesClient({
         const error = err as { message?: string };
         toast.error(error?.message || "Failed to save address");
       }
+    });
+  };
+
+  const handleDelete = async (addr: ICustomerAddress) => {
+    const confirmed = await confirmAction({
+      title: `Remove ${addr.label} address?`,
+      text: "This delivery address will be removed from your account.",
+      confirmText: "Delete",
+      cancelText: "Keep",
+      variant: "destructive",
+    });
+    if (!confirmed) return;
+
+    startTransition(async () => {
+      try {
+        await deleteAddress(addr.id);
+        setAddresses((prev) => prev.filter((a) => a.id !== addr.id));
+        toast.success("Address removed");
+        router.refresh();
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        toast.error(error?.message || "Failed to delete address");
+      }
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="border-b border-neutral-200 dark:border-neutral-800 pb-4 flex flex-wrap items-center justify-between gap-4">
+        <div>
