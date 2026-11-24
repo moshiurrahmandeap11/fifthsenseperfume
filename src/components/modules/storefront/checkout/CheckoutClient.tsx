@@ -1041,7 +1041,13 @@ export default function CheckoutClient({
                   <div className="flex items-center gap-2 text-[#9d8354] dark:text-[#cfb98f]">
                     <Tag className="size-3.5" />
                     <span>
-                      {activeCoupon.code} (-{activeCoupon.discountPercent}%)
+                      {activeCoupon.code} (
+                      {activeCoupon.discountType === "PERCENTAGE"
+                        ? `-${activeCoupon.discountValue}%`
+                        : activeCoupon.discountType === "FIXED"
+                        ? `-৳${activeCoupon.discountValue}`
+                        : "Free Shipping"}
+                      )
                     </span>
                   </div>
                   <button
