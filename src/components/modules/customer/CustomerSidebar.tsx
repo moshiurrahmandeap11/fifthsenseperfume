@@ -152,3 +152,25 @@ export default function CustomerSidebar({ user }: CustomerSidebarProps) {
               <div className="relative size-8 shrink-0 overflow-hidden border border-border rounded-full">
                 <Image
                   src={user.image}
+                  alt={user.name}
+                  fill
+                  sizes="32px"
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <div className="size-8 shrink-0 bg-neutral-900 text-white dark:bg-white dark:text-black flex items-center justify-center text-xs font-medium rounded-full">
+                {initials}
+              </div>
+            )}
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-medium text-foreground truncate">
+                {user.name}
+              </p>
+              <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                {user.emailVerified ? (
+                  <>
+                    <CheckCircle2 className="size-2.5 text-emerald-500" />
+                    <span>Verified</span>
+                  </>
+                ) : (
