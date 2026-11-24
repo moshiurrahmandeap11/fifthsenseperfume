@@ -508,3 +508,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
           <ShoppingBag className="size-7 stroke-[1.25] text-[#c6b189]" />
         </div>
         <h1 className="font-heading font-serif text-3xl font-normal text-neutral-950 dark:text-white mb-2">
+          Your Bag is Empty
+        </h1>
+        <p className="font-sans text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-sm mb-7">
+          Add your signature fragrances to your bag before proceeding to checkout.
+        </p>
+        <Link
+          href="/products"
+          className="px-7 py-3 bg-[#232323] hover:bg-black text-white dark:bg-white dark:text-black text-xs font-sans font-medium uppercase tracking-normal transition-colors flex items-center gap-2"
+        >
+          <span>Explore Fragrances</span>
+          <ArrowRight className="size-3.5" />
+        </Link>
+      </section>
+    );
+  }
