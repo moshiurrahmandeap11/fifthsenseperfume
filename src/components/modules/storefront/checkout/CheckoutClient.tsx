@@ -43,3 +43,18 @@ import { cn } from "@/lib/utils";
 interface CheckoutClientProps {
   initialUser: IUser | null;
 }
+
+const CHECKOUT_DRAFT_STORAGE_KEY = "fifthsense_checkout_draft_v1";
+
+interface CheckoutDraft {
+  customerName?: string;
+  customerPhone?: string;
+  customerEmail?: string;
+  division?: string;
+  district?: string;
+  thana?: string;
+  shippingAddress?: string;
+  customerNote?: string;
+  paymentMethod?: PaymentMethod;
+  couponInput?: string;
+}
