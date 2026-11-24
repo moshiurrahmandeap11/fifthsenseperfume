@@ -425,3 +425,4 @@ export function useCart() {
 // Cart coupon sync note 4
 // Cart coupon sync note 7
 // Cart coupon sync note 10
+// Cart coupon sync note 13
