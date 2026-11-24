@@ -650,7 +650,7 @@ export default function SystemSettingsClient({
                 </CardHeader>
                 <CardContent className="pt-5 space-y-6">
                   {/* Delivery & Shipping Charges */}
-                  <div className="space-y-3 pt-4 border-t border-border/40">
+                  <div className="space-y-3">
                     <div>
                       <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
                         Delivery &amp; Shipping Charges (৳)
@@ -813,7 +813,7 @@ export default function SystemSettingsClient({
                       className="text-xs font-normal cursor-pointer gap-1.5"
                     >
                       <Save className="size-3.5" />
-                      <span>{isPending ? "Saving..." : "Save Settings"}</span>
+                      <span>{isPending ? "Saving..." : "Save Shipping & Payments"}</span>
                     </Button>
                   </div>
                 </CardContent>
