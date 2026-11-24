@@ -298,3 +298,33 @@ export default function CustomerAddressesClient({
               <Select
                 value={division}
                 onValueChange={(v) => {
+                  if (!v) return;
+                  setDivision(v);
+                  setDistrict("");
+                  setThana("");
+                }}
+              >
+                <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
+                  <SelectValue placeholder="Select division" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {divisions.map((d) => (
+                    <SelectItem key={d} value={d}>
+                      {d}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                District <span className="text-red-500">*</span>
+              </label>
+              <Select
+                value={district}
+                onValueChange={(v) => {
+                  if (!v) return;
+                  setDistrict(v);
+                  setThana("");
+                }}
