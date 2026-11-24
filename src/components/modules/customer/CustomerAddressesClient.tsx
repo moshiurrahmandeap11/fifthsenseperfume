@@ -148,3 +148,33 @@ export default function CustomerAddressesClient({
                 return isDefault ? { ...a, isDefault: false } : a;
               })
             );
+            toast.success("Address updated");
+          }
+        } else {
+          const res = await createAddress({
+            label,
+            recipientName: recipientName.trim(),
+            phoneNumber: phoneNumber.trim(),
+            division,
+            district,
+            thana,
+            fullAddress: fullAddress.trim(),
+            deliveryZone,
+            isDefault,
+          });
+          if (res?.data) {
+            setAddresses((prev) =>
+              isDefault
+                ? [res.data!, ...prev.map((a) => ({ ...a, isDefault: false }))]
+                : [...prev, res.data!]
+            );
+            toast.success("Address added");
+          }
+        }
+
+        setIsFormOpen(false);
+        router.refresh();
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        toast.error(error?.message || "Failed to save address");
+      }
