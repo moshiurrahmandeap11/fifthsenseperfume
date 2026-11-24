@@ -610,6 +610,162 @@ export default function SystemSettingsClient({
                     </div>
                   </div>
 
+                  {/* Delivery & Shipping Charges */}
+                  <div className="space-y-3 pt-4 border-t border-border/40">
+                    <div>
+                      <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                        Delivery &amp; Shipping Charges (৳)
+                      </Label>
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
+                        Configure zone-based delivery fees and free shipping threshold shown at checkout.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Inside Dhaka (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={settings.insideDhakaShipping ?? 60}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              insideDhakaShipping: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Dhaka Sub-Area (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={settings.dhakaSubAreaShipping ?? 100}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              dhakaSubAreaShipping: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Outside Dhaka (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={settings.outsideDhakaShipping ?? 120}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              outsideDhakaShipping: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Free Shipping Min (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          placeholder="e.g. 5000"
+                          value={settings.freeShippingThreshold ?? ""}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              freeShippingThreshold:
+                                e.target.value === ""
+                                  ? null
+                                  : Number(e.target.value),
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Storefront Payment Methods */}
+                  <div className="space-y-3 pt-4 border-t border-border/40">
+                    <div>
+                      <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                        Checkout Payment Methods
+                      </Label>
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
+                        Select which payment options customers can use at checkout.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                      {[
+                        { id: "COD", label: "Cash on Delivery" },
+                        { id: "BKASH", label: "bKash" },
+                        { id: "NAGAD", label: "Nagad" },
+                        { id: "ROCKET", label: "Rocket" },
+                        { id: "SSLCOMMERZ", label: "SSLCommerz / Card" },
+                        { id: "AAMARPAY", label: "aamarPay" },
+                      ].map((method) => {
+                        const current =
+                          settings.enabledPaymentMethods &&
+                          settings.enabledPaymentMethods.length > 0
+                            ? settings.enabledPaymentMethods
+                            : ["COD", "BKASH", "NAGAD", "SSLCOMMERZ"];
+                        const isEnabled = current.includes(method.id);
+
+                        return (
+                          <button
+                            key={method.id}
+                            type="button"
+                            onClick={() => {
+                              if (isEnabled && current.length <= 1) {
+                                toast.error(
+                                  "At least one payment method must remain enabled"
+                                );
+                                return;
+                              }
+                              const next = isEnabled
+                                ? current.filter((m) => m !== method.id)
+                                : [...current, method.id];
+                              setSettings({
+                                ...settings,
+                                enabledPaymentMethods: next,
+                              });
+                            }}
+                            className={`flex items-center justify-between px-3 py-2.5 rounded border text-left text-xs transition-colors cursor-pointer ${
+                              isEnabled
+                                ? "border-foreground bg-foreground/5 text-foreground"
+                                : "border-border/60 text-muted-foreground hover:border-border"
+                            }`}
+                          >
+                            <span className="font-normal">{method.label}</span>
+                            <span
+                              className={`size-2.5 rounded-full border ${
+                                isEnabled
+                                  ? "bg-emerald-500 border-emerald-500"
+                                  : "bg-transparent border-muted-foreground/40"
+                              }`}
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   <div className="pt-2 flex justify-end">
                     <Button
                       size="sm"
