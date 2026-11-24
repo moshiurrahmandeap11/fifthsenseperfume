@@ -263,7 +263,13 @@ export default function CartDrawer() {
                       <div className="flex items-center justify-between text-[#9d8354] dark:text-[#cfb98f]">
                         <div className="flex items-center gap-1.5">
                           <span>
-                            Privilege ({activeCoupon.code} -{activeCoupon.discountPercent}%)
+                            Privilege ({activeCoupon.code}{" "}
+                            {activeCoupon.discountType === "PERCENTAGE"
+                              ? `-${activeCoupon.discountValue}%`
+                              : activeCoupon.discountType === "FIXED"
+                              ? `-৳${activeCoupon.discountValue}`
+                              : "Free Shipping"}
+                            )
                           </span>
                           <button
                             type="button"
