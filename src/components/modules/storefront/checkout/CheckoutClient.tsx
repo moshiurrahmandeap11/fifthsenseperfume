@@ -24,6 +24,7 @@ import { useCart } from "@/providers/CartProvider";
 import { useBrand } from "@/providers/BrandProvider";
 import { formatFragrancePrice } from "../cart/cartUtils";
 import { checkoutOrder, incompleteCapture } from "@/services/order.services";
+import { initiatePayment } from "@/services/payment.services";
 import { createAddress } from "@/services/user.services";
 import {
   getBangladeshLocations,
