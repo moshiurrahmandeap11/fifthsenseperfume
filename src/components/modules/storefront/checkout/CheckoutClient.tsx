@@ -478,3 +478,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
             >
               <span>Continue Shopping</span>
               <ArrowRight className="size-3.5" />
+            </Link>
+            {initialUser ? (
+              <Link
+                href="/customer/dashboard"
+                className="w-full sm:w-auto px-7 py-3 border border-neutral-900 dark:border-neutral-300 text-neutral-950 dark:text-neutral-100 hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-black text-xs font-sans font-medium uppercase tracking-normal transition-colors text-center"
+              >
+                View My Orders
+              </Link>
+            ) : (
+              <Link
+                href="/contact"
+                className="w-full sm:w-auto px-7 py-3 border border-neutral-900 dark:border-neutral-300 text-neutral-950 dark:text-neutral-100 hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-black text-xs font-sans font-medium uppercase tracking-normal transition-colors text-center"
+              >
+                Need Help?
+              </Link>
