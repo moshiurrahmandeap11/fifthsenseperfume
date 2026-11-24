@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import { useCart } from "@/providers/CartProvider";
 import { formatFragrancePrice } from "./cartUtils";
 import CartQuantityStepper from "./CartQuantityStepper";
-import CartPromoBanner from "./CartPromoBanner";
 import { cn } from "@/lib/utils";
 
 export default function CartDrawer() {
@@ -127,10 +126,7 @@ export default function CartDrawer() {
               </button>
             </div>
 
-            {/* 2. BUY2 Luxury Promo Progress Strip */}
-            <CartPromoBanner />
-
-            {/* 3. Drawer Body: Items or Editorial Empty State */}
+            {/* 2. Drawer Body: Items or Editorial Empty State */}
             {items.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center select-none">
                 <div className="size-16 flex items-center justify-center bg-[#f9f6ed] dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 mb-5 rounded-none">
