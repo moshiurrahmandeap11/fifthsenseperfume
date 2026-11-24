@@ -219,7 +219,12 @@ export default function CheckoutClient({
         if (typeof draft.division === "string") setDivision(draft.division);
         if (typeof draft.district === "string") setDistrict(draft.district);
         if (typeof draft.thana === "string") setThana(draft.thana);
-        if (typeof draft.shippingAddress === "string") setShippingAddress(draft.shippingAddress);
+        if (typeof draft.shippingAddress === "string") {
+          setShippingAddress(draft.shippingAddress);
+          if (draft.shippingAddress.trim().length > 0 && draft.thana) {
+            hasDraftAddress = true;
+          }
+        }
         if (typeof draft.customerNote === "string") setCustomerNote(draft.customerNote);
         if (draft.paymentMethod) setPaymentMethod(draft.paymentMethod);
         if (typeof draft.couponInput === "string") setCouponInput(draft.couponInput);
@@ -227,9 +232,35 @@ export default function CheckoutClient({
     } catch {
       // ignore storage read errors
     } finally {
+      if (!hasDraftAddress && defaultSavedAddress) {
+        setSelectedAddressId(defaultSavedAddress.id);
+        setCustomerName((prev) => prev || defaultSavedAddress.recipientName);
+        setCustomerPhone((prev) => prev || defaultSavedAddress.phoneNumber);
+        setDivision(defaultSavedAddress.division);
+        setDistrict(defaultSavedAddress.district);
+        setThana(defaultSavedAddress.thana);
+        setShippingAddress(defaultSavedAddress.fullAddress);
+      }
       hasHydratedDraftRef.current = true;
     }
-  }, []);
+  }, [defaultSavedAddress]);
+
+  const handleSelectSavedAddress = (addr: ICustomerAddress) => {
+    setSelectedAddressId(addr.id);
+    setSaveNewAddress(false);
+    setCustomerName(addr.recipientName);
+    setCustomerPhone(addr.phoneNumber);
+    setDivision(addr.division);
+    setDistrict(addr.district);
+    setThana(addr.thana);
+    setShippingAddress(addr.fullAddress);
+  };
+
+  const handleSelectNewAddress = () => {
+    setSelectedAddressId("NEW");
+    setThana("");
+    setShippingAddress("");
+  };
 
   // Persist checkout form inputs across page refreshes
   useEffect(() => {
@@ -296,7 +327,17 @@ export default function CheckoutClient({
   const effectiveFreeThreshold =
     shippingQuote?.freeShippingThreshold ?? freeShippingThreshold;
 
-  const netSubtotal = Math.max(0, subtotal - discountAmount);
+  const userPoints = initialUser?.loyaltyPoints || 0;
+  const pointValueBdt = brand.loyaltyPointValueBdt ?? 1;
+  const remainingAfterCoupon = Math.max(0, subtotal - discountAmount);
+  const maxRedeemablePoints =
+    pointValueBdt > 0
+      ? Math.min(userPoints, Math.floor(remainingAfterCoupon / pointValueBdt))
+      : 0;
+  const redeemedPoints = useLoyaltyPoints ? maxRedeemablePoints : 0;
+  const loyaltyDiscount = redeemedPoints * pointValueBdt;
+
+  const netSubtotal = Math.max(0, remainingAfterCoupon - loyaltyDiscount);
   const grandTotal = netSubtotal + selectedZoneCharge;
 
   // Silent Abandoned Cart Capture when phone number reaches >= 10 digits
