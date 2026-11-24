@@ -113,3 +113,26 @@ export default async function CustomerDashboardPage() {
             </span>
             <MapPin className="size-4 text-[#c5a059]" />
           </div>
+          <p className="text-2xl font-serif text-neutral-950 dark:text-white">
+            {addresses.length}
+          </p>
+          <p className="text-[11px] font-sans text-neutral-500 mt-1">
+            Ready for express checkout
+          </p>
+        </div>
+      </div>
+
+      {/* Recent Orders */}
+      <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 space-y-4">
+        <div className="flex items-center justify-between border-b border-neutral-100 dark:border-neutral-900 pb-3">
+          <h2 className="font-heading font-serif text-lg sm:text-xl font-normal text-neutral-950 dark:text-white uppercase">
+            Recent Orders
+          </h2>
+          <Link
+            href="/customer/orders"
+            className="inline-flex items-center gap-1 text-xs font-sans text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
+          >
+            <span>View All Orders</span>
+            <ArrowRight className="size-3.5" />
+          </Link>
+        </div>
