@@ -58,3 +58,33 @@ export default function CustomerAddressesClient({
   const [division, setDivision] = useState("Dhaka");
   const [district, setDistrict] = useState("Dhaka");
   const [thana, setThana] = useState("");
+  const [fullAddress, setFullAddress] = useState("");
+  const [isDefault, setIsDefault] = useState(false);
+
+  const { data: divisionsRes } = useQuery({
+    queryKey: ["bd-locations", "divisions"],
+    queryFn: () => getBangladeshLocations(),
+    staleTime: Infinity,
+  });
+
+  const { data: districtsRes } = useQuery({
+    queryKey: ["bd-locations", "districts", division],
+    queryFn: () => getBangladeshLocations({ division }),
+    enabled: Boolean(division),
+    staleTime: Infinity,
+  });
+
+  const { data: thanasRes } = useQuery({
+    queryKey: ["bd-locations", "thanas", district],
+    queryFn: () => getBangladeshLocations({ district }),
+    enabled: Boolean(district),
+    staleTime: Infinity,
+  });
+
+  const { data: shippingQuoteRes } = useQuery({
+    queryKey: ["shipping-quote", division, district, thana, 0],
+    queryFn: () => getShippingQuote({ division, district, thana, subtotal: 0 }),
+    enabled: Boolean(division && district),
+  });
+
+  const divisions = divisionsRes?.data?.divisions ?? [];
