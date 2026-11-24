@@ -466,6 +466,22 @@ export default function CheckoutClient({
             // Do not block order confirmation if address save fails
           });
         }
+        if (paymentMethod === "STRIPE") {
+          const paymentRes = await initiatePayment({
+            orderId: response.data.id,
+            method: "STRIPE",
+            transactionType: "FULL_PREPAID",
+          });
+          const redirectUrl =
+            paymentRes?.data?.redirectUrl || paymentRes?.data?.gatewayUrl;
+          if (!redirectUrl) {
+            throw new Error("Could not initialize Stripe checkout session.");
+          }
+          toast.loading("Redirecting to Stripe secure checkout...");
+          window.location.href = redirectUrl;
+          return;
+        }
+
         setCompletedOrder(response.data);
         clearCart();
         try {
