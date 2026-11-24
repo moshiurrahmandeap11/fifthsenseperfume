@@ -147,7 +147,10 @@ interface CartContextValue {
   removeItem: (itemId: string) => void;
   clearCart: () => void;
   restoreSampleCart: () => void;
-  applyCoupon: (code: string) => { ok: boolean; message: string };
+  applyCoupon: (
+    code: string,
+    options?: { isPrepaid?: boolean }
+  ) => Promise<{ ok: boolean; message: string }>;
   removeCoupon: () => void;
 }
 
