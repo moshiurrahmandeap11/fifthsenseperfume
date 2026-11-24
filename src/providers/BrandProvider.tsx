@@ -41,6 +41,11 @@ const DEFAULT_BRAND: BrandContextValue = {
   whatsappNumber: "+880 1700-000000",
   announcementText:
     "Complimentary discovery sample included with every flacon order.",
+  insideDhakaShipping: 60,
+  dhakaSubAreaShipping: 100,
+  outsideDhakaShipping: 120,
+  freeShippingThreshold: 5000,
+  enabledPaymentMethods: ["COD", "BKASH", "NAGAD", "SSLCOMMERZ"],
 };
 
 const BrandContext = createContext<BrandContextValue>(DEFAULT_BRAND);
