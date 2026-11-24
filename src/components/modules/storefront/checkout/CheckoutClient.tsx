@@ -628,3 +628,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
               {/* Cascading Location Selectors (Division -> District -> Thana) */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Division <span className="text-red-500">*</span>
+                  </label>
+                  <Select
+                    value={division}
+                    onValueChange={(val) => val && handleDivisionChange(val)}
+                    disabled={isDivisionsLoading}
+                  >
+                    <SelectTrigger className="w-full h-11 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs font-sans">
+                      <SelectValue
+                        placeholder={
+                          isDivisionsLoading ? "Loading divisions..." : "Select division"
+                        }
+                      />
+                    </SelectTrigger>
