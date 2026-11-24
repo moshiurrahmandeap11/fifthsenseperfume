@@ -433,3 +433,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
             Thank You, {completedOrder.customerName}
           </h1>
           <p className="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-md mx-auto leading-relaxed mb-8">
+            Your artisanal fragrance parcel is being carefully prepared. You can track your order anytime using your order number and phone.
+          </p>
+
+          <div className="border-y border-neutral-200 dark:border-neutral-800 py-5 my-6 grid grid-cols-2 sm:grid-cols-4 gap-4 text-left font-sans text-xs">
+            <div>
+              <span className="block text-[10px] uppercase text-neutral-400 mb-1">
+                Order Number
+              </span>
+              <span className="font-mono font-medium text-neutral-950 dark:text-white">
+                {completedOrder.orderNumber}
+              </span>
+            </div>
+            <div>
+              <span className="block text-[10px] uppercase text-neutral-400 mb-1">
+                Phone
