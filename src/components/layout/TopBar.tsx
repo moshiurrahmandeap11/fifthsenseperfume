@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useSyncExternalStore } from "react";
 import { X } from "lucide-react";
 import { useBrand } from "@/providers/BrandProvider";
 
@@ -8,16 +8,53 @@ interface TopBarProps {
   message?: string;
 }
 
+const DISMISSED_ANNOUNCEMENT_KEY = "fifthsense_dismissed_announcement";
+
+function subscribeToDismissed(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener("announcement-dismissed", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener("announcement-dismissed", callback);
+  };
+}
+
+function getDismissedSnapshot(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(DISMISSED_ANNOUNCEMENT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function getServerSnapshot(): string | null {
+  return null;
+}
+
 export default function TopBar({ message }: TopBarProps) {
   const brand = useBrand();
-  const [isVisible, setIsVisible] = useState(true);
-
-  if (!isVisible) return null;
+  const dismissedText = useSyncExternalStore(
+    subscribeToDismissed,
+    getDismissedSnapshot,
+    getServerSnapshot
+  );
 
   const content =
     message ||
     brand.announcementText ||
     "Complimentary discovery sample included with every flacon order.";
+
+  if (dismissedText === content) return null;
+
+  const handleDismiss = () => {
+    try {
+      window.localStorage.setItem(DISMISSED_ANNOUNCEMENT_KEY, content);
+      window.dispatchEvent(new Event("announcement-dismissed"));
+    } catch {
+      // ignore storage errors
+    }
+  };
 
   return (
     <aside
@@ -33,7 +70,7 @@ export default function TopBar({ message }: TopBarProps) {
       {/* Close / Dismiss Announcement Button - Positioned at the very right corner of the screen */}
       <button
         type="button"
-        onClick={() => setIsVisible(false)}
+        onClick={handleDismiss}
         className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 hover:text-white transition-colors cursor-pointer rounded-none"
         aria-label="Close announcement"
         title="Dismiss"

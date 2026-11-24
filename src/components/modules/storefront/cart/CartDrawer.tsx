@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,6 +31,7 @@ export default function CartDrawer() {
 
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const drawerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -45,15 +46,30 @@ export default function CartDrawer() {
     return () => mq.removeEventListener("change", handleMediaChange);
   }, []);
 
-  // Close on Escape key press
+  // Close on Escape key press or outside click
   useEffect(() => {
+    if (!isDrawerOpen) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isDrawerOpen) {
+      if (e.key === "Escape") {
         closeDrawer();
       }
     };
+
+    const handleOutsideMouseDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      if (drawerRef.current?.contains(target)) return;
+      if (target.closest('[aria-label="Open Shopping Bag"]')) return;
+      closeDrawer();
+    };
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleOutsideMouseDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleOutsideMouseDown);
+    };
   }, [isDrawerOpen, closeDrawer]);
 
   const handleCheckout = () => {
@@ -89,6 +105,7 @@ export default function CartDrawer() {
       <AnimatePresence>
         {isDrawerOpen && (
           <motion.aside
+            ref={drawerRef}
             key="cart-drawer-panel"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -105,8 +122,8 @@ export default function CartDrawer() {
                 : "right-0 top-0 bottom-0 h-screen w-[440px] border-l border-neutral-200 dark:border-neutral-800"
             )}
           >
-            {/* 1. Drawer Header */}
-            <div className="px-6 py-4 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between bg-white dark:bg-neutral-950 shrink-0">
+            {/* 1. Drawer Header (height aligned with Navbar Row 1: h-18 sm:h-20) */}
+            <div className="h-18 sm:h-20 px-6 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between bg-white dark:bg-neutral-950 shrink-0">
               <div className="flex items-center gap-2.5">
                 <h2 className="font-heading font-serif text-xl sm:text-2xl uppercase tracking-normal font-normal text-neutral-950 dark:text-white">
                   FRAGRANCE BAG

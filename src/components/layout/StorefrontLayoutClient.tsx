@@ -29,14 +29,14 @@ export default function StorefrontLayoutClient({
   return (
     <motion.div
       animate={{
-        marginRight: isDrawerOpen && !isMobile ? 440 : 0,
+        width: isDrawerOpen && !isMobile ? "calc(100% - 440px)" : "100%",
       }}
       transition={{
         duration: 0.38,
         ease: [0.22, 1, 0.36, 1],
         delay: isDrawerOpen ? 0 : 0.02,
       }}
-      className="flex min-h-screen flex-col w-full relative"
+      className="flex min-h-screen flex-col relative"
     >
       {children}
     </motion.div>
