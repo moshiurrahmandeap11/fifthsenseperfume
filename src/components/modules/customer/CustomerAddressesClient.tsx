@@ -238,3 +238,33 @@ export default function CustomerAddressesClient({
             </h2>
             <button
               type="button"
+              onClick={() => setIsFormOpen(false)}
+              className="p-1 text-neutral-500 hover:text-black dark:hover:text-white cursor-pointer"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Label
+              </label>
+              <Select value={label} onValueChange={(v) => v && setLabel(v)}>
+                <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Home">Home</SelectItem>
+                  <SelectItem value="Office">Office</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Recipient Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
