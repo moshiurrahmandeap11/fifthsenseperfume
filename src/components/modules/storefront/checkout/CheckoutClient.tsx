@@ -373,3 +373,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
       return;
     }
     if (cleanAddress.length < 5) {
+      toast.error("Please enter your full delivery address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await checkoutOrder({
+        customerName: cleanName,
+        customerPhone: cleanPhone,
+        customerEmail: customerEmail.trim() || undefined,
+        shippingAddress: cleanAddress,
+        division: division.trim(),
+        district: cleanDistrict,
+        thana: cleanThana,
+        deliveryZone,
