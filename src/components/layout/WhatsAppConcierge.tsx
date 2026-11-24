@@ -3,13 +3,11 @@
 import React from "react";
 import { MessageCircle } from "lucide-react";
 import { useBrand } from "@/providers/BrandProvider";
-import { useCart } from "@/providers/CartProvider";
 
 export default function WhatsAppConcierge() {
   const brand = useBrand();
-  const { isDrawerOpen } = useCart();
 
-  if (!brand.whatsappNumber || isDrawerOpen) return null;
+  if (!brand.whatsappNumber) return null;
 
   const cleanNumber = brand.whatsappNumber.replace(/[^0-9]/g, "");
   if (!cleanNumber) return null;

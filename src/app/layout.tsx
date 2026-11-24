@@ -88,7 +88,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className="min-h-full flex flex-col font-sans bg-black"
+        className="min-h-full flex flex-col font-sans"
         suppressHydrationWarning
       >
         <QueryProvider>
