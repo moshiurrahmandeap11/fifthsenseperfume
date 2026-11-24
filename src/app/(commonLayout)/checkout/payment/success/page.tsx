@@ -190,3 +190,4 @@ export default function StripePaymentSuccessPage() {
 // Stripe success redirect note 5
 // Stripe success redirect note 8
 // Stripe success redirect note 11
+// Stripe success redirect note 14
