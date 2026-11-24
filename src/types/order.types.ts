@@ -30,6 +30,7 @@ export type IncompleteOrderStatus =
 
 export type PaymentMethod =
   | "COD"
+  | "STRIPE"
   | "BKASH"
   | "NAGAD"
   | "ROCKET"
