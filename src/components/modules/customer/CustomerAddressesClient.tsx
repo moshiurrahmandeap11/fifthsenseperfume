@@ -328,3 +328,33 @@ export default function CustomerAddressesClient({
                   setDistrict(v);
                   setThana("");
                 }}
+                disabled={!division || districts.length === 0}
+              >
+                <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
+                  <SelectValue placeholder="Select district" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {districts.map((d) => (
+                    <SelectItem key={d} value={d}>
+                      {d}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Thana / Area <span className="text-red-500">*</span>
+              </label>
+              <Select
+                value={thana}
+                onValueChange={(v) => setThana(v || "")}
+                disabled={!district || thanas.length === 0}
+              >
+                <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
+                  <SelectValue placeholder="Select thana" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {thanas.map((t) => (
+                    <SelectItem key={t} value={t}>
