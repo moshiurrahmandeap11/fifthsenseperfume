@@ -339,6 +339,10 @@ export default function CheckoutClient({
 
   const netSubtotal = Math.max(0, remainingAfterCoupon - loyaltyDiscount);
   const grandTotal = netSubtotal + selectedZoneCharge;
+  const estimatedEarnPoints =
+    (brand.loyaltyPointsPer100Bdt ?? 1) > 0
+      ? Math.floor(netSubtotal / 100) * (brand.loyaltyPointsPer100Bdt ?? 1)
+      : 0;
 
   // Silent Abandoned Cart Capture when phone number reaches >= 10 digits
   useEffect(() => {
@@ -455,6 +459,7 @@ export default function CheckoutClient({
         paymentMethod,
         source: "WEBSITE",
         couponCode: activeCoupon?.code || undefined,
+        redeemPoints: redeemedPoints > 0 ? redeemedPoints : undefined,
         customerNote: customerNote.trim() || undefined,
         items: items.map((item) => ({
           variantId: item.variantId,
@@ -463,6 +468,21 @@ export default function CheckoutClient({
       });
 
       if (response?.data) {
+        if (initialUser && selectedAddressId === "NEW" && saveNewAddress) {
+          createAddress({
+            label: "Home",
+            recipientName: cleanName,
+            phoneNumber: cleanPhone,
+            division: division.trim(),
+            district: cleanDistrict,
+            thana: cleanThana,
+            fullAddress: cleanAddress,
+            deliveryZone,
+            isDefault: initialAddresses.length === 0,
+          }).catch(() => {
+            // Do not block order confirmation if address save fails
+          });
+        }
         setCompletedOrder(response.data);
         clearCart();
         try {
@@ -682,12 +702,84 @@ export default function CheckoutClient({
 
             {/* Step 2: Delivery Address & Auto-Calculated Zone */}
             <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-7 space-y-5">
-              <div className="flex items-center gap-2.5 border-b border-neutral-100 dark:border-neutral-900 pb-3.5">
-                <MapPin className="size-4 text-[#c5a059]" />
-                <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
-                  2. Shipping Destination
-                </h2>
+              <div className="flex items-center justify-between gap-2.5 border-b border-neutral-100 dark:border-neutral-900 pb-3.5">
+                <div className="flex items-center gap-2.5">
+                  <MapPin className="size-4 text-[#c5a059]" />
+                  <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+                    2. Shipping Destination
+                  </h2>
+                </div>
+                {initialUser && (
+                  <Link
+                    href="/customer/addresses"
+                    className="text-[11px] font-sans underline text-neutral-500 hover:text-black dark:hover:text-white"
+                  >
+                    Manage Addresses
+                  </Link>
+                )}
               </div>
+
+              {/* Saved Addresses Picker for Logged-In Customers */}
+              {initialUser && initialAddresses.length > 0 && (
+                <div className="space-y-2.5">
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300">
+                    Saved Delivery Addresses
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {initialAddresses.map((addr) => {
+                      const isSelected = selectedAddressId === addr.id;
+                      return (
+                        <button
+                          key={addr.id}
+                          type="button"
+                          onClick={() => handleSelectSavedAddress(addr)}
+                          className={cn(
+                            "p-3 border text-left transition-colors cursor-pointer space-y-1",
+                            isSelected
+                              ? "border-black dark:border-white bg-[#f9f6ed]/70 dark:bg-neutral-900"
+                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400"
+                          )}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[10px] font-sans uppercase tracking-wider px-1.5 py-0.5 bg-neutral-100 dark:bg-neutral-800 font-medium">
+                              {addr.label}
+                            </span>
+                            {addr.isDefault && (
+                              <span className="text-[10px] font-sans text-emerald-700 dark:text-emerald-400">
+                                Default
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white truncate">
+                            {addr.recipientName} &bull; {addr.phoneNumber}
+                          </p>
+                          <p className="text-[11px] font-sans text-neutral-500 line-clamp-1">
+                            {addr.fullAddress}, {addr.thana}, {addr.district}
+                          </p>
+                        </button>
+                      );
+                    })}
+
+                    <button
+                      type="button"
+                      onClick={handleSelectNewAddress}
+                      className={cn(
+                        "p-3 border border-dashed text-left transition-colors cursor-pointer flex flex-col justify-center items-start gap-1",
+                        selectedAddressId === "NEW"
+                          ? "border-black dark:border-white bg-[#f9f6ed]/70 dark:bg-neutral-900"
+                          : "border-neutral-300 dark:border-neutral-700 hover:border-neutral-500"
+                      )}
+                    >
+                      <span className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                        + Use a New Address
+                      </span>
+                      <span className="text-[11px] font-sans text-neutral-500">
+                        Enter a different delivery location below
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Cascading Location Selectors (Division -> District -> Thana) */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
