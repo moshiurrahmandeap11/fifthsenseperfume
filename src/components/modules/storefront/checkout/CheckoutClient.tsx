@@ -919,6 +919,17 @@ export default function CheckoutClient({
                   placeholder="House #, Road #, Block / Sector, Apartment..."
                   className="w-full p-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white resize-none"
                 />
+                {initialUser && selectedAddressId === "NEW" && (
+                  <label className="mt-2.5 inline-flex items-center gap-2 text-xs font-sans text-neutral-700 dark:text-neutral-300 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={saveNewAddress}
+                      onChange={(e) => setSaveNewAddress(e.target.checked)}
+                      className="accent-black dark:accent-white"
+                    />
+                    <span>Save this address to my account for future orders</span>
+                  </label>
+                )}
               </div>
 
               <div>
@@ -1062,6 +1073,33 @@ export default function CheckoutClient({
               )}
             </div>
 
+            {/* Loyalty Points Redemption (For Logged-In Customers with Points) */}
+            {initialUser && userPoints > 0 && pointValueBdt > 0 && (
+              <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800">
+                <label className="flex items-center justify-between gap-3 p-3 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 cursor-pointer">
+                  <div className="flex items-center gap-2.5">
+                    <input
+                      type="checkbox"
+                      checked={useLoyaltyPoints}
+                      onChange={(e) => setUseLoyaltyPoints(e.target.checked)}
+                      disabled={maxRedeemablePoints === 0}
+                      className="accent-black dark:accent-white"
+                    />
+                    <div className="text-xs font-sans">
+                      <p className="font-medium text-neutral-950 dark:text-white">
+                        Redeem Loyalty Points ({userPoints} pts available)
+                      </p>
+                      <p className="text-[11px] text-neutral-500">
+                        Use {maxRedeemablePoints} pts for ৳
+                        {formatFragrancePrice(maxRedeemablePoints * pointValueBdt)}{" "}
+                        instant discount
+                      </p>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            )}
+
             {/* Totals Breakdown */}
             <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800 space-y-2.5 text-xs font-sans">
               <div className="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
@@ -1075,6 +1113,13 @@ export default function CheckoutClient({
                 <div className="flex items-center justify-between text-[#9d8354] dark:text-[#cfb98f]">
                   <span>Privilege Discount</span>
                   <span>-৳{formatFragrancePrice(discountAmount)}</span>
+                </div>
+              )}
+
+              {loyaltyDiscount > 0 && (
+                <div className="flex items-center justify-between text-[#9d8354] dark:text-[#cfb98f]">
+                  <span>Loyalty Points ({redeemedPoints} pts)</span>
+                  <span>-৳{formatFragrancePrice(loyaltyDiscount)}</span>
                 </div>
               )}
 
@@ -1127,8 +1172,16 @@ export default function CheckoutClient({
               </div>
               <div className="flex items-center gap-2">
                 <Sparkles className="size-3.5 text-[#c5a059] shrink-0" />
-                <span>100% Authentic artisanal perfumes & sealed packaging</span>
+                <span>100% Authentic artisanal perfumes &amp; sealed packaging</span>
               </div>
+              {initialUser && estimatedEarnPoints > 0 && (
+                <div className="flex items-center gap-2 text-[#9d8354] dark:text-[#cfb98f]">
+                  <Sparkles className="size-3.5 shrink-0" />
+                  <span>
+                    You will earn +{estimatedEarnPoints} loyalty pts upon delivery
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </form>
