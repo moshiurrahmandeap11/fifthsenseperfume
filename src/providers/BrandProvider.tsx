@@ -19,6 +19,11 @@ export interface BrandContextValue {
   supportPhone: string;
   whatsappNumber: string;
   announcementText: string;
+  insideDhakaShipping: number;
+  dhakaSubAreaShipping: number;
+  outsideDhakaShipping: number;
+  freeShippingThreshold: number;
+  enabledPaymentMethods: string[];
 }
 
 const DEFAULT_BRAND: BrandContextValue = {
