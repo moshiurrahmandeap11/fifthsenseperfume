@@ -298,3 +298,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
         shippingAddress: shippingAddress.trim() || undefined,
         division: division || undefined,
         district: district.trim() || undefined,
+        thana: thana.trim() || undefined,
+        itemsJson: items.map((i) => ({
+          variantId: i.variantId,
+          productName: i.productName,
+          size: i.size,
+          quantity: i.quantity,
+          unitPrice: i.unitPrice,
+        })),
+        totalAmount: grandTotal,
+        source: "WEBSITE",
+      }).catch(() => {
+        // Silently ignore background capture errors
+      });
+    }, 1200);
+
