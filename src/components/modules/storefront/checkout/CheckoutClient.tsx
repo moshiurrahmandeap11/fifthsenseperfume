@@ -883,3 +883,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                     onClick={removeCoupon}
                     className="text-[11px] underline text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white cursor-pointer"
                   >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={couponInput}
+                    onChange={(e) => setCouponInput(e.target.value)}
+                    placeholder="Privilege / Coupon code (e.g. BUY2)"
+                    className="flex-1 h-10 px-3 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
