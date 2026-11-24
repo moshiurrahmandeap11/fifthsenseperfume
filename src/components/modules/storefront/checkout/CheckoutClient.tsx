@@ -472,6 +472,11 @@ export default function CheckoutClient({
             method: "STRIPE",
             transactionType: "FULL_PREPAID",
           });
+          if (!paymentRes?.success) {
+            throw new Error(
+              paymentRes?.message || "Could not initialize Stripe checkout session."
+            );
+          }
           const redirectUrl =
             paymentRes?.data?.redirectUrl || paymentRes?.data?.gatewayUrl;
           if (!redirectUrl) {

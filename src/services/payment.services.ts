@@ -56,7 +56,11 @@ export const initiatePayment = async (
       error?.response?.data?.message ||
       error?.message ||
       "Failed to initiate online payment session";
-    throw new Error(message);
+    return {
+      success: false,
+      message,
+      data: null as unknown as IInitiatePaymentResponse,
+    };
   }
 };
 
