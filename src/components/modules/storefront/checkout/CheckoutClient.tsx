@@ -673,3 +673,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                         }
                       />
                     </SelectTrigger>
+                    <SelectContent className="max-h-64">
+                      {districts.map((dist) => (
+                        <SelectItem key={dist} value={dist}>
+                          {dist}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Thana / Area <span className="text-red-500">*</span>
+                  </label>
+                  <Select
