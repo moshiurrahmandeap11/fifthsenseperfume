@@ -148,3 +148,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
   };
 
   const handleDistrictChange = (nextDistrict: string) => {
+    setDistrict(nextDistrict);
+    setThana("");
+  };
+  const [shippingAddress, setShippingAddress] = useState(initialUser?.address || "");
+  const [customerNote, setCustomerNote] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("COD");
+
+  const availablePaymentOptions = useMemo(() => {
+    const enabled = brand.enabledPaymentMethods || [
+      "COD",
+      "BKASH",
+      "NAGAD",
+      "SSLCOMMERZ",
+    ];
+    const filtered = PAYMENT_OPTIONS.filter((opt) =>
