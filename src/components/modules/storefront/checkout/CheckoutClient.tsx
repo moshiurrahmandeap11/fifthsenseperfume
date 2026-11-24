@@ -96,6 +96,10 @@ const PAYMENT_OPTIONS: Array<{
   },
 ];
 
+/**
+ * 1-Page Luxury Express Checkout with backend-driven cascading locations,
+ * authoritative shipping quotes, dynamic payment methods, and draft persistence.
+ */
 export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
   const brand = useBrand();
   const {
