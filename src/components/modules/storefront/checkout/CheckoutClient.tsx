@@ -583,3 +583,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                   />
                 </div>
 
+                <div>
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-neutral-400" />
+                    <input
+                      type="tel"
+                      required
+                      value={customerPhone}
+                      onChange={(e) => setCustomerPhone(e.target.value)}
+                      placeholder="01XXXXXXXXX"
+                      className="w-full h-11 pl-9 pr-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
+                    />
+                  </div>
