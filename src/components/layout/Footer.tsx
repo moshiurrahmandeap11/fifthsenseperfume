@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, Mail } from "lucide-react";
+import { Phone, Mail, MessageCircle } from "lucide-react";
 import CurrentYear from "@/components/common/CurrentYear";
 import { useBrand } from "@/providers/BrandProvider";
 
@@ -32,6 +32,13 @@ export default function Footer() {
 
           {/* Golden Ambient Divider Line */}
           <div className="w-28 sm:w-36 h-[2px] bg-gradient-to-r from-transparent via-[#cfb98f] to-transparent mt-4 sm:mt-5 opacity-90" />
+
+          {/* Dynamic Brand Description from Settings */}
+          {brand.footerDescription && (
+            <p className="mt-4 max-w-xl mx-auto text-xs sm:text-[13px] text-neutral-400 font-sans leading-relaxed tracking-wide text-center">
+              {brand.footerDescription}
+            </p>
+          )}
         </div>
 
         {/* 2. 4-Column Navigation & Contact Grid */}
@@ -165,15 +172,30 @@ export default function Footer() {
               Contact With Us
             </h3>
             <ul className="space-y-3 sm:space-y-3.5 font-sans text-xs sm:text-[13px] text-neutral-400">
-              <li className="flex items-center gap-2.5">
-                <Phone className="size-3.5 sm:size-4 text-[#cfb98f] shrink-0" />
-                <a
-                  href="tel:+88012345678"
-                  className="hover:text-white transition-colors"
-                >
-                  (00) 1234-5678
-                </a>
-              </li>
+              {brand.supportPhone && (
+                <li className="flex items-center gap-2.5">
+                  <Phone className="size-3.5 sm:size-4 text-[#cfb98f] shrink-0" />
+                  <a
+                    href={`tel:${brand.supportPhone.replace(/\s+/g, "")}`}
+                    className="hover:text-white transition-colors"
+                  >
+                    {brand.supportPhone}
+                  </a>
+                </li>
+              )}
+              {brand.whatsappNumber && (
+                <li className="flex items-center gap-2.5">
+                  <MessageCircle className="size-3.5 sm:size-4 text-[#cfb98f] shrink-0" />
+                  <a
+                    href={`https://wa.me/${brand.whatsappNumber.replace(/[^0-9]/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    WhatsApp: {brand.whatsappNumber}
+                  </a>
+                </li>
+              )}
               <li className="flex items-center gap-2.5">
                 <Mail className="size-3.5 sm:size-4 text-[#cfb98f] shrink-0" />
                 <a

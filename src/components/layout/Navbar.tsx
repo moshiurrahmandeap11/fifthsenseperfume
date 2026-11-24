@@ -193,7 +193,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
     <header className="sticky top-0 z-50 w-full bg-transparent pointer-events-none rounded-none">
       {/* 1. Black Top Announcement Bar */}
       <div className="pointer-events-auto">
-        <TopBar />
+        <TopBar message={brand.announcementText} />
       </div>
 
       {/* 2. Main Navbar Container (transparent wrapper; Row 1/Row 2 maintain constant layout height -> zero scroll reflow) */}

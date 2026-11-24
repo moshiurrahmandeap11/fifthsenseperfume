@@ -2,17 +2,22 @@
 
 import React, { useState } from "react";
 import { X } from "lucide-react";
+import { useBrand } from "@/providers/BrandProvider";
 
 interface TopBarProps {
   message?: string;
 }
 
-export default function TopBar({
-  message = '"Enjoy 20% off with code BUY2 — Complimentary tester on all prepaid orders"',
-}: TopBarProps) {
+export default function TopBar({ message }: TopBarProps) {
+  const brand = useBrand();
   const [isVisible, setIsVisible] = useState(true);
 
   if (!isVisible) return null;
+
+  const content =
+    message ||
+    brand.announcementText ||
+    "Complimentary discovery sample included with every flacon order.";
 
   return (
     <aside
@@ -21,7 +26,7 @@ export default function TopBar({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <p className="text-xs sm:text-[13px] font-sans font-normal tracking-normal text-neutral-100 pr-10 sm:pr-0">
-          {message}
+          {content}
         </p>
       </div>
 
