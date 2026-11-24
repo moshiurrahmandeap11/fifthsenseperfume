@@ -218,3 +218,25 @@ export default function CustomerOrdersClient({
                         <p className="text-neutral-600 dark:text-neutral-400">
                           Subtotal: ৳{formatFragrancePrice(order.subtotal)} &bull;
                           Delivery: ৳{formatFragrancePrice(order.shippingCharge)}
+                          {order.discountAmount > 0
+                            ? ` • Discount: -৳${formatFragrancePrice(order.discountAmount)}`
+                            : ""}
+                        </p>
+                        {Boolean(order.shipment?.trackingCode) && (
+                          <p className="font-mono text-[11px] text-neutral-900 dark:text-neutral-100">
+                            Tracking ({String(order.shipment?.provider || "Courier")}):{" "}
+                            {String(order.shipment?.trackingCode)}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
