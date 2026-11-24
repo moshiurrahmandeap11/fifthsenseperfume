@@ -328,3 +328,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
   ]);
 
   const handleApplyCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = applyCoupon(couponInput);
+    if (res.ok) {
+      toast.success(res.message);
+      setCouponInput("");
+    } else {
+      toast.error(res.message);
+    }
+  };
+
+  const handlePlaceOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (items.length === 0) {
+      toast.error("Your fragrance bag is empty.");
