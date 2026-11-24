@@ -44,9 +44,9 @@ export default function CartPageClient() {
   const router = useRouter();
   const [couponInput, setCouponInput] = useState("");
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = applyCoupon(couponInput);
+    const res = await applyCoupon(couponInput);
     if (res.ok) {
       setCouponInput("");
       toast.success(res.message, {
