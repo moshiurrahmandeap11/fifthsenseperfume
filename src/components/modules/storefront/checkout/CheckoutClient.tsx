@@ -403,3 +403,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
         clearCart();
         try {
           window.localStorage.removeItem(CHECKOUT_DRAFT_STORAGE_KEY);
+        } catch {
+          // ignore storage errors
+        }
+        toast.success("Order confirmed! Thank you for choosing Fifth Sense.");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } catch (err: unknown) {
+      const error = err as { message?: string };
+      toast.error(error?.message || "Could not place order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // 1. Order Confirmation / Thank You Screen
