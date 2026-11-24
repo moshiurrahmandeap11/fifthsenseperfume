@@ -523,3 +523,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
       </section>
     );
   }
+
+  // 3. 1-Page Luxury Checkout Form
+  return (
+    <section className="bg-white dark:bg-neutral-950 py-8 sm:py-12 lg:py-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+        {/* Top Breadcrumb / Back Link */}
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-5">
+          <div>
+            <Link
+              href="/cart"
+              className="inline-flex items-center gap-1.5 text-xs font-sans text-neutral-500 hover:text-neutral-950 dark:hover:text-white transition-colors mb-2"
+            >
+              <ArrowLeft className="size-3.5" />
+              <span>Return to Bag</span>
+            </Link>
