@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { getMe } from "@/services/auth.services";
+import { getMyAddresses } from "@/services/user.services";
 import CheckoutClient from "@/components/modules/storefront/checkout/CheckoutClient";
 
 export const metadata: Metadata = {
@@ -12,6 +13,14 @@ export const metadata: Metadata = {
 export default async function CheckoutPage() {
   await connection();
   const user = await getMe().catch(() => null);
+  const addressesRes = user
+    ? await getMyAddresses().catch(() => ({ data: [] }))
+    : { data: [] };
 
-  return <CheckoutClient initialUser={user} />;
+  return (
+    <CheckoutClient
+      initialUser={user}
+      initialAddresses={addressesRes?.data || []}
+    />
+  );
 }
