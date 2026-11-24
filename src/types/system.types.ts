@@ -126,6 +126,7 @@ export interface IPlatformSettings {
   dhakaSubAreaShipping: number;
   outsideDhakaShipping: number;
   freeShippingThreshold: number | null;
+  enabledPaymentMethods?: string[];
   metaPixelId: string | null;
   metaCapiAccessToken: string | null;
   sendCapiOnConfirmOnly: boolean;
