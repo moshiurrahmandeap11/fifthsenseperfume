@@ -186,3 +186,4 @@ export default function StripePaymentSuccessPage() {
     </Suspense>
   );
 }
+// Stripe success redirect note 2
