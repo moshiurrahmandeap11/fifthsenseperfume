@@ -313,3 +313,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
       });
     }, 1200);
 
+    return () => clearTimeout(timer);
+  }, [
+    customerPhone,
+    customerName,
+    customerEmail,
+    shippingAddress,
+    division,
+    district,
+    thana,
+    items,
+    grandTotal,
+    completedOrder,
+  ]);
+
+  const handleApplyCoupon = (e: React.FormEvent) => {
