@@ -133,3 +133,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
   const { data: thanasRes, isLoading: isThanasLoading } = useQuery({
     queryKey: ["bd-locations", "thanas", district],
     queryFn: () => getBangladeshLocations({ district }),
+    enabled: Boolean(district),
+    staleTime: Infinity,
+  });
+
+  const divisions = divisionsRes?.data?.divisions ?? [];
+  const districts = districtsRes?.data?.districts ?? [];
+  const thanas = thanasRes?.data?.thanas ?? [];
+
+  const handleDivisionChange = (nextDivision: string) => {
+    setDivision(nextDivision);
+    setDistrict("");
+    setThana("");
+  };
+
+  const handleDistrictChange = (nextDistrict: string) => {
