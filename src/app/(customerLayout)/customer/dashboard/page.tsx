@@ -182,3 +182,31 @@ export default async function CustomerDashboardPage() {
       </div>
 
       {/* Quick Profile Snapshot */}
+      <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
+        <div>
+          <span className="block text-[10px] uppercase tracking-wider text-neutral-400 mb-1">
+            Contact Phone
+          </span>
+          <p className="flex items-center gap-1.5 text-neutral-900 dark:text-neutral-100">
+            <Phone className="size-3.5 text-[#c5a059]" />
+            <span>{user?.phoneNumber || "Not set yet"}</span>
+          </p>
+        </div>
+
+        <div>
+          <span className="block text-[10px] uppercase tracking-wider text-neutral-400 mb-1">
+            Primary Address
+          </span>
+          <p className="flex items-center gap-1.5 text-neutral-900 dark:text-neutral-100">
+            <MapPin className="size-3.5 text-[#c5a059] shrink-0" />
+            <span className="truncate">
+              {user?.address ||
+                addresses[0]?.fullAddress ||
+                "No default address saved"}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
