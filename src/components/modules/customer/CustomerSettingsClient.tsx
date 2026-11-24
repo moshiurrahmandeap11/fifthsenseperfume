@@ -159,3 +159,26 @@ export default function CustomerSettingsClient({
                 <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="MALE">Male</SelectItem>
+                  <SelectItem value="FEMALE">Female</SelectItem>
+                  <SelectItem value="OTHER">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+              Primary Delivery Address
+            </label>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="House #, Road #, Area..."
+              className="w-full h-10 px-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700"
+            />
+          </div>
+
+          <div>
