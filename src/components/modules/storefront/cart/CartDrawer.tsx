@@ -29,6 +29,7 @@ export default function CartDrawer() {
     removeCoupon,
   } = useCart();
 
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const drawerRef = useRef<HTMLElement>(null);
