@@ -86,3 +86,25 @@ export default function CustomerSidebar({ user }: CustomerSidebarProps) {
       {/* Desktop Full-Height Sticky Sidebar (matches AdminSidebar) */}
       <aside className="hidden lg:flex w-64 shrink-0 border-r border-border/60 bg-card flex-col justify-between min-h-screen sticky top-0 h-screen select-none">
         <div>
+          {/* Brand Header */}
+          <div className="h-16 px-5 border-b border-border/60 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2" title={brand.brandName}>
+              <Image
+                src={brand.logoUrl}
+                alt={brand.brandName}
+                width={120}
+                height={36}
+                className="h-7 w-auto object-contain dark:invert"
+              />
+            </Link>
+            <span className="px-2 py-0.5 text-[10px] font-sans uppercase tracking-wider bg-muted text-muted-foreground border border-border/60">
+              Account
+            </span>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="p-3 space-y-1">
+            <p className="px-3 py-1.5 text-[10px] font-sans uppercase tracking-wider text-muted-foreground">
+              My Account
+            </p>
+            {NAV_ITEMS.map((item) => {
