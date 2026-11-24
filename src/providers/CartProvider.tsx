@@ -17,8 +17,8 @@ import {
   buildCartItemFromProduct,
 } from "@/components/modules/storefront/cart/cartUtils";
 
-const CART_ITEMS_STORAGE_KEY = "fifthsense_cart_items_v1";
-const CART_COUPON_STORAGE_KEY = "fifthsense_cart_coupon_v1";
+const CART_ITEMS_STORAGE_KEY = "fifthsense_cart_items_v2";
+const CART_COUPON_STORAGE_KEY = "fifthsense_cart_coupon_v2";
 
 export interface CartCouponRule {
   code: string;
@@ -33,7 +33,7 @@ interface StoredCartState {
 }
 
 const AVAILABLE_COUPONS: CartCouponRule[] = dummyCartJson.availableCoupons;
-const INITIAL_DUMMY_ITEMS: ICartItemDetails[] = dummyCartJson.initialItems;
+const INITIAL_CART_ITEMS: ICartItemDetails[] = [];
 
 const SERVER_SNAPSHOT: StoredCartState = {
   items: [],
@@ -75,7 +75,7 @@ function readCartSnapshot(): StoredCartState {
 
   let rawItems = window.localStorage.getItem(CART_ITEMS_STORAGE_KEY);
   if (rawItems === null) {
-    rawItems = JSON.stringify(INITIAL_DUMMY_ITEMS);
+    rawItems = JSON.stringify(INITIAL_CART_ITEMS);
     window.localStorage.setItem(CART_ITEMS_STORAGE_KEY, rawItems);
   }
   const rawCoupon = window.localStorage.getItem(CART_COUPON_STORAGE_KEY);
@@ -84,14 +84,14 @@ function readCartSnapshot(): StoredCartState {
     return cachedSnapshot;
   }
 
-  let parsedItems: ICartItemDetails[] = INITIAL_DUMMY_ITEMS;
+  let parsedItems: ICartItemDetails[] = INITIAL_CART_ITEMS;
   try {
     const candidate = JSON.parse(rawItems);
     if (Array.isArray(candidate)) {
       parsedItems = candidate;
     }
   } catch {
-    parsedItems = INITIAL_DUMMY_ITEMS;
+    parsedItems = INITIAL_CART_ITEMS;
   }
 
   cachedRawItems = rawItems;
@@ -302,7 +302,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const restoreSampleCart = useCallback(() => {
-    writeCartItems(INITIAL_DUMMY_ITEMS, null);
+    writeCartItems(INITIAL_CART_ITEMS, null);
   }, []);
 
   const applyCoupon = useCallback((rawCode: string) => {

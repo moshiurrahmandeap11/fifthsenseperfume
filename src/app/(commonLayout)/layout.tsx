@@ -1,6 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/modules/storefront/cart/CartDrawer";
+import WhatsAppConcierge from "@/components/layout/WhatsAppConcierge";
 import { CartProvider } from "@/providers/CartProvider";
 import { getMe } from "@/services/auth.services";
 import { connection } from "next/server";
@@ -27,6 +28,9 @@ export default async function CommonLayout({
 
         {/* Slide-Over Luxury Fragrance Bag Drawer */}
         <CartDrawer />
+
+        {/* Floating WhatsApp Concierge Button */}
+        <WhatsAppConcierge />
       </div>
     </CartProvider>
   );
