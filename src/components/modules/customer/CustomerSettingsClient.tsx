@@ -90,3 +90,26 @@ export default function CustomerSettingsClient({
           onSubmit={handleSaveProfile}
           className="xl:col-span-7 border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 space-y-5 bg-white dark:bg-neutral-950"
         >
+          <div className="flex items-center gap-2 border-b border-neutral-100 dark:border-neutral-900 pb-3">
+            <User className="size-4 text-[#c5a059]" />
+            <h2 className="font-heading font-serif text-lg font-normal text-neutral-950 dark:text-white uppercase">
+              Personal Details
+            </h2>
+          </div>
+
+          <div className="max-w-[200px]">
+            <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-2">
+              Profile Photo
+            </label>
+            <ThumbnailDropzone
+              value={image}
+              onChange={handlePhotoChange}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                Full Name <span className="text-red-500">*</span>
+              </label>
+              <input
