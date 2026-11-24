@@ -304,7 +304,13 @@ export default function CartPageClient() {
                   <div className="flex items-center justify-between text-[#9d8354] dark:text-[#cfb98f]">
                     <div className="flex items-center gap-2">
                       <span>
-                        {activeCoupon.code} ({activeCoupon.discountPercent}% off)
+                        {activeCoupon.code} (
+                        {activeCoupon.discountType === "PERCENTAGE"
+                          ? `${activeCoupon.discountValue}% off`
+                          : activeCoupon.discountType === "FIXED"
+                          ? `৳${activeCoupon.discountValue} off`
+                          : "Free Shipping"}
+                        )
                       </span>
                       <button
                         type="button"
