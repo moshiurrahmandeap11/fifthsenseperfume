@@ -108,3 +108,25 @@ export default function CustomerSidebar({ user }: CustomerSidebarProps) {
               My Account
             </p>
             {NAV_ITEMS.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-2.5 px-3 py-2.5 text-xs font-sans transition-colors",
+                    isActive
+                      ? "bg-[#09090b] text-white dark:bg-white dark:text-black font-medium"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  )}
+                >
+                  <Icon
+                    className={cn(
+                      "size-4 shrink-0 stroke-[1.5]",
+                      isActive ? "text-[#c5a059] dark:text-[#9d8354]" : ""
+                    )}
+                  />
+                  <span>{item.label}</span>
+                </Link>
