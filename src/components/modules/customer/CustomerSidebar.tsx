@@ -218,3 +218,34 @@ export default function CustomerSidebar({ user }: CustomerSidebarProps) {
               type="button"
               onClick={handleLogout}
               className="text-xs text-red-600 dark:text-red-400 cursor-pointer"
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+
+        <nav className="flex items-center gap-1 px-3 py-2 overflow-x-auto">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 text-xs whitespace-nowrap transition-colors",
+                  isActive
+                    ? "bg-[#09090b] text-white dark:bg-white dark:text-black font-medium"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <Icon className="size-3.5 shrink-0" />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+    </>
+  );
+}
