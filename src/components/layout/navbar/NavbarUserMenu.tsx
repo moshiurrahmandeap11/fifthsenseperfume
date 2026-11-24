@@ -53,6 +53,17 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
     "ACCOUNTANT",
   ].includes(displayRole);
 
+  const ROLE_LABELS: Record<string, string> = {
+    SUPER_ADMIN: "Super Admin",
+    ADMIN: "Admin",
+    MANAGER: "Manager",
+    MODERATOR: "Moderator",
+    INVENTORY_STAFF: "Inventory Staff",
+    ACCOUNTANT: "Accountant",
+    CUSTOMER: "Customer",
+  };
+  const roleLabel = ROLE_LABELS[displayRole] || "Customer";
+
   const initials = displayName
     .split(" ")
     .map((n) => n[0])
@@ -124,7 +135,7 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
                     variant="outline"
                     className="text-[10px] px-1.5 py-0 font-medium bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 border-neutral-300 dark:border-neutral-700"
                   >
-                    {isAdmin ? "Staff" : "Customer"}
+                    {roleLabel}
                   </Badge>
                 </div>
               </div>
