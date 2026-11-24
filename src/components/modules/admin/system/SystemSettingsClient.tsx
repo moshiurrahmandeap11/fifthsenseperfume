@@ -752,20 +752,18 @@ export default function SystemSettingsClient({
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {[
                         { id: "COD", label: "Cash on Delivery" },
-                        { id: "BKASH", label: "bKash" },
-                        { id: "NAGAD", label: "Nagad" },
-                        { id: "ROCKET", label: "Rocket" },
-                        { id: "SSLCOMMERZ", label: "SSLCommerz / Card" },
-                        { id: "AAMARPAY", label: "aamarPay" },
+                        { id: "STRIPE", label: "Card (Stripe)" },
                       ].map((method) => {
                         const current =
                           settings.enabledPaymentMethods &&
                           settings.enabledPaymentMethods.length > 0
-                            ? settings.enabledPaymentMethods
-                            : ["COD", "BKASH", "NAGAD", "SSLCOMMERZ"];
+                            ? settings.enabledPaymentMethods.filter((m) =>
+                                ["COD", "STRIPE"].includes(m)
+                              )
+                            : ["COD", "STRIPE"];
                         const isEnabled = current.includes(method.id);
 
                         return (
