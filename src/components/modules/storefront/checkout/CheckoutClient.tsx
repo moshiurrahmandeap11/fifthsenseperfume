@@ -778,3 +778,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                   placeholder="Special delivery instructions or gift note..."
                   className="w-full h-11 px-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
                 />
+              </div>
+            </div>
+
+            {/* Step 3: Payment Method */}
+            <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-7 space-y-4">
+              <div className="flex items-center gap-2.5 border-b border-neutral-100 dark:border-neutral-900 pb-3.5">
+                <CreditCard className="size-4 text-[#c5a059]" />
+                <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+                  3. Payment Method
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {availablePaymentOptions.map((opt) => {
+                  const isSelected = paymentMethod === opt.value;
