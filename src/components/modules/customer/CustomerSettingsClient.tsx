@@ -113,3 +113,26 @@ export default function CustomerSettingsClient({
                 Full Name <span className="text-red-500">*</span>
               </label>
               <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full h-10 px-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                Email Address
+              </label>
+              <input
+                type="email"
+                disabled
+                value={user.email}
+                className="w-full h-10 px-3 text-xs bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-500 cursor-not-allowed"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
