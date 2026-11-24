@@ -44,3 +44,26 @@ export default function CustomerSettingsClient({
         const error = err as { message?: string };
         toast.error(error?.message || "Failed to save profile photo");
       }
+    });
+  };
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name.trim().length < 2) {
+      toast.error("Name must be at least 2 characters.");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        await updateMyProfile({
+          name: name.trim(),
+          phoneNumber: phoneNumber.trim() || undefined,
+          gender: (gender as Gender) || undefined,
+          address: address.trim() || undefined,
+          bio: bio.trim() || undefined,
+          image: image || undefined,
+        });
+        toast.success("Profile updated successfully");
+        router.refresh();
+      } catch (err: unknown) {
