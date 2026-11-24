@@ -27,20 +27,18 @@ export default function StorefrontLayoutClient({
   }, []);
 
   return (
-    <div className="flex h-full w-full min-h-screen relative overflow-x-hidden bg-background">
-      <motion.div
-        animate={{
-          marginRight: isDrawerOpen && !isMobile ? 440 : 0,
-        }}
-        transition={{
-          duration: 0.38,
-          ease: [0.22, 1, 0.36, 1],
-          delay: isDrawerOpen ? 0 : 0.02,
-        }}
-        className="flex-1 min-w-0 flex flex-col min-h-screen w-full relative"
-      >
-        {children}
-      </motion.div>
-    </div>
+    <motion.div
+      animate={{
+        marginRight: isDrawerOpen && !isMobile ? 440 : 0,
+      }}
+      transition={{
+        duration: 0.38,
+        ease: [0.22, 1, 0.36, 1],
+        delay: isDrawerOpen ? 0 : 0.02,
+      }}
+      className="flex min-h-screen flex-col w-full relative"
+    >
+      {children}
+    </motion.div>
   );
 }
