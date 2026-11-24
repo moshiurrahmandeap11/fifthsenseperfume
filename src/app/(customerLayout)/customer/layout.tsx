@@ -78,3 +78,25 @@ export default async function CustomerLayout({
                     fill
                     sizes="32px"
                     className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="size-8 rounded-full bg-neutral-900 text-white dark:bg-white dark:text-black flex items-center justify-center text-xs font-medium">
+                  {initials}
+                </div>
+              )}
+              <div className="text-xs leading-tight">
+                <p className="font-medium text-foreground">{user.name}</p>
+                <p className="text-[10px] text-muted-foreground">{user.email}</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-6xl">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
