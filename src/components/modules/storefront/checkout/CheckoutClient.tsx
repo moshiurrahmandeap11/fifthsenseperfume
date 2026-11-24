@@ -613,3 +613,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                   placeholder="you@example.com"
                   className="w-full h-11 px-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
                 />
+              </div>
+            </div>
+
+            {/* Step 2: Delivery Address & Auto-Calculated Zone */}
+            <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-7 space-y-5">
+              <div className="flex items-center gap-2.5 border-b border-neutral-100 dark:border-neutral-900 pb-3.5">
+                <MapPin className="size-4 text-[#c5a059]" />
+                <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+                  2. Shipping Destination
+                </h2>
+              </div>
+
+              {/* Cascading Location Selectors (Division -> District -> Thana) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
