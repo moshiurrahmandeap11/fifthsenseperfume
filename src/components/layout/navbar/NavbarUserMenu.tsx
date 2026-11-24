@@ -171,7 +171,7 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
         {/* Orders Link */}
         <DropdownMenuItem className="cursor-pointer rounded-xl py-2 px-3 hover:bg-neutral-100 dark:hover:bg-neutral-900 focus:bg-neutral-100 dark:focus:bg-neutral-900">
           <Link
-            href="/orders"
+            href="/customer/orders"
             className="flex items-center gap-2.5 w-full text-xs font-medium text-neutral-800 dark:text-neutral-200"
           >
             <Package className="size-4 text-neutral-600 dark:text-neutral-400" />
@@ -193,11 +193,11 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
         {/* Profile Settings */}
         <DropdownMenuItem className="cursor-pointer rounded-xl py-2 px-3 hover:bg-neutral-100 dark:hover:bg-neutral-900 focus:bg-neutral-100 dark:focus:bg-neutral-900">
           <Link
-            href="/profile"
+            href="/customer/settings"
             className="flex items-center gap-2.5 w-full text-xs font-medium text-neutral-800 dark:text-neutral-200"
           >
             <User className="size-4 text-neutral-600 dark:text-neutral-400" />
-            <span>Profile & Addresses</span>
+            <span>Profile & Settings</span>
           </Link>
         </DropdownMenuItem>
 
