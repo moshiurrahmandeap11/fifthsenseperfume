@@ -208,3 +208,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
     }
   }, []);
 
+  // Persist checkout form inputs across page refreshes
+  useEffect(() => {
+    if (!hasHydratedDraftRef.current || completedOrder) return;
+    try {
+      const draft: CheckoutDraft = {
+        customerName,
+        customerPhone,
+        customerEmail,
+        division,
+        district,
+        thana,
+        shippingAddress,
+        customerNote,
+        paymentMethod,
+        couponInput,
