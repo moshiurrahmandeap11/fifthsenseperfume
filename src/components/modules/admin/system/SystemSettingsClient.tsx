@@ -130,6 +130,8 @@ export default function SystemSettingsClient({
             settings.enabledPaymentMethods.length > 0
               ? settings.enabledPaymentMethods
               : ["COD", "BKASH", "NAGAD", "SSLCOMMERZ"],
+          loyaltyPointsPer100Bdt: Number(settings.loyaltyPointsPer100Bdt ?? 1),
+          loyaltyPointValueBdt: Number(settings.loyaltyPointValueBdt ?? 1),
         });
 
         router.refresh();
@@ -228,58 +230,7 @@ export default function SystemSettingsClient({
 
   return (
     <div className="space-y-6 w-full">
-      {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="shadow-none border-border/50 bg-card">
-          <CardHeader className="pb-1 space-y-0">
-            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
-              Brand
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl font-normal tracking-tight text-foreground truncate">
-              {settings.brandName || "FIFTH SENSE"}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              Storefront identity
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-none border-border/50 bg-card">
-          <CardHeader className="pb-1 space-y-0">
-            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
-              Campaign Banners
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
-              {banners.length}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              Configured slides
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-none border-border/50 bg-card">
-          <CardHeader className="pb-1 space-y-0">
-            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
-              Boutiques
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
-              {showrooms.length}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              Physical locations
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Tabs */}
+      {/* Fluid Animated Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="h-9 mb-4">
           <TabsTrigger value="BRAND" className="text-xs font-normal cursor-pointer">
