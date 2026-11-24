@@ -748,3 +748,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                       `৳${formatFragrancePrice(selectedZoneCharge)}`
                     )}
                   </span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  Full Delivery Address <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  required
+                  rows={2}
+                  value={shippingAddress}
+                  onChange={(e) => setShippingAddress(e.target.value)}
+                  placeholder="House #, Road #, Block / Sector, Apartment..."
+                  className="w-full p-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white resize-none"
+                />
