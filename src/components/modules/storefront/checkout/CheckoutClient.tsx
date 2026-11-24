@@ -238,3 +238,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
     division,
     district,
     thana,
+    shippingAddress,
+    customerNote,
+    paymentMethod,
+    couponInput,
+    completedOrder,
+  ]);
+
+  // Sync user details if initialUser arrives and fields are still empty
+  useEffect(() => {
+    if (!initialUser) return;
+    setCustomerName((prev) => prev || initialUser.name || "");
+    setCustomerPhone((prev) => prev || initialUser.phoneNumber || "");
+    setCustomerEmail((prev) => prev || initialUser.email || "");
+    setShippingAddress((prev) => prev || initialUser.address || "");
+  }, [initialUser]);
