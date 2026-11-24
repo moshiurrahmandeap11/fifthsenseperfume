@@ -301,3 +301,19 @@ export const scanVerifyPack = async (
     throw new Error(message);
   }
 };
+
+/**
+ * Fetch authenticated customer's own order history
+ */
+export const getMyOrders = async (): Promise<ApiResponse<IOrder[]>> => {
+  try {
+    const res = await httpClient.get<IOrder[]>("/orders/my-orders");
+    return res;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to fetch your orders";
+    throw new Error(message);
+  }
+};
