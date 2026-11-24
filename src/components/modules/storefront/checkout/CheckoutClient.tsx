@@ -376,9 +376,11 @@ export default function CheckoutClient({
     completedOrder,
   ]);
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = applyCoupon(couponInput);
+    const res = await applyCoupon(couponInput, {
+      isPrepaid: paymentMethod === "STRIPE",
+    });
     if (res.ok) {
       toast.success(res.message);
       setCouponInput("");
