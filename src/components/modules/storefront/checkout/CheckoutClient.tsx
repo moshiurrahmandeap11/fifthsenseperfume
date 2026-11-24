@@ -913,3 +913,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                 <span className="text-neutral-950 dark:text-neutral-100">
                   ৳{formatFragrancePrice(subtotal)}
                 </span>
+              </div>
+
+              {discountAmount > 0 && (
+                <div className="flex items-center justify-between text-[#9d8354] dark:text-[#cfb98f]">
+                  <span>Privilege Discount</span>
+                  <span>-৳{formatFragrancePrice(discountAmount)}</span>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
+                <span>Delivery Fee</span>
+                <span>
+                  {selectedZoneCharge === 0 ? (
+                    <span className="text-neutral-950 dark:text-white">
+                      Complimentary
