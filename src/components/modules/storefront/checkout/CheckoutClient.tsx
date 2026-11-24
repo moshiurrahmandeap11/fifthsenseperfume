@@ -553,3 +553,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
           </div>
         </div>
 
+        <form
+          onSubmit={handlePlaceOrder}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start"
+        >
+          {/* LEFT COLUMN: Shipping & Payment */}
+          <div className="lg:col-span-7 space-y-8">
+            {/* Step 1: Contact Information */}
+            <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-7 space-y-5">
+              <div className="flex items-center gap-2.5 border-b border-neutral-100 dark:border-neutral-900 pb-3.5">
+                <User className="size-4 text-[#c5a059]" />
+                <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+                  1. Contact Information
+                </h2>
+              </div>
+
