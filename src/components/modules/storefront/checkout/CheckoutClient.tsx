@@ -853,3 +853,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col justify-between">
                     <div>
+                      <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white line-clamp-1">
+                        {item.productName}
+                      </p>
+                      <p className="text-[11px] font-sans text-neutral-500 mt-0.5">
+                        {item.size} &times; {item.quantity}
+                      </p>
+                    </div>
+                    <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                      ৳{formatFragrancePrice(item.itemTotal)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
