@@ -76,6 +76,19 @@ export function BrandProvider({
         initialSettings.whatsappNumber || DEFAULT_BRAND.whatsappNumber,
       announcementText:
         initialSettings.announcementText || DEFAULT_BRAND.announcementText,
+      insideDhakaShipping:
+        initialSettings.insideDhakaShipping ?? DEFAULT_BRAND.insideDhakaShipping,
+      dhakaSubAreaShipping:
+        initialSettings.dhakaSubAreaShipping ?? DEFAULT_BRAND.dhakaSubAreaShipping,
+      outsideDhakaShipping:
+        initialSettings.outsideDhakaShipping ?? DEFAULT_BRAND.outsideDhakaShipping,
+      freeShippingThreshold:
+        initialSettings.freeShippingThreshold ?? DEFAULT_BRAND.freeShippingThreshold,
+      enabledPaymentMethods:
+        initialSettings.enabledPaymentMethods &&
+        initialSettings.enabledPaymentMethods.length > 0
+          ? initialSettings.enabledPaymentMethods
+          : DEFAULT_BRAND.enabledPaymentMethods,
     };
   }, [initialSettings]);
 
