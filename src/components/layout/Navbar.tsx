@@ -455,6 +455,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
         </nav>
       </div>
       </div>
-    </header>
+      </motion.header>
+    </>
   );
 }
