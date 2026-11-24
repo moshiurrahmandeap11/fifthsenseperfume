@@ -118,3 +118,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
   const [thana, setThana] = useState("");
 
   const { data: divisionsRes, isLoading: isDivisionsLoading } = useQuery({
+    queryKey: ["bd-locations", "divisions"],
+    queryFn: () => getBangladeshLocations(),
+    staleTime: Infinity,
+  });
+
+  const { data: districtsRes, isLoading: isDistrictsLoading } = useQuery({
+    queryKey: ["bd-locations", "districts", division],
+    queryFn: () => getBangladeshLocations({ division }),
+    enabled: Boolean(division),
+    staleTime: Infinity,
+  });
+
+  const { data: thanasRes, isLoading: isThanasLoading } = useQuery({
+    queryKey: ["bd-locations", "thanas", district],
+    queryFn: () => getBangladeshLocations({ district }),
