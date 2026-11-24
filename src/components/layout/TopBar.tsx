@@ -32,6 +32,9 @@ function getServerSnapshot(): string | null {
   return null;
 }
 
+/**
+ * Dismissible top announcement bar persisted per message content in localStorage.
+ */
 export default function TopBar({ message }: TopBarProps) {
   const brand = useBrand();
   const dismissedText = useSyncExternalStore(
