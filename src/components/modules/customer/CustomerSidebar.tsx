@@ -174,3 +174,25 @@ export default function CustomerSidebar({ user }: CustomerSidebarProps) {
                     <span>Verified</span>
                   </>
                 ) : (
+                  <>
+                    <Clock className="size-2.5 text-amber-500" />
+                    <span>Unverified</span>
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-sans text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors cursor-pointer"
+          >
+            <LogOut className="size-4 shrink-0 stroke-[1.5]" />
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Mobile Header + Horizontal Navigation (< lg) */}
+      <div className="lg:hidden w-full border-b border-border/60 bg-card sticky top-0 z-40">
