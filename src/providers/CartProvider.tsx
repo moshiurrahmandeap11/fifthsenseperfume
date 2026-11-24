@@ -421,3 +421,4 @@ export function useCart() {
   }
   return ctx;
 }
+// Cart coupon sync note 1
