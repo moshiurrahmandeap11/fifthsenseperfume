@@ -128,8 +128,10 @@ export default function SystemSettingsClient({
           enabledPaymentMethods:
             settings.enabledPaymentMethods &&
             settings.enabledPaymentMethods.length > 0
-              ? settings.enabledPaymentMethods
-              : ["COD", "BKASH", "NAGAD", "SSLCOMMERZ"],
+              ? settings.enabledPaymentMethods.filter((m) =>
+                  ["COD", "STRIPE"].includes(m)
+                )
+              : ["COD", "STRIPE"],
           loyaltyPointsPer100Bdt: Number(settings.loyaltyPointsPer100Bdt ?? 1),
           loyaltyPointValueBdt: Number(settings.loyaltyPointValueBdt ?? 1),
         });
