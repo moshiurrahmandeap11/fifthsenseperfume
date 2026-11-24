@@ -24,6 +24,7 @@ import { useCart } from "@/providers/CartProvider";
 import { useBrand } from "@/providers/BrandProvider";
 import { formatFragrancePrice } from "../cart/cartUtils";
 import { checkoutOrder, incompleteCapture } from "@/services/order.services";
+import { createAddress } from "@/services/user.services";
 import {
   getBangladeshLocations,
   getShippingQuote,
@@ -37,11 +38,12 @@ import {
 } from "@/components/ui/select";
 import { IUser } from "@/types/auth.types";
 import { IOrder, PaymentMethod } from "@/types/order.types";
-import { DeliveryZone } from "@/types/user.types";
+import { DeliveryZone, ICustomerAddress } from "@/types/user.types";
 import { cn } from "@/lib/utils";
 
 interface CheckoutClientProps {
   initialUser: IUser | null;
+  initialAddresses?: ICustomerAddress[];
 }
 
 const CHECKOUT_DRAFT_STORAGE_KEY = "fifthsense_checkout_draft_v1";
@@ -100,7 +102,10 @@ const PAYMENT_OPTIONS: Array<{
  * 1-Page Luxury Express Checkout with backend-driven cascading locations,
  * authoritative shipping quotes, dynamic payment methods, and draft persistence.
  */
-export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
+export default function CheckoutClient({
+  initialUser,
+  initialAddresses = [],
+}: CheckoutClientProps) {
   const brand = useBrand();
   const {
     items,
