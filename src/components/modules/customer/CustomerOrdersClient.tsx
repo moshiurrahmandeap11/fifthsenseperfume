@@ -20,3 +20,25 @@ interface CustomerOrdersClientProps {
 }
 
 type OrderFilter = "ALL" | "ACTIVE" | "DELIVERED" | "CANCELLED";
+
+export default function CustomerOrdersClient({
+  initialOrders,
+}: CustomerOrdersClientProps) {
+  const [filter, setFilter] = useState<OrderFilter>("ALL");
+  const [expandedId, setExpandedId] = useState<string | null>(
+    initialOrders[0]?.id || null
+  );
+
+  const filteredOrders = useMemo(() => {
+    if (filter === "ALL") return initialOrders;
+    if (filter === "DELIVERED") {
+      return initialOrders.filter((o) => o.status === "DELIVERED");
+    }
+    if (filter === "CANCELLED") {
+      return initialOrders.filter((o) =>
+        ["CANCELLED", "RETURNED"].includes(o.status)
+      );
+    }
+    return initialOrders.filter(
+      (o) => !["DELIVERED", "CANCELLED", "RETURNED"].includes(o.status)
+    );
