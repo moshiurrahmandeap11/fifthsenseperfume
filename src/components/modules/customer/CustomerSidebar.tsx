@@ -64,3 +64,25 @@ export default function CustomerSidebar({ user }: CustomerSidebarProps) {
 
   const handleLogout = async () => {
     const confirmed = await confirmAction({
+      title: "Sign Out?",
+      text: "You will be signed out of your account.",
+      confirmText: "Sign Out",
+      cancelText: "Stay Signed In",
+    });
+    if (!confirmed) return;
+
+    try {
+      await Promise.allSettled([signOut(), logoutUser()]);
+      toast.success("Signed out successfully");
+      router.push("/");
+      router.refresh();
+    } catch {
+      toast.error("Logout failed");
+    }
+  };
+
+  return (
+    <>
+      {/* Desktop Full-Height Sticky Sidebar (matches AdminSidebar) */}
+      <aside className="hidden lg:flex w-64 shrink-0 border-r border-border/60 bg-card flex-col justify-between min-h-screen sticky top-0 h-screen select-none">
+        <div>
