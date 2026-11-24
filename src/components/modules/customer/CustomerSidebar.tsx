@@ -196,3 +196,25 @@ export default function CustomerSidebar({ user }: CustomerSidebarProps) {
 
       {/* Mobile Header + Horizontal Navigation (< lg) */}
       <div className="lg:hidden w-full border-b border-border/60 bg-card sticky top-0 z-40">
+        <div className="h-14 px-4 flex items-center justify-between border-b border-border/40">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src={brand.logoUrl}
+              alt={brand.brandName}
+              width={110}
+              height={32}
+              className="h-6 w-auto object-contain dark:invert"
+            />
+          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <ExternalLink className="size-3.5" />
+              <span>Storefront</span>
+            </Link>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="text-xs text-red-600 dark:text-red-400 cursor-pointer"
