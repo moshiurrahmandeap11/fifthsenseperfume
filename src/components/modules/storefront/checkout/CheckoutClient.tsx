@@ -763,3 +763,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                   placeholder="House #, Road #, Block / Sector, Apartment..."
                   className="w-full p-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white resize-none"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  Order Note / Gift Message{" "}
+                  <span className="text-neutral-400">(Optional)</span>
+                </label>
+                <input
+                  type="text"
+                  maxLength={300}
+                  value={customerNote}
+                  onChange={(e) => setCustomerNote(e.target.value)}
+                  placeholder="Special delivery instructions or gift note..."
+                  className="w-full h-11 px-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
+                />
