@@ -388,3 +388,33 @@ export default function CustomerAddressesClient({
                 onChange={(e) => setIsDefault(e.target.checked)}
                 className="accent-black dark:accent-white"
               />
+              <span>Set as default delivery address</span>
+            </label>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsFormOpen(false)}
+                className="px-4 py-2 border border-neutral-300 dark:border-neutral-700 text-xs font-sans cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isPending}
+                className="px-5 py-2 bg-[#09090b] text-white dark:bg-white dark:text-black text-xs font-sans uppercase inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+              >
+                {isPending && <Loader2 className="size-3.5 animate-spin" />}
+                <span>{editingId ? "Update Address" : "Save Address"}</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      )}
+
+      {/* Address Cards */}
+      {addresses.length === 0 ? (
+        <div className="border border-neutral-200 dark:border-neutral-800 p-10 text-center space-y-3">
+          <div className="size-14 mx-auto flex items-center justify-center bg-[#f9f6ed] dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+            <MapPin className="size-6 text-[#c5a059]" />
+          </div>
