@@ -232,26 +232,52 @@ export default function SystemSettingsClient({
     <div className="space-y-6 w-full">
       {/* Fluid Animated Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="h-9 mb-4">
-          <TabsTrigger value="BRAND" className="text-xs font-normal cursor-pointer">
-            Brand &amp; Support
-          </TabsTrigger>
-          <TabsTrigger value="BANNERS" className="text-xs font-normal cursor-pointer">
-            Hero Banners ({banners.length})
-          </TabsTrigger>
-          <TabsTrigger value="SHOWROOMS" className="text-xs font-normal cursor-pointer">
-            Showrooms ({showrooms.length})
-          </TabsTrigger>
-        </TabsList>
+        <div className="inline-flex flex-wrap items-center gap-1 p-1 bg-muted/60 border border-border/50 mb-5">
+          {[
+            { value: "BRAND", label: "Brand & Contact" },
+            { value: "THEME", label: "Theme & Colors" },
+            { value: "SHIPPING_PAYMENTS", label: "Shipping & Payments" },
+            { value: "LOYALTY", label: "Loyalty & Rewards" },
+            { value: "BANNERS", label: `Hero Banners (${banners.length})` },
+            { value: "SHOWROOMS", label: `Showrooms (${showrooms.length})` },
+          ].map((tab) => {
+            const isActive = activeTab === tab.value;
+            return (
+              <button
+                key={tab.value}
+                type="button"
+                onClick={() => setActiveTab(tab.value)}
+                className={`relative px-3.5 py-2 text-xs font-normal transition-colors cursor-pointer select-none ${
+                  isActive
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="admin-settings-tab-pill"
+                    transition={{
+                      type: "spring",
+                      stiffness: 420,
+                      damping: 32,
+                    }}
+                    className="absolute inset-0 bg-background border border-border/60 shadow-xs"
+                  />
+                )}
+                <span className="relative z-10">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
         <AnimatePresence mode="wait">
           {activeTab === "BRAND" && (
             <motion.div
               key="brand-tab"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
               <Card className="shadow-none border-border/50 bg-card">
                 <CardHeader className="pb-3 border-b border-border/40">
