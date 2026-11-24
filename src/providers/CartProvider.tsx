@@ -294,14 +294,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeItem = useCallback((itemId: string) => {
     const current = readCartSnapshot();
     const nextItems = current.items.filter((item) => item.id !== itemId);
-    const nextQtyTotal = nextItems.reduce((sum, i) => sum + i.quantity, 0);
-    const activeRule = AVAILABLE_COUPONS.find(
-      (c) => c.code.toUpperCase() === current.couponCode?.toUpperCase()
-    );
-    const nextCoupon =
-      activeRule && nextQtyTotal < activeRule.minQuantity
-        ? null
-        : current.couponCode;
+    const nextCoupon = nextItems.length === 0 ? null : current.couponCode;
 
     writeCartItems(nextItems, nextCoupon);
   }, []);
