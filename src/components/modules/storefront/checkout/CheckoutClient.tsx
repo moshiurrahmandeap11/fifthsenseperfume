@@ -943,3 +943,40 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                   ৳{formatFragrancePrice(grandTotal)}
                 </span>
               </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-12 px-6 bg-[#232323] hover:bg-black disabled:opacity-60 text-white dark:bg-white dark:text-black dark:hover:bg-neutral-200 text-xs font-sans font-medium uppercase tracking-normal transition-colors cursor-pointer flex items-center justify-center gap-2"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Confirming Order...</span>
+                </>
+              ) : (
+                <>
+                  <span>Confirm Order — ৳{formatFragrancePrice(grandTotal)}</span>
+                  <ArrowRight className="size-3.5" />
+                </>
+              )}
+            </button>
+
+            <div className="space-y-2 pt-2 text-[11px] font-sans text-neutral-500 dark:text-neutral-400">
+              <div className="flex items-center gap-2">
+                <Truck className="size-3.5 text-[#c5a059] shrink-0" />
+                <span>Complimentary shipping on orders above ৳{formatFragrancePrice(freeShippingThreshold)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="size-3.5 text-[#c5a059] shrink-0" />
+                <span>100% Authentic artisanal perfumes & sealed packaging</span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
