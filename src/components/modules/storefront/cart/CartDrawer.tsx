@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ShoppingBag, Trash2, X, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import toast from "react-hot-toast";
 import { useCart } from "@/providers/CartProvider";
 import { formatFragrancePrice } from "./cartUtils";
 import CartQuantityStepper from "./CartQuantityStepper";
