@@ -9,3 +9,14 @@ export const metadata: Metadata = {
   title: "Profile & Security | FIFTH SENSE PERFUMES",
   description: "Update your personal details and account password.",
 };
+
+export default async function CustomerSettingsPage() {
+  await connection();
+  const user = await getMe();
+
+  if (!user) {
+    redirect("/login?callbackUrl=/customer/settings");
+  }
+
+  return <CustomerSettingsClient user={user} />;
+}
