@@ -448,3 +448,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
             <div>
               <span className="block text-[10px] uppercase text-neutral-400 mb-1">
                 Phone
+              </span>
+              <span className="text-neutral-900 dark:text-neutral-100">
+                {completedOrder.customerPhone}
+              </span>
+            </div>
+            <div>
+              <span className="block text-[10px] uppercase text-neutral-400 mb-1">
+                Payment
+              </span>
+              <span className="text-neutral-900 dark:text-neutral-100">
+                {completedOrder.paymentMethod}
+              </span>
+            </div>
+            <div>
+              <span className="block text-[10px] uppercase text-neutral-400 mb-1">
