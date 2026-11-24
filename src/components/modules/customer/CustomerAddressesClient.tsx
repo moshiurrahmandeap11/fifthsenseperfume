@@ -448,3 +448,38 @@ export default function CustomerAddressesClient({
                 </div>
 
                 <p className="font-medium text-neutral-950 dark:text-white pt-1">
+                  {addr.recipientName} &bull; {addr.phoneNumber}
+                </p>
+                <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                  {addr.fullAddress}
+                </p>
+                <p className="text-[11px] text-neutral-500">
+                  {addr.thana}, {addr.district}, {addr.division}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-100 dark:border-neutral-900">
+                <button
+                  type="button"
+                  onClick={() => openEditForm(addr)}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 border border-neutral-200 dark:border-neutral-800 hover:border-black dark:hover:border-white text-[11px] font-sans cursor-pointer"
+                >
+                  <Edit3 className="size-3" />
+                  <span>Edit</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(addr)}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 border border-red-200 dark:border-red-900/50 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 text-[11px] font-sans cursor-pointer"
+                >
+                  <Trash2 className="size-3" />
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
