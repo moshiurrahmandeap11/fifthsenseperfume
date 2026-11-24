@@ -343,3 +343,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
 
     if (items.length === 0) {
       toast.error("Your fragrance bag is empty.");
+      return;
+    }
+
+    const cleanName = customerName.trim();
+    const cleanPhone = customerPhone.replace(/\s+/g, "");
+    const cleanAddress = shippingAddress.trim();
+    const cleanDistrict = district.trim();
+    const cleanThana = thana.trim();
+
+    if (cleanName.length < 2) {
+      toast.error("Please enter your full name (at least 2 characters).");
+      return;
+    }
+    if (cleanPhone.length < 10) {
+      toast.error("Please enter a valid 10+ digit phone number.");
