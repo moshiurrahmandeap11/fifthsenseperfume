@@ -205,3 +205,26 @@ export default function CustomerSettingsClient({
                 <Loader2 className="size-3.5 animate-spin" />
               ) : (
                 <Save className="size-3.5" />
+              )}
+              <span>Save Profile</span>
+            </button>
+          </div>
+        </form>
+
+        {/* Security & Password */}
+        <div className="xl:col-span-5 border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 space-y-4 bg-white dark:bg-neutral-950">
+          <div className="flex items-center gap-2 border-b border-neutral-100 dark:border-neutral-900 pb-3">
+            <Shield className="size-4 text-[#c5a059]" />
+            <h2 className="font-heading font-serif text-lg font-normal text-neutral-950 dark:text-white uppercase">
+              Security &amp; Password
+            </h2>
+          </div>
+          <p className="text-xs font-sans text-neutral-500">
+            Update your account password to keep your profile secure.
+          </p>
+          <ChangePasswordForm />
+        </div>
+      </div>
+    </div>
+  );
+}
