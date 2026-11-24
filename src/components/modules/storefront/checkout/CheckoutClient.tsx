@@ -838,3 +838,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
               Order Summary ({items.length})
             </h2>
 
+            {/* Item List */}
+            <div className="space-y-4 max-h-72 overflow-y-auto pr-1 divide-y divide-neutral-200/60 dark:divide-neutral-800">
+              {items.map((item) => (
+                <div key={item.id} className="pt-3 first:pt-0 flex gap-3.5">
+                  <div className="relative w-14 h-18 bg-neutral-100 dark:bg-neutral-900 shrink-0 overflow-hidden">
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.productName}
+                      fill
+                      sizes="56px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 flex flex-col justify-between">
+                    <div>
