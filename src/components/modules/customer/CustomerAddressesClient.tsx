@@ -418,3 +418,33 @@ export default function CustomerAddressesClient({
           <div className="size-14 mx-auto flex items-center justify-center bg-[#f9f6ed] dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
             <MapPin className="size-6 text-[#c5a059]" />
           </div>
+          <p className="text-xs font-sans text-neutral-500">
+            No saved delivery addresses yet. Add one for faster checkout.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {addresses.map((addr) => (
+            <div
+              key={addr.id}
+              className={cn(
+                "border p-5 flex flex-col justify-between gap-4",
+                addr.isDefault
+                  ? "border-black dark:border-white bg-[#f9f6ed]/40 dark:bg-neutral-900/40"
+                  : "border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950"
+              )}
+            >
+              <div className="space-y-1.5 text-xs font-sans">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 font-medium">
+                    {addr.label}
+                  </span>
+                  {addr.isDefault && (
+                    <span className="inline-flex items-center gap-1 text-[10px] text-emerald-700 dark:text-emerald-400">
+                      <CheckCircle2 className="size-3" />
+                      Default
+                    </span>
+                  )}
+                </div>
+
+                <p className="font-medium text-neutral-950 dark:text-white pt-1">
