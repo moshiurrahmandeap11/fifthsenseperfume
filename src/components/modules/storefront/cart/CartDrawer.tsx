@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ShoppingBag, Trash2, X, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import toast from "react-hot-toast";
