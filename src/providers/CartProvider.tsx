@@ -35,7 +35,6 @@ interface StoredCartState {
   couponCode: string | null;
 }
 
-const AVAILABLE_COUPONS: CartCouponRule[] = dummyCartJson.availableCoupons;
 const INITIAL_CART_ITEMS: ICartItemDetails[] = [];
 
 const SERVER_SNAPSHOT: StoredCartState = {
