@@ -117,6 +117,19 @@ export default function SystemSettingsClient({
           supportPhone: settings.supportPhone || undefined,
           whatsappNumber: settings.whatsappNumber || undefined,
           announcementText: settings.announcementText || undefined,
+          insideDhakaShipping: Number(settings.insideDhakaShipping ?? 60),
+          dhakaSubAreaShipping: Number(settings.dhakaSubAreaShipping ?? 100),
+          outsideDhakaShipping: Number(settings.outsideDhakaShipping ?? 120),
+          freeShippingThreshold:
+            settings.freeShippingThreshold !== null &&
+            settings.freeShippingThreshold !== undefined
+              ? Number(settings.freeShippingThreshold)
+              : null,
+          enabledPaymentMethods:
+            settings.enabledPaymentMethods &&
+            settings.enabledPaymentMethods.length > 0
+              ? settings.enabledPaymentMethods
+              : ["COD", "BKASH", "NAGAD", "SSLCOMMERZ"],
         });
 
         router.refresh();
