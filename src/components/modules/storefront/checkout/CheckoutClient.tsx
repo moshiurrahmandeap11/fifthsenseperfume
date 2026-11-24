@@ -283,3 +283,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
       cleanPhone.length < 10 ||
       items.length === 0 ||
       completedOrder ||
+      lastCapturedPhoneRef.current === cleanPhone
+    ) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      lastCapturedPhoneRef.current = cleanPhone;
+      incompleteCapture({
+        sessionKey: sessionKeyRef.current,
+        customerName: customerName.trim() || undefined,
+        customerPhone: cleanPhone,
+        customerEmail: customerEmail.trim() || undefined,
+        shippingAddress: shippingAddress.trim() || undefined,
+        division: division || undefined,
+        district: district.trim() || undefined,
