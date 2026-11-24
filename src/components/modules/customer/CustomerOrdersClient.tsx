@@ -174,3 +174,25 @@ export default function CustomerOrdersClient({
                                   alt={item.productName}
                                   fill
                                   sizes="48px"
+                                  className="object-cover"
+                                />
+                              )}
+                            </div>
+                            <div>
+                              <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                                {item.productName}
+                              </p>
+                              <p className="text-[11px] font-sans text-neutral-500 mt-0.5">
+                                {item.size} &times; {item.quantity}
+                              </p>
+                            </div>
+                          </div>
+                          <span className="text-xs font-sans font-medium text-neutral-950 dark:text-white tabular-nums">
+                            ৳{formatFragrancePrice(item.totalPrice)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Shipping & Courier Info */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-neutral-200 dark:border-neutral-800 text-xs font-sans">
