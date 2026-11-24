@@ -268,3 +268,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
 
   const shippingQuote = shippingQuoteRes?.data;
   const deliveryZone: DeliveryZone =
+    shippingQuote?.deliveryZone || "INSIDE_DHAKA";
+  const selectedZoneCharge = shippingQuote ? shippingQuote.charge : brand.insideDhakaShipping;
+  const effectiveFreeThreshold =
+    shippingQuote?.freeShippingThreshold ?? freeShippingThreshold;
+
+  const netSubtotal = Math.max(0, subtotal - discountAmount);
+  const grandTotal = netSubtotal + selectedZoneCharge;
+
+  // Silent Abandoned Cart Capture when phone number reaches >= 10 digits
+  useEffect(() => {
+    const cleanPhone = customerPhone.replace(/\s+/g, "");
+    if (
+      cleanPhone.length < 10 ||
+      items.length === 0 ||
+      completedOrder ||
