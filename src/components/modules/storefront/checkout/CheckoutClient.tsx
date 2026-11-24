@@ -658,3 +658,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                     District <span className="text-red-500">*</span>
                   </label>
                   <Select
+                    value={district}
+                    onValueChange={(val) => val && handleDistrictChange(val)}
+                    disabled={!division || isDistrictsLoading || districts.length === 0}
+                  >
+                    <SelectTrigger className="w-full h-11 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs font-sans">
+                      <SelectValue
+                        placeholder={
+                          isDistrictsLoading
+                            ? "Loading districts..."
+                            : division
+                              ? "Select district"
+                              : "Select division first"
+                        }
+                      />
+                    </SelectTrigger>
