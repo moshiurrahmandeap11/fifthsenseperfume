@@ -108,3 +108,25 @@ export default function CustomerOrdersClient({
                 key={order.id}
                 className="border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950"
               >
+                {/* Order Summary Row */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setExpandedId(isExpanded ? null : order.id)
+                  }
+                  className="w-full p-5 flex flex-wrap items-center justify-between gap-4 text-left hover:bg-neutral-50/70 dark:hover:bg-neutral-900/40 transition-colors cursor-pointer"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <span className="font-mono text-sm font-medium text-neutral-950 dark:text-white">
+                        {order.orderNumber}
+                      </span>
+                      <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200">
+                        {order.status.replace(/_/g, " ")}
+                      </span>
+                      <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider bg-[#f9f6ed] dark:bg-neutral-900 text-[#9d8354] border border-[#c5a059]/30">
+                        {order.paymentMethod}
+                      </span>
+                    </div>
+                    <p className="text-[11px] font-sans text-neutral-500">
+                      Placed on{" "}
