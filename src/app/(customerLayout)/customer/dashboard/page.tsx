@@ -67,3 +67,26 @@ export default async function CustomerDashboardPage() {
               Total Orders
             </span>
             <Package className="size-4 text-[#c5a059]" />
+          </div>
+          <p className="text-2xl font-serif text-neutral-950 dark:text-white">
+            {orders.length}
+          </p>
+          <p className="text-[11px] font-sans text-neutral-500 mt-1">
+            Lifetime placed orders
+          </p>
+        </div>
+
+        <div className="border border-neutral-200 dark:border-neutral-800 p-5 bg-[#f9f6ed]/40 dark:bg-neutral-900/40">
+          <div className="flex items-center justify-between text-xs font-sans text-neutral-500 mb-2">
+            <span className="uppercase tracking-wider text-[10px]">
+              Active Shipments
+            </span>
+            <Truck className="size-4 text-[#c5a059]" />
+          </div>
+          <p className="text-2xl font-serif text-neutral-950 dark:text-white">
+            {activeOrdersCount}
+          </p>
+          <p className="text-[11px] font-sans text-neutral-500 mt-1">
+            In processing or transit
+          </p>
+        </div>
