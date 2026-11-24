@@ -733,3 +733,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                           (district
                             ? "Calculating delivery zone..."
                             : "Select your division & district above")}
+                      </span>
+                    </p>
+                    <p className="text-[11px] font-sans text-neutral-500 mt-0.5">
+                      Estimated delivery: {shippingQuote?.eta || "24 – 48 Hours"}
+                    </p>
+                  </div>
+                  <span className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                    {isQuoteFetching ? (
+                      <Loader2 className="size-3.5 animate-spin text-neutral-500" />
+                    ) : selectedZoneCharge === 0 ? (
+                      "Free"
+                    ) : (
+                      `৳${formatFragrancePrice(selectedZoneCharge)}`
+                    )}
+                  </span>
