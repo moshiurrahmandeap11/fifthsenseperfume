@@ -127,6 +127,8 @@ export interface IPlatformSettings {
   outsideDhakaShipping: number;
   freeShippingThreshold: number | null;
   enabledPaymentMethods?: string[];
+  loyaltyPointsPer100Bdt?: number;
+  loyaltyPointValueBdt?: number;
   metaPixelId: string | null;
   metaCapiAccessToken: string | null;
   sendCapiOnConfirmOnly: boolean;
