@@ -163,3 +163,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
       "SSLCOMMERZ",
     ];
     const filtered = PAYMENT_OPTIONS.filter((opt) =>
+      enabled.includes(opt.value)
+    );
+    return filtered.length > 0 ? filtered : [PAYMENT_OPTIONS[0]];
+  }, [brand.enabledPaymentMethods]);
+
+  useEffect(() => {
+    if (!availablePaymentOptions.some((opt) => opt.value === paymentMethod)) {
+      setPaymentMethod(availablePaymentOptions[0].value);
+    }
+  }, [availablePaymentOptions, paymentMethod]);
+
+  const [couponInput, setCouponInput] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState<IOrder | null>(null);
+
