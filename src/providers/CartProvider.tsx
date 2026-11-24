@@ -177,23 +177,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [snapshot.items]
   );
 
-  const activeCoupon = useMemo(() => {
+  const activeCoupon = useMemo<CartCouponRule | null>(() => {
     if (!snapshot.couponCode) return null;
-    const rule = AVAILABLE_COUPONS.find(
-      (c) => c.code.toUpperCase() === snapshot.couponCode?.toUpperCase()
-    );
-    if (!rule || totalQuantity < rule.minQuantity) return null;
-    return rule;
-  }, [snapshot.couponCode, totalQuantity]);
+    try {
+      const parsed = JSON.parse(snapshot.couponCode) as CartCouponRule;
+      if (parsed && parsed.code && parsed.discountType) {
+        return parsed;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }, [snapshot.couponCode]);
 
   const discountAmount = useMemo(() => {
     if (!activeCoupon || subtotal <= 0) return 0;
-    return Math.round(subtotal * (activeCoupon.discountPercent / 100));
+    if (activeCoupon.discountType === "PERCENTAGE") {
+      return Math.round(subtotal * (activeCoupon.discountValue / 100));
+    }
+    if (activeCoupon.discountType === "FIXED") {
+      return Math.round(Math.min(subtotal, activeCoupon.discountValue));
+    }
+    return 0;
   }, [activeCoupon, subtotal]);
 
   const netSubtotal = Math.max(0, subtotal - discountAmount);
   const shippingFee =
     snapshot.items.length === 0 ||
+    activeCoupon?.discountType === "FREE_SHIPPING" ||
     netSubtotal >= dummyCartJson.freeShippingThreshold
       ? 0
       : dummyCartJson.defaultShippingFee;
