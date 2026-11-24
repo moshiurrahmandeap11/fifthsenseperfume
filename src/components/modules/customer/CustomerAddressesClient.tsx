@@ -118,3 +118,33 @@ export default function CustomerAddressesClient({
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!recipientName.trim() || !phoneNumber.trim() || !thana || !fullAddress.trim()) {
+      toast.error("Please fill in all required address fields.");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const deliveryZone =
+          shippingQuoteRes?.data?.deliveryZone || "INSIDE_DHAKA";
+
+        if (editingId) {
+          const res = await updateAddress(editingId, {
+            label,
+            recipientName: recipientName.trim(),
+            phoneNumber: phoneNumber.trim(),
+            division,
+            district,
+            thana,
+            fullAddress: fullAddress.trim(),
+            deliveryZone,
+            isDefault,
+          });
+          if (res?.data) {
+            setAddresses((prev) =>
+              prev.map((a) => {
+                if (a.id === editingId) return res.data!;
+                return isDefault ? { ...a, isDefault: false } : a;
+              })
+            );
