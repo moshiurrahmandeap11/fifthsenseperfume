@@ -107,6 +107,18 @@ export default function CheckoutClient({
   initialAddresses = [],
 }: CheckoutClientProps) {
   const brand = useBrand();
+  const defaultSavedAddress = useMemo(
+    () =>
+      initialAddresses.find((a) => a.isDefault) ||
+      initialAddresses[0] ||
+      null,
+    [initialAddresses]
+  );
+
+  const [selectedAddressId, setSelectedAddressId] = useState<string>(
+    defaultSavedAddress ? defaultSavedAddress.id : "NEW"
+  );
+  const [saveNewAddress, setSaveNewAddress] = useState<boolean>(false);
   const {
     items,
     subtotal,
@@ -184,6 +196,7 @@ export default function CheckoutClient({
   }, [availablePaymentOptions, paymentMethod]);
 
   const [couponInput, setCouponInput] = useState("");
+  const [useLoyaltyPoints, setUseLoyaltyPoints] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completedOrder, setCompletedOrder] = useState<IOrder | null>(null);
 
@@ -193,8 +206,9 @@ export default function CheckoutClient({
     `chk_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
   );
 
-  // Restore saved checkout draft from localStorage on mount (before user fallback)
+  // Restore saved checkout draft from localStorage on mount (or apply default saved address)
   useEffect(() => {
+    let hasDraftAddress = false;
     try {
       const raw = window.localStorage.getItem(CHECKOUT_DRAFT_STORAGE_KEY);
       if (raw) {
