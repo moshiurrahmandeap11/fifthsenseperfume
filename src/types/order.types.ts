@@ -30,6 +30,7 @@ export type IncompleteOrderStatus =
 
 export type PaymentMethod =
   | "COD"
+  | "STRIPE"
   | "BKASH"
   | "NAGAD"
   | "ROCKET"
@@ -181,6 +182,7 @@ export interface ICheckoutPayload {
   paymentMethod?: PaymentMethod;
   source?: OrderSource;
   couponCode?: string;
+  redeemPoints?: number;
   customerNote?: string;
   items: ICheckoutItemInput[];
   fbp?: string;

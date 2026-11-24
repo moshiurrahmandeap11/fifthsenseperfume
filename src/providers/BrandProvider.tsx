@@ -19,6 +19,13 @@ export interface BrandContextValue {
   supportPhone: string;
   whatsappNumber: string;
   announcementText: string;
+  insideDhakaShipping: number;
+  dhakaSubAreaShipping: number;
+  outsideDhakaShipping: number;
+  freeShippingThreshold: number;
+  enabledPaymentMethods: string[];
+  loyaltyPointsPer100Bdt: number;
+  loyaltyPointValueBdt: number;
 }
 
 const DEFAULT_BRAND: BrandContextValue = {
@@ -36,6 +43,13 @@ const DEFAULT_BRAND: BrandContextValue = {
   whatsappNumber: "+880 1700-000000",
   announcementText:
     "Complimentary discovery sample included with every flacon order.",
+  insideDhakaShipping: 60,
+  dhakaSubAreaShipping: 100,
+  outsideDhakaShipping: 120,
+  freeShippingThreshold: 5000,
+  enabledPaymentMethods: ["COD", "BKASH", "NAGAD", "SSLCOMMERZ"],
+  loyaltyPointsPer100Bdt: 1,
+  loyaltyPointValueBdt: 1,
 };
 
 const BrandContext = createContext<BrandContextValue>(DEFAULT_BRAND);
@@ -66,6 +80,25 @@ export function BrandProvider({
         initialSettings.whatsappNumber || DEFAULT_BRAND.whatsappNumber,
       announcementText:
         initialSettings.announcementText || DEFAULT_BRAND.announcementText,
+      insideDhakaShipping:
+        initialSettings.insideDhakaShipping ?? DEFAULT_BRAND.insideDhakaShipping,
+      dhakaSubAreaShipping:
+        initialSettings.dhakaSubAreaShipping ?? DEFAULT_BRAND.dhakaSubAreaShipping,
+      outsideDhakaShipping:
+        initialSettings.outsideDhakaShipping ?? DEFAULT_BRAND.outsideDhakaShipping,
+      freeShippingThreshold:
+        initialSettings.freeShippingThreshold ?? DEFAULT_BRAND.freeShippingThreshold,
+      enabledPaymentMethods:
+        initialSettings.enabledPaymentMethods &&
+        initialSettings.enabledPaymentMethods.length > 0
+          ? initialSettings.enabledPaymentMethods
+          : DEFAULT_BRAND.enabledPaymentMethods,
+      loyaltyPointsPer100Bdt:
+        initialSettings.loyaltyPointsPer100Bdt ??
+        DEFAULT_BRAND.loyaltyPointsPer100Bdt,
+      loyaltyPointValueBdt:
+        initialSettings.loyaltyPointValueBdt ??
+        DEFAULT_BRAND.loyaltyPointValueBdt,
     };
   }, [initialSettings]);
 

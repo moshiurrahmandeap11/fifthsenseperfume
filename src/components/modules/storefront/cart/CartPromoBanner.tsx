@@ -17,8 +17,8 @@ export default function CartPromoBanner({ className }: CartPromoBannerProps) {
   const isBuy2Unlocked = totalQuantity >= 2;
   const isBuy2Applied = activeCoupon?.code === "BUY2";
 
-  const handleQuickApplyBuy2 = () => {
-    const result = applyCoupon("BUY2");
+  const handleQuickApplyBuy2 = async () => {
+    const result = await applyCoupon("BUY2");
     if (result.ok) {
       toast.success(result.message, {
         style: {
@@ -27,6 +27,8 @@ export default function CartPromoBanner({ className }: CartPromoBannerProps) {
           border: "1px solid #27272a",
         },
       });
+    } else {
+      toast.error(result.message);
     }
   };
 

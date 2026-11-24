@@ -165,10 +165,8 @@ export default function AccountsPaymentsClient({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All Methods</SelectItem>
-              <SelectItem value="CASH_ON_DELIVERY">COD</SelectItem>
-              <SelectItem value="BKASH">bKash</SelectItem>
-              <SelectItem value="NAGAD">Nagad</SelectItem>
-              <SelectItem value="SSLCOMMERZ">Online Gateway</SelectItem>
+              <SelectItem value="COD">Cash on Delivery</SelectItem>
+              <SelectItem value="STRIPE">Card (Stripe)</SelectItem>
             </SelectContent>
           </Select>
 

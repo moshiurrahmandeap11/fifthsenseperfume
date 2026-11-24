@@ -126,6 +126,9 @@ export interface IPlatformSettings {
   dhakaSubAreaShipping: number;
   outsideDhakaShipping: number;
   freeShippingThreshold: number | null;
+  enabledPaymentMethods?: string[];
+  loyaltyPointsPer100Bdt?: number;
+  loyaltyPointValueBdt?: number;
   metaPixelId: string | null;
   metaCapiAccessToken: string | null;
   sendCapiOnConfirmOnly: boolean;
@@ -155,6 +158,9 @@ export interface IUpdatePlatformSettingsPayload {
   dhakaSubAreaShipping?: number;
   outsideDhakaShipping?: number;
   freeShippingThreshold?: number | null;
+  enabledPaymentMethods?: string[];
+  loyaltyPointsPer100Bdt?: number;
+  loyaltyPointValueBdt?: number;
   metaPixelId?: string;
   metaCapiAccessToken?: string;
   sendCapiOnConfirmOnly?: boolean;

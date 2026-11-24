@@ -1,0 +1,212 @@
+import React from "react";
+import { Metadata } from "next";
+import { connection } from "next/server";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Award,
+  MapPin,
+  Package,
+  Phone,
+  Settings,
+  Truck,
+} from "lucide-react";
+import { getMe } from "@/services/auth.services";
+import { getMyOrders } from "@/services/order.services";
+import { getMyAddresses } from "@/services/user.services";
+import { formatFragrancePrice } from "@/components/modules/storefront/cart/cartUtils";
+
+export const metadata: Metadata = {
+  title: "Customer Dashboard | FIFTH SENSE PERFUMES",
+  description:
+    "Overview of your fragrance orders, loyalty points, saved addresses, and account settings.",
+};
+
+export default async function CustomerDashboardPage() {
+  await connection();
+  const [user, ordersRes, addressesRes] = await Promise.all([
+    getMe(),
+    getMyOrders().catch(() => ({ data: [] })),
+    getMyAddresses().catch(() => ({ data: [] })),
+  ]);
+
+  const orders = ordersRes?.data || [];
+  const addresses = addressesRes?.data || [];
+  const activeOrdersCount = orders.filter(
+    (o) => !["DELIVERED", "CANCELLED", "RETURNED"].includes(o.status)
+  ).length;
+  const recentOrders = orders.slice(0, 4);
+
+  return (
+    <div className="space-y-6">
+      {/* Page Title */}
+      <div className="border-b border-neutral-200 dark:border-neutral-800 pb-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="font-heading font-serif text-2xl sm:text-3xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+            Account Overview
+          </h1>
+          <p className="text-xs font-sans text-neutral-500 mt-1">
+            Welcome back, {user?.name || "Customer"}. Manage your orders, addresses, and security.
+          </p>
+        </div>
+
+        <Link
+          href="/customer/settings"
+          className="inline-flex items-center gap-1.5 px-4 py-2 border border-neutral-300 dark:border-neutral-700 hover:border-black dark:hover:border-white text-xs font-sans text-neutral-900 dark:text-neutral-100 transition-colors"
+        >
+          <Settings className="size-3.5" />
+          <span>Edit Profile</span>
+        </Link>
+      </div>
+
+      {/* Key Metrics Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="border border-neutral-200 dark:border-neutral-800 p-5 bg-[#f9f6ed]/40 dark:bg-neutral-900/40">
+          <div className="flex items-center justify-between text-xs font-sans text-neutral-500 mb-2">
+            <span className="uppercase tracking-wider text-[10px]">
+              Total Orders
+            </span>
+            <Package className="size-4 text-[#c5a059]" />
+          </div>
+          <p className="text-2xl font-serif text-neutral-950 dark:text-white">
+            {orders.length}
+          </p>
+          <p className="text-[11px] font-sans text-neutral-500 mt-1">
+            Lifetime placed orders
+          </p>
+        </div>
+
+        <div className="border border-neutral-200 dark:border-neutral-800 p-5 bg-[#f9f6ed]/40 dark:bg-neutral-900/40">
+          <div className="flex items-center justify-between text-xs font-sans text-neutral-500 mb-2">
+            <span className="uppercase tracking-wider text-[10px]">
+              Active Shipments
+            </span>
+            <Truck className="size-4 text-[#c5a059]" />
+          </div>
+          <p className="text-2xl font-serif text-neutral-950 dark:text-white">
+            {activeOrdersCount}
+          </p>
+          <p className="text-[11px] font-sans text-neutral-500 mt-1">
+            In processing or transit
+          </p>
+        </div>
+
+        <div className="border border-neutral-200 dark:border-neutral-800 p-5 bg-[#f9f6ed]/40 dark:bg-neutral-900/40">
+          <div className="flex items-center justify-between text-xs font-sans text-neutral-500 mb-2">
+            <span className="uppercase tracking-wider text-[10px]">
+              Loyalty Points
+            </span>
+            <Award className="size-4 text-[#c5a059]" />
+          </div>
+          <p className="text-2xl font-serif text-neutral-950 dark:text-white">
+            {user?.loyaltyPoints || 0} pts
+          </p>
+          <p className="text-[11px] font-sans text-neutral-500 mt-1">
+            Earned on verified purchases
+          </p>
+        </div>
+
+        <div className="border border-neutral-200 dark:border-neutral-800 p-5 bg-[#f9f6ed]/40 dark:bg-neutral-900/40">
+          <div className="flex items-center justify-between text-xs font-sans text-neutral-500 mb-2">
+            <span className="uppercase tracking-wider text-[10px]">
+              Saved Addresses
+            </span>
+            <MapPin className="size-4 text-[#c5a059]" />
+          </div>
+          <p className="text-2xl font-serif text-neutral-950 dark:text-white">
+            {addresses.length}
+          </p>
+          <p className="text-[11px] font-sans text-neutral-500 mt-1">
+            Ready for express checkout
+          </p>
+        </div>
+      </div>
+
+      {/* Recent Orders */}
+      <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 space-y-4">
+        <div className="flex items-center justify-between border-b border-neutral-100 dark:border-neutral-900 pb-3">
+          <h2 className="font-heading font-serif text-lg sm:text-xl font-normal text-neutral-950 dark:text-white uppercase">
+            Recent Orders
+          </h2>
+          <Link
+            href="/customer/orders"
+            className="inline-flex items-center gap-1 text-xs font-sans text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
+          >
+            <span>View All Orders</span>
+            <ArrowRight className="size-3.5" />
+          </Link>
+        </div>
+
+        {recentOrders.length === 0 ? (
+          <div className="py-8 text-center space-y-3">
+            <p className="text-xs font-sans text-neutral-500">
+              You haven&apos;t placed any fragrance orders yet.
+            </p>
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#09090b] text-white dark:bg-white dark:text-black text-xs font-sans uppercase"
+            >
+              <span>Explore Fragrances</span>
+              <ArrowRight className="size-3.5" />
+            </Link>
+          </div>
+        ) : (
+          <div className="divide-y divide-neutral-100 dark:divide-neutral-900">
+            {recentOrders.map((order) => (
+              <div
+                key={order.id}
+                className="py-3.5 flex flex-wrap items-center justify-between gap-3 text-xs font-sans"
+              >
+                <div>
+                  <p className="font-mono font-medium text-neutral-950 dark:text-white">
+                    {order.orderNumber}
+                  </p>
+                  <p className="text-[11px] text-neutral-500 mt-0.5">
+                    {new Date(order.createdAt).toLocaleDateString()} &bull;{" "}
+                    {order.items?.length || 0} item(s)
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <span className="px-2.5 py-1 text-[10px] uppercase tracking-wider border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200">
+                    {order.status.replace(/_/g, " ")}
+                  </span>
+                  <span className="font-medium text-neutral-950 dark:text-white tabular-nums">
+                    ৳{formatFragrancePrice(order.totalAmount)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Quick Profile Snapshot */}
+      <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
+        <div>
+          <span className="block text-[10px] uppercase tracking-wider text-neutral-400 mb-1">
+            Contact Phone
+          </span>
+          <p className="flex items-center gap-1.5 text-neutral-900 dark:text-neutral-100">
+            <Phone className="size-3.5 text-[#c5a059]" />
+            <span>{user?.phoneNumber || "Not set yet"}</span>
+          </p>
+        </div>
+
+        <div>
+          <span className="block text-[10px] uppercase tracking-wider text-neutral-400 mb-1">
+            Primary Address
+          </span>
+          <p className="flex items-center gap-1.5 text-neutral-900 dark:text-neutral-100">
+            <MapPin className="size-3.5 text-[#c5a059] shrink-0" />
+            <span className="truncate">
+              {user?.address ||
+                addresses[0]?.fullAddress ||
+                "No default address saved"}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

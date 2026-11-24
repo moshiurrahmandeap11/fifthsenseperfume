@@ -16,15 +16,18 @@ import {
   AddProductOptions,
   buildCartItemFromProduct,
 } from "@/components/modules/storefront/cart/cartUtils";
+import { applyCoupon as applyCouponApi } from "@/services/marketing.services";
+import { DiscountType } from "@/types/marketing.types";
 
 const CART_ITEMS_STORAGE_KEY = "fifthsense_cart_items_v2";
 const CART_COUPON_STORAGE_KEY = "fifthsense_cart_coupon_v2";
 
 export interface CartCouponRule {
   code: string;
-  discountPercent: number;
-  minQuantity: number;
-  description: string;
+  discountType: DiscountType;
+  discountValue: number;
+  discountAmount: number;
+  discountPercent?: number;
 }
 
 interface StoredCartState {
@@ -32,7 +35,6 @@ interface StoredCartState {
   couponCode: string | null;
 }
 
-const AVAILABLE_COUPONS: CartCouponRule[] = dummyCartJson.availableCoupons;
 const INITIAL_CART_ITEMS: ICartItemDetails[] = [];
 
 const SERVER_SNAPSHOT: StoredCartState = {
@@ -145,7 +147,10 @@ interface CartContextValue {
   removeItem: (itemId: string) => void;
   clearCart: () => void;
   restoreSampleCart: () => void;
-  applyCoupon: (code: string) => { ok: boolean; message: string };
+  applyCoupon: (
+    code: string,
+    options?: { isPrepaid?: boolean }
+  ) => Promise<{ ok: boolean; message: string }>;
   removeCoupon: () => void;
 }
 
@@ -172,23 +177,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [snapshot.items]
   );
 
-  const activeCoupon = useMemo(() => {
+  const activeCoupon = useMemo<CartCouponRule | null>(() => {
     if (!snapshot.couponCode) return null;
-    const rule = AVAILABLE_COUPONS.find(
-      (c) => c.code.toUpperCase() === snapshot.couponCode?.toUpperCase()
-    );
-    if (!rule || totalQuantity < rule.minQuantity) return null;
-    return rule;
-  }, [snapshot.couponCode, totalQuantity]);
+    try {
+      const parsed = JSON.parse(snapshot.couponCode) as CartCouponRule;
+      if (parsed && parsed.code && parsed.discountType) {
+        return parsed;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }, [snapshot.couponCode]);
 
   const discountAmount = useMemo(() => {
     if (!activeCoupon || subtotal <= 0) return 0;
-    return Math.round(subtotal * (activeCoupon.discountPercent / 100));
+    if (activeCoupon.discountType === "PERCENTAGE") {
+      return Math.round(subtotal * (activeCoupon.discountValue / 100));
+    }
+    if (activeCoupon.discountType === "FIXED") {
+      return Math.round(Math.min(subtotal, activeCoupon.discountValue));
+    }
+    return 0;
   }, [activeCoupon, subtotal]);
 
   const netSubtotal = Math.max(0, subtotal - discountAmount);
   const shippingFee =
     snapshot.items.length === 0 ||
+    activeCoupon?.discountType === "FREE_SHIPPING" ||
     netSubtotal >= dummyCartJson.freeShippingThreshold
       ? 0
       : dummyCartJson.defaultShippingFee;
@@ -270,14 +286,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             };
           });
 
-    const nextQtyTotal = nextItems.reduce((sum, i) => sum + i.quantity, 0);
-    const activeRule = AVAILABLE_COUPONS.find(
-      (c) => c.code.toUpperCase() === current.couponCode?.toUpperCase()
-    );
-    const nextCoupon =
-      activeRule && nextQtyTotal < activeRule.minQuantity
-        ? null
-        : current.couponCode;
+    const nextCoupon = nextItems.length === 0 ? null : current.couponCode;
 
     writeCartItems(nextItems, nextCoupon);
   }, []);
@@ -285,14 +294,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeItem = useCallback((itemId: string) => {
     const current = readCartSnapshot();
     const nextItems = current.items.filter((item) => item.id !== itemId);
-    const nextQtyTotal = nextItems.reduce((sum, i) => sum + i.quantity, 0);
-    const activeRule = AVAILABLE_COUPONS.find(
-      (c) => c.code.toUpperCase() === current.couponCode?.toUpperCase()
-    );
-    const nextCoupon =
-      activeRule && nextQtyTotal < activeRule.minQuantity
-        ? null
-        : current.couponCode;
+    const nextCoupon = nextItems.length === 0 ? null : current.couponCode;
 
     writeCartItems(nextItems, nextCoupon);
   }, []);
@@ -305,37 +307,59 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     writeCartItems(INITIAL_CART_ITEMS, null);
   }, []);
 
-  const applyCoupon = useCallback((rawCode: string) => {
-    const normalized = rawCode.trim().toUpperCase();
-    if (!normalized) {
-      return { ok: false, message: "Please enter a privilege code." };
-    }
+  const applyCoupon = useCallback(
+    async (rawCode: string, options?: { isPrepaid?: boolean }) => {
+      const normalized = rawCode.trim().toUpperCase();
+      if (!normalized) {
+        return { ok: false, message: "Please enter a coupon code." };
+      }
 
-    const rule = AVAILABLE_COUPONS.find(
-      (c) => c.code.toUpperCase() === normalized
-    );
-    if (!rule) {
-      return {
-        ok: false,
-        message: "Invalid code. Try BUY2 (20% off 2+ items) or FIFTH10.",
-      };
-    }
+      const current = readCartSnapshot();
+      const cartSubtotal = current.items.reduce((sum, i) => sum + i.itemTotal, 0);
+      const qtyTotal = current.items.reduce((sum, i) => sum + i.quantity, 0);
 
-    const current = readCartSnapshot();
-    const qtyTotal = current.items.reduce((sum, i) => sum + i.quantity, 0);
-    if (qtyTotal < rule.minQuantity) {
-      return {
-        ok: false,
-        message: `Add at least ${rule.minQuantity} fragrances to unlock ${rule.code} (${rule.discountPercent}% off).`,
-      };
-    }
+      try {
+        const res = await applyCouponApi({
+          code: normalized,
+          cartSubtotal,
+          totalPairs: qtyTotal || 1,
+          isPrepaid: options?.isPrepaid,
+        });
 
-    writeCartItems(current.items, rule.code);
-    return {
-      ok: true,
-      message: `${rule.code} applied — ${rule.discountPercent}% privilege unlocked.`,
-    };
-  }, []);
+        const data = res?.data;
+        if (!data || !data.isValid) {
+          return {
+            ok: false,
+            message: res?.message || "Invalid or inactive coupon code.",
+          };
+        }
+
+        const rule: CartCouponRule = {
+          code: data.code,
+          discountType: data.discountType,
+          discountValue: data.discountValue,
+          discountAmount: data.discountAmount,
+          discountPercent:
+            data.discountType === "PERCENTAGE" ? data.discountValue : undefined,
+        };
+
+        writeCartItems(current.items, JSON.stringify(rule));
+        return {
+          ok: true,
+          message:
+            data.message ||
+            `${data.code} applied — ৳${data.discountAmount} discount unlocked.`,
+        };
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        return {
+          ok: false,
+          message: error?.message || "Invalid or inactive coupon code.",
+        };
+      }
+    },
+    []
+  );
 
   const removeCoupon = useCallback(() => {
     const current = readCartSnapshot();
@@ -397,3 +421,9 @@ export function useCart() {
   }
   return ctx;
 }
+// Cart coupon sync note 1
+// Cart coupon sync note 4
+// Cart coupon sync note 7
+// Cart coupon sync note 10
+// Cart coupon sync note 13
+// Cart coupon sync note 16

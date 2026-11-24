@@ -1,0 +1,485 @@
+"use client";
+
+import React, { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import {
+  CheckCircle2,
+  Edit3,
+  Loader2,
+  MapPin,
+  Plus,
+  Trash2,
+  X,
+} from "lucide-react";
+import toast from "react-hot-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  createAddress,
+  deleteAddress,
+  updateAddress,
+} from "@/services/user.services";
+import {
+  getBangladeshLocations,
+  getShippingQuote,
+} from "@/services/system.services";
+import { confirmAction } from "@/lib/swal";
+import { ICustomerAddress } from "@/types/user.types";
+import { cn } from "@/lib/utils";
+
+interface CustomerAddressesClientProps {
+  initialAddresses: ICustomerAddress[];
+  defaultRecipientName?: string;
+  defaultPhoneNumber?: string;
+}
+
+export default function CustomerAddressesClient({
+  initialAddresses,
+  defaultRecipientName = "",
+  defaultPhoneNumber = "",
+}: CustomerAddressesClientProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [addresses, setAddresses] =
+    useState<ICustomerAddress[]>(initialAddresses);
+
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [label, setLabel] = useState("Home");
+  const [recipientName, setRecipientName] = useState(defaultRecipientName);
+  const [phoneNumber, setPhoneNumber] = useState(defaultPhoneNumber);
+  const [division, setDivision] = useState("Dhaka");
+  const [district, setDistrict] = useState("Dhaka");
+  const [thana, setThana] = useState("");
+  const [fullAddress, setFullAddress] = useState("");
+  const [isDefault, setIsDefault] = useState(false);
+
+  const { data: divisionsRes } = useQuery({
+    queryKey: ["bd-locations", "divisions"],
+    queryFn: () => getBangladeshLocations(),
+    staleTime: Infinity,
+  });
+
+  const { data: districtsRes } = useQuery({
+    queryKey: ["bd-locations", "districts", division],
+    queryFn: () => getBangladeshLocations({ division }),
+    enabled: Boolean(division),
+    staleTime: Infinity,
+  });
+
+  const { data: thanasRes } = useQuery({
+    queryKey: ["bd-locations", "thanas", district],
+    queryFn: () => getBangladeshLocations({ district }),
+    enabled: Boolean(district),
+    staleTime: Infinity,
+  });
+
+  const { data: shippingQuoteRes } = useQuery({
+    queryKey: ["shipping-quote", division, district, thana, 0],
+    queryFn: () => getShippingQuote({ division, district, thana, subtotal: 0 }),
+    enabled: Boolean(division && district),
+  });
+
+  const divisions = divisionsRes?.data?.divisions ?? [];
+  const districts = districtsRes?.data?.districts ?? [];
+  const thanas = thanasRes?.data?.thanas ?? [];
+
+  const openCreateForm = () => {
+    setEditingId(null);
+    setLabel("Home");
+    setRecipientName(defaultRecipientName);
+    setPhoneNumber(defaultPhoneNumber);
+    setDivision("Dhaka");
+    setDistrict("Dhaka");
+    setThana("");
+    setFullAddress("");
+    setIsDefault(addresses.length === 0);
+    setIsFormOpen(true);
+  };
+
+  const openEditForm = (addr: ICustomerAddress) => {
+    setEditingId(addr.id);
+    setLabel(addr.label || "Home");
+    setRecipientName(addr.recipientName);
+    setPhoneNumber(addr.phoneNumber);
+    setDivision(addr.division);
+    setDistrict(addr.district);
+    setThana(addr.thana);
+    setFullAddress(addr.fullAddress);
+    setIsDefault(addr.isDefault);
+    setIsFormOpen(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!recipientName.trim() || !phoneNumber.trim() || !thana || !fullAddress.trim()) {
+      toast.error("Please fill in all required address fields.");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const deliveryZone =
+          shippingQuoteRes?.data?.deliveryZone || "INSIDE_DHAKA";
+
+        if (editingId) {
+          const res = await updateAddress(editingId, {
+            label,
+            recipientName: recipientName.trim(),
+            phoneNumber: phoneNumber.trim(),
+            division,
+            district,
+            thana,
+            fullAddress: fullAddress.trim(),
+            deliveryZone,
+            isDefault,
+          });
+          if (res?.data) {
+            setAddresses((prev) =>
+              prev.map((a) => {
+                if (a.id === editingId) return res.data!;
+                return isDefault ? { ...a, isDefault: false } : a;
+              })
+            );
+            toast.success("Address updated");
+          }
+        } else {
+          const res = await createAddress({
+            label,
+            recipientName: recipientName.trim(),
+            phoneNumber: phoneNumber.trim(),
+            division,
+            district,
+            thana,
+            fullAddress: fullAddress.trim(),
+            deliveryZone,
+            isDefault,
+          });
+          if (res?.data) {
+            setAddresses((prev) =>
+              isDefault
+                ? [res.data!, ...prev.map((a) => ({ ...a, isDefault: false }))]
+                : [...prev, res.data!]
+            );
+            toast.success("Address added");
+          }
+        }
+
+        setIsFormOpen(false);
+        router.refresh();
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        toast.error(error?.message || "Failed to save address");
+      }
+    });
+  };
+
+  const handleDelete = async (addr: ICustomerAddress) => {
+    const confirmed = await confirmAction({
+      title: `Remove ${addr.label} address?`,
+      text: "This delivery address will be removed from your account.",
+      confirmText: "Delete",
+      cancelText: "Keep",
+      variant: "destructive",
+    });
+    if (!confirmed) return;
+
+    startTransition(async () => {
+      try {
+        await deleteAddress(addr.id);
+        setAddresses((prev) => prev.filter((a) => a.id !== addr.id));
+        toast.success("Address removed");
+        router.refresh();
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        toast.error(error?.message || "Failed to delete address");
+      }
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="border-b border-neutral-200 dark:border-neutral-800 pb-4 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="font-heading font-serif text-2xl sm:text-3xl font-normal text-neutral-950 dark:text-white uppercase">
+            Saved Addresses
+          </h1>
+          <p className="text-xs font-sans text-neutral-500 mt-1">
+            Manage your delivery destinations for faster fragrance checkout.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={openCreateForm}
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#09090b] text-white dark:bg-white dark:text-black text-xs font-sans uppercase cursor-pointer hover:opacity-90 transition-opacity"
+        >
+          <Plus className="size-3.5" />
+          <span>Add New Address</span>
+        </button>
+      </div>
+
+      {/* Add / Edit Address Form */}
+      {isFormOpen && (
+        <form
+          onSubmit={handleSubmit}
+          className="border border-neutral-300 dark:border-neutral-700 bg-[#f9f6ed]/40 dark:bg-neutral-900/40 p-5 sm:p-6 space-y-4"
+        >
+          <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 pb-3">
+            <h2 className="font-heading font-serif text-lg font-normal text-neutral-950 dark:text-white uppercase">
+              {editingId ? "Edit Address" : "New Delivery Address"}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setIsFormOpen(false)}
+              className="p-1 text-neutral-500 hover:text-black dark:hover:text-white cursor-pointer"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Label
+              </label>
+              <Select value={label} onValueChange={(v) => v && setLabel(v)}>
+                <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Home">Home</SelectItem>
+                  <SelectItem value="Office">Office</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Recipient Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                value={recipientName}
+                onChange={(e) => setRecipientName(e.target.value)}
+                className="w-full h-10 px-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                required
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="01XXXXXXXXX"
+                className="w-full h-10 px-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Division <span className="text-red-500">*</span>
+              </label>
+              <Select
+                value={division}
+                onValueChange={(v) => {
+                  if (!v) return;
+                  setDivision(v);
+                  setDistrict("");
+                  setThana("");
+                }}
+              >
+                <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
+                  <SelectValue placeholder="Select division" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {divisions.map((d) => (
+                    <SelectItem key={d} value={d}>
+                      {d}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                District <span className="text-red-500">*</span>
+              </label>
+              <Select
+                value={district}
+                onValueChange={(v) => {
+                  if (!v) return;
+                  setDistrict(v);
+                  setThana("");
+                }}
+                disabled={!division || districts.length === 0}
+              >
+                <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
+                  <SelectValue placeholder="Select district" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {districts.map((d) => (
+                    <SelectItem key={d} value={d}>
+                      {d}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Thana / Area <span className="text-red-500">*</span>
+              </label>
+              <Select
+                value={thana}
+                onValueChange={(v) => setThana(v || "")}
+                disabled={!district || thanas.length === 0}
+              >
+                <SelectTrigger className="w-full h-10 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs">
+                  <SelectValue placeholder="Select thana" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {thanas.map((t) => (
+                    <SelectItem key={t} value={t}>
+                      {t}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+              Full Address <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              rows={2}
+              required
+              value={fullAddress}
+              onChange={(e) => setFullAddress(e.target.value)}
+              placeholder="House #, Road #, Block, Flat..."
+              className="w-full p-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 resize-none"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
+            <label className="inline-flex items-center gap-2 text-xs font-sans text-neutral-700 dark:text-neutral-300 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isDefault}
+                onChange={(e) => setIsDefault(e.target.checked)}
+                className="accent-black dark:accent-white"
+              />
+              <span>Set as default delivery address</span>
+            </label>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsFormOpen(false)}
+                className="px-4 py-2 border border-neutral-300 dark:border-neutral-700 text-xs font-sans cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isPending}
+                className="px-5 py-2 bg-[#09090b] text-white dark:bg-white dark:text-black text-xs font-sans uppercase inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+              >
+                {isPending && <Loader2 className="size-3.5 animate-spin" />}
+                <span>{editingId ? "Update Address" : "Save Address"}</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      )}
+
+      {/* Address Cards */}
+      {addresses.length === 0 ? (
+        <div className="border border-neutral-200 dark:border-neutral-800 p-10 text-center space-y-3">
+          <div className="size-14 mx-auto flex items-center justify-center bg-[#f9f6ed] dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+            <MapPin className="size-6 text-[#c5a059]" />
+          </div>
+          <p className="text-xs font-sans text-neutral-500">
+            No saved delivery addresses yet. Add one for faster checkout.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {addresses.map((addr) => (
+            <div
+              key={addr.id}
+              className={cn(
+                "border p-5 flex flex-col justify-between gap-4",
+                addr.isDefault
+                  ? "border-black dark:border-white bg-[#f9f6ed]/40 dark:bg-neutral-900/40"
+                  : "border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950"
+              )}
+            >
+              <div className="space-y-1.5 text-xs font-sans">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 font-medium">
+                    {addr.label}
+                  </span>
+                  {addr.isDefault && (
+                    <span className="inline-flex items-center gap-1 text-[10px] text-emerald-700 dark:text-emerald-400">
+                      <CheckCircle2 className="size-3" />
+                      Default
+                    </span>
+                  )}
+                </div>
+
+                <p className="font-medium text-neutral-950 dark:text-white pt-1">
+                  {addr.recipientName} &bull; {addr.phoneNumber}
+                </p>
+                <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                  {addr.fullAddress}
+                </p>
+                <p className="text-[11px] text-neutral-500">
+                  {addr.thana}, {addr.district}, {addr.division}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-100 dark:border-neutral-900">
+                <button
+                  type="button"
+                  onClick={() => openEditForm(addr)}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 border border-neutral-200 dark:border-neutral-800 hover:border-black dark:hover:border-white text-[11px] font-sans cursor-pointer"
+                >
+                  <Edit3 className="size-3" />
+                  <span>Edit</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(addr)}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 border border-red-200 dark:border-red-900/50 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 text-[11px] font-sans cursor-pointer"
+                >
+                  <Trash2 className="size-3" />
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

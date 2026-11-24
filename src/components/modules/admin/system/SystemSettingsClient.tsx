@@ -117,6 +117,23 @@ export default function SystemSettingsClient({
           supportPhone: settings.supportPhone || undefined,
           whatsappNumber: settings.whatsappNumber || undefined,
           announcementText: settings.announcementText || undefined,
+          insideDhakaShipping: Number(settings.insideDhakaShipping ?? 60),
+          dhakaSubAreaShipping: Number(settings.dhakaSubAreaShipping ?? 100),
+          outsideDhakaShipping: Number(settings.outsideDhakaShipping ?? 120),
+          freeShippingThreshold:
+            settings.freeShippingThreshold !== null &&
+            settings.freeShippingThreshold !== undefined
+              ? Number(settings.freeShippingThreshold)
+              : null,
+          enabledPaymentMethods:
+            settings.enabledPaymentMethods &&
+            settings.enabledPaymentMethods.length > 0
+              ? settings.enabledPaymentMethods.filter((m) =>
+                  ["COD", "STRIPE"].includes(m)
+                )
+              : ["COD", "STRIPE"],
+          loyaltyPointsPer100Bdt: Number(settings.loyaltyPointsPer100Bdt ?? 1),
+          loyaltyPointValueBdt: Number(settings.loyaltyPointValueBdt ?? 1),
         });
 
         router.refresh();
@@ -215,79 +232,54 @@ export default function SystemSettingsClient({
 
   return (
     <div className="space-y-6 w-full">
-      {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="shadow-none border-border/50 bg-card">
-          <CardHeader className="pb-1 space-y-0">
-            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
-              Brand
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl font-normal tracking-tight text-foreground truncate">
-              {settings.brandName || "FIFTH SENSE"}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              Storefront identity
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-none border-border/50 bg-card">
-          <CardHeader className="pb-1 space-y-0">
-            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
-              Campaign Banners
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
-              {banners.length}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              Configured slides
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-none border-border/50 bg-card">
-          <CardHeader className="pb-1 space-y-0">
-            <CardTitle className="text-xs font-normal text-muted-foreground uppercase tracking-wider">
-              Boutiques
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-normal tracking-tight text-foreground tabular-nums">
-              {showrooms.length}
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              Physical locations
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Tabs */}
+      {/* Fluid Animated Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="h-9 mb-4">
-          <TabsTrigger value="BRAND" className="text-xs font-normal cursor-pointer">
-            Brand &amp; Support
-          </TabsTrigger>
-          <TabsTrigger value="BANNERS" className="text-xs font-normal cursor-pointer">
-            Hero Banners ({banners.length})
-          </TabsTrigger>
-          <TabsTrigger value="SHOWROOMS" className="text-xs font-normal cursor-pointer">
-            Showrooms ({showrooms.length})
-          </TabsTrigger>
-        </TabsList>
+        <div className="inline-flex flex-wrap items-center gap-1 p-1 bg-muted/60 border border-border/50 mb-5">
+          {[
+            { value: "BRAND", label: "Brand & Contact" },
+            { value: "THEME", label: "Theme & Colors" },
+            { value: "SHIPPING_PAYMENTS", label: "Shipping & Payments" },
+            { value: "LOYALTY", label: "Loyalty & Rewards" },
+            { value: "BANNERS", label: `Hero Banners (${banners.length})` },
+            { value: "SHOWROOMS", label: `Showrooms (${showrooms.length})` },
+          ].map((tab) => {
+            const isActive = activeTab === tab.value;
+            return (
+              <button
+                key={tab.value}
+                type="button"
+                onClick={() => setActiveTab(tab.value)}
+                className={`relative px-3.5 py-2 text-xs font-normal transition-colors cursor-pointer select-none ${
+                  isActive
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="admin-settings-tab-pill"
+                    transition={{
+                      type: "spring",
+                      stiffness: 420,
+                      damping: 32,
+                    }}
+                    className="absolute inset-0 bg-background border border-border/60 shadow-xs"
+                  />
+                )}
+                <span className="relative z-10">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
         <AnimatePresence mode="wait">
           {activeTab === "BRAND" && (
             <motion.div
               key="brand-tab"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
               <Card className="shadow-none border-border/50 bg-card">
                 <CardHeader className="pb-3 border-b border-border/40">
@@ -409,8 +401,72 @@ export default function SystemSettingsClient({
                     />
                   </div>
 
+                  {/* Contact */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border/40">
+                    <div className="space-y-1">
+                      <Label className="text-xs font-normal">Hotline Phone</Label>
+                      <Input
+                        value={settings.supportPhone || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            supportPhone: e.target.value,
+                          })
+                        }
+                        className="text-xs h-9 font-normal"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="text-xs font-normal">
+                        WhatsApp Number
+                      </Label>
+                      <Input
+                        value={settings.whatsappNumber || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            whatsappNumber: e.target.value,
+                          })
+                        }
+                        className="text-xs h-9 font-normal"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex justify-end">
+                    <Button
+                      size="sm"
+                      onClick={handleSaveSettings}
+                      disabled={isPending}
+                      className="text-xs font-normal cursor-pointer gap-1.5"
+                    >
+                      <Save className="size-3.5" />
+                      <span>{isPending ? "Saving..." : "Save Brand & Contact"}</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {activeTab === "THEME" && (
+            <motion.div
+              key="theme-tab"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Card className="shadow-none border-border/50 bg-card">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                    Luxury Brand Color Palette &amp; Presets
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-5 space-y-6">
                   {/* Multi-Color Brand Theme */}
-                  <div className="space-y-3 pt-4 border-t border-border/40">
+                  <div className="space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
                         <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
@@ -564,36 +620,270 @@ export default function SystemSettingsClient({
                     </div>
                   </div>
 
-                  {/* Contact */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border/40">
-                    <div className="space-y-1">
-                      <Label className="text-xs font-normal">Hotline Phone</Label>
-                      <Input
-                        value={settings.supportPhone || ""}
-                        onChange={(e) =>
-                          setSettings({
-                            ...settings,
-                            supportPhone: e.target.value,
-                          })
-                        }
-                        className="text-xs h-9 font-normal"
-                      />
+                  <div className="pt-2 flex justify-end">
+                    <Button
+                      size="sm"
+                      onClick={handleSaveSettings}
+                      disabled={isPending}
+                      className="text-xs font-normal cursor-pointer gap-1.5"
+                    >
+                      <Save className="size-3.5" />
+                      <span>{isPending ? "Saving..." : "Save Theme"}</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {activeTab === "SHIPPING_PAYMENTS" && (
+            <motion.div
+              key="shipping-payments-tab"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Card className="shadow-none border-border/50 bg-card">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                    Delivery Charges &amp; Checkout Payment Methods
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-5 space-y-6">
+                  {/* Delivery & Shipping Charges */}
+                  <div className="space-y-3">
+                    <div>
+                      <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                        Delivery &amp; Shipping Charges (৳)
+                      </Label>
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
+                        Configure zone-based delivery fees and free shipping threshold shown at checkout.
+                      </p>
                     </div>
 
-                    <div className="space-y-1">
-                      <Label className="text-xs font-normal">
-                        WhatsApp Number
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Inside Dhaka (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={settings.insideDhakaShipping ?? 60}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              insideDhakaShipping: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Dhaka Sub-Area (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={settings.dhakaSubAreaShipping ?? 100}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              dhakaSubAreaShipping: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Outside Dhaka (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={settings.outsideDhakaShipping ?? 120}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              outsideDhakaShipping: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Free Shipping Min (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          placeholder="e.g. 5000"
+                          value={settings.freeShippingThreshold ?? ""}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              freeShippingThreshold:
+                                e.target.value === ""
+                                  ? null
+                                  : Number(e.target.value),
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Storefront Payment Methods */}
+                  <div className="space-y-3 pt-4 border-t border-border/40">
+                    <div>
+                      <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                        Checkout Payment Methods
                       </Label>
-                      <Input
-                        value={settings.whatsappNumber || ""}
-                        onChange={(e) =>
-                          setSettings({
-                            ...settings,
-                            whatsappNumber: e.target.value,
-                          })
-                        }
-                        className="text-xs h-9 font-normal"
-                      />
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
+                        Select which payment options customers can use at checkout.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {[
+                        { id: "COD", label: "Cash on Delivery" },
+                        { id: "STRIPE", label: "Card (Stripe)" },
+                      ].map((method) => {
+                        const current =
+                          settings.enabledPaymentMethods &&
+                          settings.enabledPaymentMethods.length > 0
+                            ? settings.enabledPaymentMethods.filter((m) =>
+                                ["COD", "STRIPE"].includes(m)
+                              )
+                            : ["COD", "STRIPE"];
+                        const isEnabled = current.includes(method.id);
+
+                        return (
+                          <button
+                            key={method.id}
+                            type="button"
+                            onClick={() => {
+                              if (isEnabled && current.length <= 1) {
+                                toast.error(
+                                  "At least one payment method must remain enabled"
+                                );
+                                return;
+                              }
+                              const next = isEnabled
+                                ? current.filter((m) => m !== method.id)
+                                : [...current, method.id];
+                              setSettings({
+                                ...settings,
+                                enabledPaymentMethods: next,
+                              });
+                            }}
+                            className={`flex items-center justify-between px-3 py-2.5 rounded border text-left text-xs transition-colors cursor-pointer ${
+                              isEnabled
+                                ? "border-foreground bg-foreground/5 text-foreground"
+                                : "border-border/60 text-muted-foreground hover:border-border"
+                            }`}
+                          >
+                            <span className="font-normal">{method.label}</span>
+                            <span
+                              className={`size-2.5 rounded-full border ${
+                                isEnabled
+                                  ? "bg-emerald-500 border-emerald-500"
+                                  : "bg-transparent border-muted-foreground/40"
+                              }`}
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex justify-end">
+                    <Button
+                      size="sm"
+                      onClick={handleSaveSettings}
+                      disabled={isPending}
+                      className="text-xs font-normal cursor-pointer gap-1.5"
+                    >
+                      <Save className="size-3.5" />
+                      <span>{isPending ? "Saving..." : "Save Shipping & Payments"}</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {activeTab === "LOYALTY" && (
+            <motion.div
+              key="loyalty-tab"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Card className="shadow-none border-border/50 bg-card">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                    Customer Loyalty &amp; Reward Points
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-5 space-y-6">
+                  {/* Loyalty Points Program */}
+                  <div className="space-y-3">
+                    <div>
+                      <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                        Loyalty Points Program
+                      </Label>
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
+                        Customers automatically earn points when an order is delivered, and can redeem them at checkout (set 0 to disable).
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Points Earned per ৳100 Spent
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={settings.loyaltyPointsPer100Bdt ?? 1}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              loyaltyPointsPer100Bdt: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Redeem Value (1 Point = ৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          step="0.5"
+                          value={settings.loyaltyPointValueBdt ?? 1}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              loyaltyPointValueBdt: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -616,10 +906,10 @@ export default function SystemSettingsClient({
           {activeTab === "BANNERS" && (
             <motion.div
               key="banners-tab"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className="space-y-4"
             >
               <div className="flex justify-end">
@@ -712,10 +1002,10 @@ export default function SystemSettingsClient({
           {activeTab === "SHOWROOMS" && (
             <motion.div
               key="showrooms-tab"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className="space-y-4"
             >
               <div className="flex justify-end">

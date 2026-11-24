@@ -295,3 +295,72 @@ export const deleteShowroom = async (
   }
 };
 
+// ==========================================
+// 4. BANGLADESH LOCATIONS (BACKEND API)
+// ==========================================
+
+export interface ILocationsResponse {
+  divisions?: string[];
+  districts?: string[];
+  thanas?: string[];
+}
+
+export interface IShippingQuoteResponse {
+  deliveryZone: "INSIDE_DHAKA" | "DHAKA_SUB_AREA" | "OUTSIDE_DHAKA";
+  label: string;
+  eta: string;
+  baseCharge: number;
+  charge: number;
+  isFreeShipping: boolean;
+  freeShippingThreshold: number | null;
+}
+
+/**
+ * Fetch Bangladesh Divisions, Districts, or Thanas securely from Backend
+ */
+export const getBangladeshLocations = async (params?: {
+  division?: string;
+  district?: string;
+}): Promise<ApiResponse<ILocationsResponse>> => {
+  try {
+    const cleanParams = buildQueryParams(params);
+    const res = await httpClient.get<ILocationsResponse>("/system/locations", {
+      params: cleanParams,
+    });
+    return res;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to fetch locations";
+    throw new Error(message);
+  }
+};
+
+/**
+ * Calculate authoritative delivery zone & shipping fee from Backend
+ */
+export const getShippingQuote = async (params: {
+  division?: string;
+  district?: string;
+  thana?: string;
+  subtotal?: number;
+}): Promise<ApiResponse<IShippingQuoteResponse>> => {
+  try {
+    const cleanParams = buildQueryParams(params);
+    const res = await httpClient.get<IShippingQuoteResponse>(
+      "/system/shipping-quote",
+      {
+        params: cleanParams,
+      }
+    );
+    return res;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to calculate shipping fee";
+    throw new Error(message);
+  }
+};
+

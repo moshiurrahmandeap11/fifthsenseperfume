@@ -61,6 +61,26 @@ export const initiatePayment = async (
 };
 
 /**
+ * Verify Stripe Checkout Session after redirect back from Stripe
+ */
+export const verifyStripeSession = async (
+  sessionId: string
+): Promise<ApiResponse<any>> => {
+  try {
+    const res = await httpClient.get<any>("/payments/stripe/verify-session", {
+      params: { sessionId },
+    });
+    return res;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to verify Stripe payment session";
+    throw new Error(message);
+  }
+};
+
+/**
  * Payment Transactions Directory
  * Filterable and searchable ledger of all digital payments and COD settlements
  * Allowed: ACCOUNTANT, ADMIN, SUPER_ADMIN

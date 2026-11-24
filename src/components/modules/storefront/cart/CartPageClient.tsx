@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ShoppingBag,
   Trash2,
@@ -40,11 +41,12 @@ export default function CartPageClient() {
     removeCoupon,
   } = useCart();
 
+  const router = useRouter();
   const [couponInput, setCouponInput] = useState("");
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = applyCoupon(couponInput);
+    const res = await applyCoupon(couponInput);
     if (res.ok) {
       setCouponInput("");
       toast.success(res.message, {
@@ -66,13 +68,7 @@ export default function CartPageClient() {
   };
 
   const handleCheckout = () => {
-    toast.success("Proceeding to Fifth Sense luxury checkout soon.", {
-      style: {
-        background: "#09090b",
-        color: "#ffffff",
-        border: "1px solid #27272a",
-      },
-    });
+    router.push("/checkout");
   };
 
   return (
@@ -308,7 +304,13 @@ export default function CartPageClient() {
                   <div className="flex items-center justify-between text-[#9d8354] dark:text-[#cfb98f]">
                     <div className="flex items-center gap-2">
                       <span>
-                        {activeCoupon.code} ({activeCoupon.discountPercent}% off)
+                        {activeCoupon.code} (
+                        {activeCoupon.discountType === "PERCENTAGE"
+                          ? `${activeCoupon.discountValue}% off`
+                          : activeCoupon.discountType === "FIXED"
+                          ? `৳${activeCoupon.discountValue} off`
+                          : "Free Shipping"}
+                        )
                       </span>
                       <button
                         type="button"

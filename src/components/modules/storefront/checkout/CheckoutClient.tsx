@@ -1,0 +1,1196 @@
+"use client";
+
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  CreditCard,
+  Loader2,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  Tag,
+  Truck,
+  User,
+} from "lucide-react";
+import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import { useCart } from "@/providers/CartProvider";
+import { useBrand } from "@/providers/BrandProvider";
+import { formatFragrancePrice } from "../cart/cartUtils";
+import { checkoutOrder, incompleteCapture } from "@/services/order.services";
+import { initiatePayment } from "@/services/payment.services";
+import { createAddress } from "@/services/user.services";
+import {
+  getBangladeshLocations,
+  getShippingQuote,
+} from "@/services/system.services";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { IUser } from "@/types/auth.types";
+import { IOrder, PaymentMethod } from "@/types/order.types";
+import { DeliveryZone, ICustomerAddress } from "@/types/user.types";
+import { cn } from "@/lib/utils";
+
+interface CheckoutClientProps {
+  initialUser: IUser | null;
+  initialAddresses?: ICustomerAddress[];
+}
+
+const CHECKOUT_DRAFT_STORAGE_KEY = "fifthsense_checkout_draft_v1";
+
+interface CheckoutDraft {
+  customerName?: string;
+  customerPhone?: string;
+  customerEmail?: string;
+  division?: string;
+  district?: string;
+  thana?: string;
+  shippingAddress?: string;
+  customerNote?: string;
+  paymentMethod?: PaymentMethod;
+  couponInput?: string;
+}
+
+const PAYMENT_OPTIONS: Array<{
+  value: PaymentMethod;
+  label: string;
+  subtitle: string;
+}> = [
+  {
+    value: "COD",
+    label: "Cash on Delivery",
+    subtitle: "Pay in cash upon receiving your fragrance parcel",
+  },
+  {
+    value: "STRIPE",
+    label: "Card Payment",
+    subtitle: "Pay securely with Visa, Mastercard or AMEX via Stripe",
+  },
+];
+
+/**
+ * 1-Page Luxury Express Checkout with backend-driven cascading locations,
+ * authoritative shipping quotes, dynamic payment methods, and draft persistence.
+ */
+export default function CheckoutClient({
+  initialUser,
+  initialAddresses = [],
+}: CheckoutClientProps) {
+  const brand = useBrand();
+  const defaultSavedAddress = useMemo(
+    () =>
+      initialAddresses.find((a) => a.isDefault) ||
+      initialAddresses[0] ||
+      null,
+    [initialAddresses]
+  );
+
+  const [selectedAddressId, setSelectedAddressId] = useState<string>(
+    defaultSavedAddress ? defaultSavedAddress.id : "NEW"
+  );
+  const [saveNewAddress, setSaveNewAddress] = useState<boolean>(false);
+  const {
+    items,
+    subtotal,
+    discountAmount,
+    activeCoupon,
+    applyCoupon,
+    removeCoupon,
+    clearCart,
+  } = useCart();
+
+  const freeShippingThreshold = brand.freeShippingThreshold || 5000;
+
+  const [customerName, setCustomerName] = useState(initialUser?.name || "");
+  const [customerPhone, setCustomerPhone] = useState(initialUser?.phoneNumber || "");
+  const [customerEmail, setCustomerEmail] = useState(initialUser?.email || "");
+  const [division, setDivision] = useState("Dhaka");
+  const [district, setDistrict] = useState("Dhaka");
+  const [thana, setThana] = useState("");
+
+  const { data: divisionsRes, isLoading: isDivisionsLoading } = useQuery({
+    queryKey: ["bd-locations", "divisions"],
+    queryFn: () => getBangladeshLocations(),
+    staleTime: Infinity,
+  });
+
+  const { data: districtsRes, isLoading: isDistrictsLoading } = useQuery({
+    queryKey: ["bd-locations", "districts", division],
+    queryFn: () => getBangladeshLocations({ division }),
+    enabled: Boolean(division),
+    staleTime: Infinity,
+  });
+
+  const { data: thanasRes, isLoading: isThanasLoading } = useQuery({
+    queryKey: ["bd-locations", "thanas", district],
+    queryFn: () => getBangladeshLocations({ district }),
+    enabled: Boolean(district),
+    staleTime: Infinity,
+  });
+
+  const divisions = divisionsRes?.data?.divisions ?? [];
+  const districts = districtsRes?.data?.districts ?? [];
+  const thanas = thanasRes?.data?.thanas ?? [];
+
+  const handleDivisionChange = (nextDivision: string) => {
+    setDivision(nextDivision);
+    setDistrict("");
+    setThana("");
+  };
+
+  const handleDistrictChange = (nextDistrict: string) => {
+    setDistrict(nextDistrict);
+    setThana("");
+  };
+  const [shippingAddress, setShippingAddress] = useState(initialUser?.address || "");
+  const [customerNote, setCustomerNote] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("COD");
+
+  const availablePaymentOptions = useMemo(() => {
+    const enabled = brand.enabledPaymentMethods || ["COD", "STRIPE"];
+    const filtered = PAYMENT_OPTIONS.filter((opt) =>
+      enabled.includes(opt.value)
+    );
+    return filtered.length > 0 ? filtered : [PAYMENT_OPTIONS[0]];
+  }, [brand.enabledPaymentMethods]);
+
+  useEffect(() => {
+    if (!availablePaymentOptions.some((opt) => opt.value === paymentMethod)) {
+      setPaymentMethod(availablePaymentOptions[0].value);
+    }
+  }, [availablePaymentOptions, paymentMethod]);
+
+  const [couponInput, setCouponInput] = useState("");
+  const [useLoyaltyPoints, setUseLoyaltyPoints] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState<IOrder | null>(null);
+
+  const lastCapturedPhoneRef = useRef<string>("");
+  const hasHydratedDraftRef = useRef(false);
+  const sessionKeyRef = useRef<string>(
+    `chk_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+  );
+
+  // Restore saved checkout draft from localStorage on mount (or apply default saved address)
+  useEffect(() => {
+    let hasDraftAddress = false;
+    try {
+      const raw = window.localStorage.getItem(CHECKOUT_DRAFT_STORAGE_KEY);
+      if (raw) {
+        const draft = JSON.parse(raw) as CheckoutDraft;
+        if (typeof draft.customerName === "string") setCustomerName(draft.customerName);
+        if (typeof draft.customerPhone === "string") setCustomerPhone(draft.customerPhone);
+        if (typeof draft.customerEmail === "string") setCustomerEmail(draft.customerEmail);
+        if (typeof draft.division === "string") setDivision(draft.division);
+        if (typeof draft.district === "string") setDistrict(draft.district);
+        if (typeof draft.thana === "string") setThana(draft.thana);
+        if (typeof draft.shippingAddress === "string") {
+          setShippingAddress(draft.shippingAddress);
+          if (draft.shippingAddress.trim().length > 0 && draft.thana) {
+            hasDraftAddress = true;
+          }
+        }
+        if (typeof draft.customerNote === "string") setCustomerNote(draft.customerNote);
+        if (draft.paymentMethod) setPaymentMethod(draft.paymentMethod);
+        if (typeof draft.couponInput === "string") setCouponInput(draft.couponInput);
+      }
+    } catch {
+      // ignore storage read errors
+    } finally {
+      if (!hasDraftAddress && defaultSavedAddress) {
+        setSelectedAddressId(defaultSavedAddress.id);
+        setCustomerName((prev) => prev || defaultSavedAddress.recipientName);
+        setCustomerPhone((prev) => prev || defaultSavedAddress.phoneNumber);
+        setDivision(defaultSavedAddress.division);
+        setDistrict(defaultSavedAddress.district);
+        setThana(defaultSavedAddress.thana);
+        setShippingAddress(defaultSavedAddress.fullAddress);
+      }
+      hasHydratedDraftRef.current = true;
+    }
+  }, [defaultSavedAddress]);
+
+  const handleSelectSavedAddress = (addr: ICustomerAddress) => {
+    setSelectedAddressId(addr.id);
+    setSaveNewAddress(false);
+    setCustomerName(addr.recipientName);
+    setCustomerPhone(addr.phoneNumber);
+    setDivision(addr.division);
+    setDistrict(addr.district);
+    setThana(addr.thana);
+    setShippingAddress(addr.fullAddress);
+  };
+
+  const handleSelectNewAddress = () => {
+    setSelectedAddressId("NEW");
+    setThana("");
+    setShippingAddress("");
+  };
+
+  // Persist checkout form inputs across page refreshes
+  useEffect(() => {
+    if (!hasHydratedDraftRef.current || completedOrder) return;
+    try {
+      const draft: CheckoutDraft = {
+        customerName,
+        customerPhone,
+        customerEmail,
+        division,
+        district,
+        thana,
+        shippingAddress,
+        customerNote,
+        paymentMethod,
+        couponInput,
+      };
+      window.localStorage.setItem(
+        CHECKOUT_DRAFT_STORAGE_KEY,
+        JSON.stringify(draft)
+      );
+    } catch {
+      // ignore storage write errors
+    }
+  }, [
+    customerName,
+    customerPhone,
+    customerEmail,
+    division,
+    district,
+    thana,
+    shippingAddress,
+    customerNote,
+    paymentMethod,
+    couponInput,
+    completedOrder,
+  ]);
+
+  // Sync user details if initialUser arrives and fields are still empty
+  useEffect(() => {
+    if (!initialUser) return;
+    setCustomerName((prev) => prev || initialUser.name || "");
+    setCustomerPhone((prev) => prev || initialUser.phoneNumber || "");
+    setCustomerEmail((prev) => prev || initialUser.email || "");
+    setShippingAddress((prev) => prev || initialUser.address || "");
+  }, [initialUser]);
+
+  const { data: shippingQuoteRes, isFetching: isQuoteFetching } = useQuery({
+    queryKey: ["shipping-quote", division, district, thana, subtotal],
+    queryFn: () =>
+      getShippingQuote({
+        division,
+        district,
+        thana,
+        subtotal,
+      }),
+    enabled: Boolean(division && district),
+  });
+
+  const shippingQuote = shippingQuoteRes?.data;
+  const deliveryZone: DeliveryZone =
+    shippingQuote?.deliveryZone || "INSIDE_DHAKA";
+  const selectedZoneCharge =
+    activeCoupon?.discountType === "FREE_SHIPPING"
+      ? 0
+      : shippingQuote
+      ? shippingQuote.charge
+      : brand.insideDhakaShipping;
+  const effectiveFreeThreshold =
+    shippingQuote?.freeShippingThreshold ?? freeShippingThreshold;
+
+  const userPoints = initialUser?.loyaltyPoints || 0;
+  const pointValueBdt = brand.loyaltyPointValueBdt ?? 1;
+  const remainingAfterCoupon = Math.max(0, subtotal - discountAmount);
+  const maxRedeemablePoints =
+    pointValueBdt > 0
+      ? Math.min(userPoints, Math.floor(remainingAfterCoupon / pointValueBdt))
+      : 0;
+  const redeemedPoints = useLoyaltyPoints ? maxRedeemablePoints : 0;
+  const loyaltyDiscount = redeemedPoints * pointValueBdt;
+
+  const netSubtotal = Math.max(0, remainingAfterCoupon - loyaltyDiscount);
+  const grandTotal = netSubtotal + selectedZoneCharge;
+  const estimatedEarnPoints =
+    (brand.loyaltyPointsPer100Bdt ?? 1) > 0
+      ? Math.floor(netSubtotal / 100) * (brand.loyaltyPointsPer100Bdt ?? 1)
+      : 0;
+
+  // Silent Abandoned Cart Capture when phone number reaches >= 10 digits
+  useEffect(() => {
+    const cleanPhone = customerPhone.replace(/\s+/g, "");
+    if (
+      cleanPhone.length < 10 ||
+      items.length === 0 ||
+      completedOrder ||
+      lastCapturedPhoneRef.current === cleanPhone
+    ) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      lastCapturedPhoneRef.current = cleanPhone;
+      incompleteCapture({
+        sessionKey: sessionKeyRef.current,
+        customerName: customerName.trim() || undefined,
+        customerPhone: cleanPhone,
+        customerEmail: customerEmail.trim() || undefined,
+        shippingAddress: shippingAddress.trim() || undefined,
+        division: division || undefined,
+        district: district.trim() || undefined,
+        thana: thana.trim() || undefined,
+        itemsJson: items.map((i) => ({
+          variantId: i.variantId,
+          productName: i.productName,
+          size: i.size,
+          quantity: i.quantity,
+          unitPrice: i.unitPrice,
+        })),
+        totalAmount: grandTotal,
+        source: "WEBSITE",
+      }).catch(() => {
+        // Silently ignore background capture errors
+      });
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, [
+    customerPhone,
+    customerName,
+    customerEmail,
+    shippingAddress,
+    division,
+    district,
+    thana,
+    items,
+    grandTotal,
+    completedOrder,
+  ]);
+
+  const handleApplyCoupon = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await applyCoupon(couponInput, {
+      isPrepaid: paymentMethod === "STRIPE",
+    });
+    if (res.ok) {
+      toast.success(res.message);
+      setCouponInput("");
+    } else {
+      toast.error(res.message);
+    }
+  };
+
+  const handlePlaceOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (items.length === 0) {
+      toast.error("Your fragrance bag is empty.");
+      return;
+    }
+
+    const cleanName = customerName.trim();
+    const cleanPhone = customerPhone.replace(/\s+/g, "");
+    const cleanAddress = shippingAddress.trim();
+    const cleanDistrict = district.trim();
+    const cleanThana = thana.trim();
+
+    if (cleanName.length < 2) {
+      toast.error("Please enter your full name (at least 2 characters).");
+      return;
+    }
+    if (cleanPhone.length < 10) {
+      toast.error("Please enter a valid 10+ digit phone number.");
+      return;
+    }
+    if (division.trim().length < 2) {
+      toast.error("Please select a delivery division.");
+      return;
+    }
+    if (cleanDistrict.length < 2) {
+      toast.error("Please enter your district.");
+      return;
+    }
+    if (cleanThana.length < 2) {
+      toast.error("Please enter your thana / area.");
+      return;
+    }
+    if (cleanAddress.length < 5) {
+      toast.error("Please enter your full delivery address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await checkoutOrder({
+        customerName: cleanName,
+        customerPhone: cleanPhone,
+        customerEmail: customerEmail.trim() || undefined,
+        shippingAddress: cleanAddress,
+        division: division.trim(),
+        district: cleanDistrict,
+        thana: cleanThana,
+        deliveryZone,
+        paymentMethod,
+        source: "WEBSITE",
+        couponCode: activeCoupon?.code || undefined,
+        redeemPoints: redeemedPoints > 0 ? redeemedPoints : undefined,
+        customerNote: customerNote.trim() || undefined,
+        items: items.map((item) => ({
+          variantId: item.variantId,
+          quantity: item.quantity,
+        })),
+      });
+
+      if (response?.data) {
+        if (initialUser && selectedAddressId === "NEW" && saveNewAddress) {
+          createAddress({
+            label: "Home",
+            recipientName: cleanName,
+            phoneNumber: cleanPhone,
+            division: division.trim(),
+            district: cleanDistrict,
+            thana: cleanThana,
+            fullAddress: cleanAddress,
+            deliveryZone,
+            isDefault: initialAddresses.length === 0,
+          }).catch(() => {
+            // Do not block order confirmation if address save fails
+          });
+        }
+        if (paymentMethod === "STRIPE") {
+          const paymentRes = await initiatePayment({
+            orderId: response.data.id,
+            method: "STRIPE",
+            transactionType: "FULL_PREPAID",
+          });
+          const redirectUrl =
+            paymentRes?.data?.redirectUrl || paymentRes?.data?.gatewayUrl;
+          if (!redirectUrl) {
+            throw new Error("Could not initialize Stripe checkout session.");
+          }
+          toast.loading("Redirecting to Stripe secure checkout...");
+          window.location.href = redirectUrl;
+          return;
+        }
+
+        setCompletedOrder(response.data);
+        clearCart();
+        try {
+          window.localStorage.removeItem(CHECKOUT_DRAFT_STORAGE_KEY);
+        } catch {
+          // ignore storage errors
+        }
+        toast.success("Order confirmed! Thank you for choosing Fifth Sense.");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } catch (err: unknown) {
+      const error = err as { message?: string };
+      toast.error(error?.message || "Could not place order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // 1. Order Confirmation / Thank You Screen
+  if (completedOrder) {
+    return (
+      <section className="min-h-[75vh] bg-white dark:bg-neutral-950 py-14 sm:py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto border border-neutral-200 dark:border-neutral-800 bg-[#f9f6ed]/40 dark:bg-neutral-900/40 p-7 sm:p-12 text-center">
+          <div className="size-16 mx-auto mb-6 flex items-center justify-center bg-[#09090b] text-[#c5a059]">
+            <CheckCircle2 className="size-8 stroke-[1.5]" />
+          </div>
+
+          <p className="text-[11px] font-sans uppercase tracking-[0.2em] text-[#9d8354] mb-2">
+            Order Confirmed
+          </p>
+          <h1 className="font-heading font-serif text-3xl sm:text-4xl font-normal text-neutral-950 dark:text-white mb-3">
+            Thank You, {completedOrder.customerName}
+          </h1>
+          <p className="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-md mx-auto leading-relaxed mb-8">
+            Your artisanal fragrance parcel is being carefully prepared. You can track your order anytime using your order number and phone.
+          </p>
+
+          <div className="border-y border-neutral-200 dark:border-neutral-800 py-5 my-6 grid grid-cols-2 sm:grid-cols-4 gap-4 text-left font-sans text-xs">
+            <div>
+              <span className="block text-[10px] uppercase text-neutral-400 mb-1">
+                Order Number
+              </span>
+              <span className="font-mono font-medium text-neutral-950 dark:text-white">
+                {completedOrder.orderNumber}
+              </span>
+            </div>
+            <div>
+              <span className="block text-[10px] uppercase text-neutral-400 mb-1">
+                Phone
+              </span>
+              <span className="text-neutral-900 dark:text-neutral-100">
+                {completedOrder.customerPhone}
+              </span>
+            </div>
+            <div>
+              <span className="block text-[10px] uppercase text-neutral-400 mb-1">
+                Payment
+              </span>
+              <span className="text-neutral-900 dark:text-neutral-100">
+                {completedOrder.paymentMethod}
+              </span>
+            </div>
+            <div>
+              <span className="block text-[10px] uppercase text-neutral-400 mb-1">
+                Total Payable
+              </span>
+              <span className="font-medium text-neutral-950 dark:text-white">
+                ৳{formatFragrancePrice(completedOrder.totalAmount)}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+            <Link
+              href="/products"
+              className="w-full sm:w-auto px-7 py-3 bg-[#232323] hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-neutral-200 text-xs font-sans font-medium uppercase tracking-normal transition-colors flex items-center justify-center gap-2"
+            >
+              <span>Continue Shopping</span>
+              <ArrowRight className="size-3.5" />
+            </Link>
+            {initialUser ? (
+              <Link
+                href="/customer/dashboard"
+                className="w-full sm:w-auto px-7 py-3 border border-neutral-900 dark:border-neutral-300 text-neutral-950 dark:text-neutral-100 hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-black text-xs font-sans font-medium uppercase tracking-normal transition-colors text-center"
+              >
+                View My Orders
+              </Link>
+            ) : (
+              <Link
+                href="/contact"
+                className="w-full sm:w-auto px-7 py-3 border border-neutral-900 dark:border-neutral-300 text-neutral-950 dark:text-neutral-100 hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-black text-xs font-sans font-medium uppercase tracking-normal transition-colors text-center"
+              >
+                Need Help?
+              </Link>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // 2. Empty Cart Guard
+  if (items.length === 0) {
+    return (
+      <section className="min-h-[65vh] bg-white dark:bg-neutral-950 flex flex-col items-center justify-center px-4 py-16 text-center">
+        <div className="size-16 flex items-center justify-center bg-[#f9f6ed] dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 mb-5">
+          <ShoppingBag className="size-7 stroke-[1.25] text-[#c6b189]" />
+        </div>
+        <h1 className="font-heading font-serif text-3xl font-normal text-neutral-950 dark:text-white mb-2">
+          Your Bag is Empty
+        </h1>
+        <p className="font-sans text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-sm mb-7">
+          Add your signature fragrances to your bag before proceeding to checkout.
+        </p>
+        <Link
+          href="/products"
+          className="px-7 py-3 bg-[#232323] hover:bg-black text-white dark:bg-white dark:text-black text-xs font-sans font-medium uppercase tracking-normal transition-colors flex items-center gap-2"
+        >
+          <span>Explore Fragrances</span>
+          <ArrowRight className="size-3.5" />
+        </Link>
+      </section>
+    );
+  }
+
+  // 3. 1-Page Luxury Checkout Form
+  return (
+    <section className="bg-white dark:bg-neutral-950 py-8 sm:py-12 lg:py-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+        {/* Top Breadcrumb / Back Link */}
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-5">
+          <div>
+            <Link
+              href="/cart"
+              className="inline-flex items-center gap-1.5 text-xs font-sans text-neutral-500 hover:text-neutral-950 dark:hover:text-white transition-colors mb-2"
+            >
+              <ArrowLeft className="size-3.5" />
+              <span>Return to Bag</span>
+            </Link>
+            <h1 className="font-heading font-serif text-3xl sm:text-4xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+              Express Checkout
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs font-sans text-neutral-500 dark:text-neutral-400">
+            <ShieldCheck className="size-4 text-[#c5a059]" />
+            <span>
+              {initialUser
+                ? `Signed in as ${initialUser.name}`
+                : "Guest Checkout Enabled — No Login Required"}
+            </span>
+          </div>
+        </div>
+
+        <form
+          onSubmit={handlePlaceOrder}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start"
+        >
+          {/* LEFT COLUMN: Shipping & Payment */}
+          <div className="lg:col-span-7 space-y-8">
+            {/* Step 1: Contact Information */}
+            <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-7 space-y-5">
+              <div className="flex items-center gap-2.5 border-b border-neutral-100 dark:border-neutral-900 pb-3.5">
+                <User className="size-4 text-[#c5a059]" />
+                <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+                  1. Contact Information
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Full Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="e.g. Tanvir Ahmed"
+                    className="w-full h-11 px-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-neutral-400" />
+                    <input
+                      type="tel"
+                      required
+                      value={customerPhone}
+                      onChange={(e) => setCustomerPhone(e.target.value)}
+                      placeholder="01XXXXXXXXX"
+                      className="w-full h-11 pl-9 pr-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  Email Address{" "}
+                  <span className="text-neutral-400">(Optional — for digital receipt)</span>
+                </label>
+                <input
+                  type="email"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full h-11 px-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
+                />
+              </div>
+            </div>
+
+            {/* Step 2: Delivery Address & Auto-Calculated Zone */}
+            <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-7 space-y-5">
+              <div className="flex items-center justify-between gap-2.5 border-b border-neutral-100 dark:border-neutral-900 pb-3.5">
+                <div className="flex items-center gap-2.5">
+                  <MapPin className="size-4 text-[#c5a059]" />
+                  <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+                    2. Shipping Destination
+                  </h2>
+                </div>
+                {initialUser && (
+                  <Link
+                    href="/customer/addresses"
+                    className="text-[11px] font-sans underline text-neutral-500 hover:text-black dark:hover:text-white"
+                  >
+                    Manage Addresses
+                  </Link>
+                )}
+              </div>
+
+              {/* Saved Addresses Picker for Logged-In Customers */}
+              {initialUser && initialAddresses.length > 0 && (
+                <div className="space-y-2.5">
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300">
+                    Saved Delivery Addresses
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {initialAddresses.map((addr) => {
+                      const isSelected = selectedAddressId === addr.id;
+                      return (
+                        <button
+                          key={addr.id}
+                          type="button"
+                          onClick={() => handleSelectSavedAddress(addr)}
+                          className={cn(
+                            "p-3 border text-left transition-colors cursor-pointer space-y-1",
+                            isSelected
+                              ? "border-black dark:border-white bg-[#f9f6ed]/70 dark:bg-neutral-900"
+                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400"
+                          )}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[10px] font-sans uppercase tracking-wider px-1.5 py-0.5 bg-neutral-100 dark:bg-neutral-800 font-medium">
+                              {addr.label}
+                            </span>
+                            {addr.isDefault && (
+                              <span className="text-[10px] font-sans text-emerald-700 dark:text-emerald-400">
+                                Default
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white truncate">
+                            {addr.recipientName} &bull; {addr.phoneNumber}
+                          </p>
+                          <p className="text-[11px] font-sans text-neutral-500 line-clamp-1">
+                            {addr.fullAddress}, {addr.thana}, {addr.district}
+                          </p>
+                        </button>
+                      );
+                    })}
+
+                    <button
+                      type="button"
+                      onClick={handleSelectNewAddress}
+                      className={cn(
+                        "p-3 border border-dashed text-left transition-colors cursor-pointer flex flex-col justify-center items-start gap-1",
+                        selectedAddressId === "NEW"
+                          ? "border-black dark:border-white bg-[#f9f6ed]/70 dark:bg-neutral-900"
+                          : "border-neutral-300 dark:border-neutral-700 hover:border-neutral-500"
+                      )}
+                    >
+                      <span className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                        + Use a New Address
+                      </span>
+                      <span className="text-[11px] font-sans text-neutral-500">
+                        Enter a different delivery location below
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Cascading Location Selectors (Division -> District -> Thana) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Division <span className="text-red-500">*</span>
+                  </label>
+                  <Select
+                    value={division}
+                    onValueChange={(val) => val && handleDivisionChange(val)}
+                    disabled={isDivisionsLoading}
+                  >
+                    <SelectTrigger className="w-full h-11 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs font-sans">
+                      <SelectValue
+                        placeholder={
+                          isDivisionsLoading ? "Loading divisions..." : "Select division"
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-64">
+                      {divisions.map((div) => (
+                        <SelectItem key={div} value={div}>
+                          {div}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    District <span className="text-red-500">*</span>
+                  </label>
+                  <Select
+                    value={district}
+                    onValueChange={(val) => val && handleDistrictChange(val)}
+                    disabled={!division || isDistrictsLoading || districts.length === 0}
+                  >
+                    <SelectTrigger className="w-full h-11 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs font-sans">
+                      <SelectValue
+                        placeholder={
+                          isDistrictsLoading
+                            ? "Loading districts..."
+                            : division
+                              ? "Select district"
+                              : "Select division first"
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-64">
+                      {districts.map((dist) => (
+                        <SelectItem key={dist} value={dist}>
+                          {dist}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Thana / Area <span className="text-red-500">*</span>
+                  </label>
+                  <Select
+                    value={thana}
+                    onValueChange={(val) => setThana(val || "")}
+                    disabled={!district || isThanasLoading || thanas.length === 0}
+                  >
+                    <SelectTrigger className="w-full h-11 rounded-none border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs font-sans">
+                      <SelectValue
+                        placeholder={
+                          isThanasLoading
+                            ? "Loading areas..."
+                            : district
+                              ? "Select thana / area"
+                              : "Select district first"
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-64">
+                      {thanas.map((area) => (
+                        <SelectItem key={area} value={area}>
+                          {area}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Read-Only Auto-Detected Delivery Zone & Charge (Server-Authoritative) */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300">
+                    Assigned Delivery Zone &amp; Charge
+                  </label>
+                  <span className="text-[10px] font-sans uppercase tracking-wider text-[#9d8354]">
+                    Auto-calculated by address
+                  </span>
+                </div>
+                <div className="w-full p-3.5 border border-black/80 dark:border-white/80 bg-[#f9f6ed]/70 dark:bg-neutral-900 flex items-center justify-between select-none">
+                  <div>
+                    <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white flex items-center gap-2">
+                      <Truck className="size-3.5 text-[#c5a059]" />
+                      <span>
+                        {shippingQuote?.label ||
+                          (district
+                            ? "Calculating delivery zone..."
+                            : "Select your division & district above")}
+                      </span>
+                    </p>
+                    <p className="text-[11px] font-sans text-neutral-500 mt-0.5">
+                      Estimated delivery: {shippingQuote?.eta || "24 – 48 Hours"}
+                    </p>
+                  </div>
+                  <span className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                    {isQuoteFetching ? (
+                      <Loader2 className="size-3.5 animate-spin text-neutral-500" />
+                    ) : selectedZoneCharge === 0 ? (
+                      "Free"
+                    ) : (
+                      `৳${formatFragrancePrice(selectedZoneCharge)}`
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  Full Delivery Address <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  required
+                  rows={2}
+                  value={shippingAddress}
+                  onChange={(e) => setShippingAddress(e.target.value)}
+                  placeholder="House #, Road #, Block / Sector, Apartment..."
+                  className="w-full p-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white resize-none"
+                />
+                {initialUser && selectedAddressId === "NEW" && (
+                  <label className="mt-2.5 inline-flex items-center gap-2 text-xs font-sans text-neutral-700 dark:text-neutral-300 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={saveNewAddress}
+                      onChange={(e) => setSaveNewAddress(e.target.checked)}
+                      className="accent-black dark:accent-white"
+                    />
+                    <span>Save this address to my account for future orders</span>
+                  </label>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  Order Note / Gift Message{" "}
+                  <span className="text-neutral-400">(Optional)</span>
+                </label>
+                <input
+                  type="text"
+                  maxLength={300}
+                  value={customerNote}
+                  onChange={(e) => setCustomerNote(e.target.value)}
+                  placeholder="Special delivery instructions or gift note..."
+                  className="w-full h-11 px-3.5 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
+                />
+              </div>
+            </div>
+
+            {/* Step 3: Payment Method */}
+            <div className="border border-neutral-200 dark:border-neutral-800 p-5 sm:p-7 space-y-4">
+              <div className="flex items-center gap-2.5 border-b border-neutral-100 dark:border-neutral-900 pb-3.5">
+                <CreditCard className="size-4 text-[#c5a059]" />
+                <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+                  3. Payment Method
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {availablePaymentOptions.map((opt) => {
+                  const isSelected = paymentMethod === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setPaymentMethod(opt.value)}
+                      className={cn(
+                        "p-3.5 border text-left transition-colors cursor-pointer",
+                        isSelected
+                          ? "border-black dark:border-white bg-[#f9f6ed]/70 dark:bg-neutral-900"
+                          : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400"
+                      )}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                          {opt.label}
+                        </span>
+                        <span
+                          className={cn(
+                            "size-3.5 rounded-full border flex items-center justify-center",
+                            isSelected
+                              ? "border-black dark:border-white"
+                              : "border-neutral-400"
+                          )}
+                        >
+                          {isSelected && (
+                            <span className="size-2 rounded-full bg-black dark:bg-white" />
+                          )}
+                        </span>
+                      </div>
+                      <p className="text-[11px] font-sans text-neutral-500">
+                        {opt.subtitle}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Order Summary */}
+          <div className="lg:col-span-5 lg:sticky lg:top-24 border border-neutral-200 dark:border-neutral-800 bg-[#f9f6ed]/40 dark:bg-neutral-900/40 p-5 sm:p-7 space-y-6">
+            <h2 className="font-heading font-serif text-xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal border-b border-neutral-200 dark:border-neutral-800 pb-3.5">
+              Order Summary ({items.length})
+            </h2>
+
+            {/* Item List */}
+            <div className="space-y-4 max-h-72 overflow-y-auto pr-1 divide-y divide-neutral-200/60 dark:divide-neutral-800">
+              {items.map((item) => (
+                <div key={item.id} className="pt-3 first:pt-0 flex gap-3.5">
+                  <div className="relative w-14 h-18 bg-neutral-100 dark:bg-neutral-900 shrink-0 overflow-hidden">
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.productName}
+                      fill
+                      sizes="56px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 flex flex-col justify-between">
+                    <div>
+                      <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white line-clamp-1">
+                        {item.productName}
+                      </p>
+                      <p className="text-[11px] font-sans text-neutral-500 mt-0.5">
+                        {item.size} &times; {item.quantity}
+                      </p>
+                    </div>
+                    <p className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                      ৳{formatFragrancePrice(item.itemTotal)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Coupon Input */}
+            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800">
+              {activeCoupon ? (
+                <div className="flex items-center justify-between px-3 py-2 bg-[#f9f6ed] dark:bg-neutral-900 border border-[#c5a059]/50 text-xs font-sans">
+                  <div className="flex items-center gap-2 text-[#9d8354] dark:text-[#cfb98f]">
+                    <Tag className="size-3.5" />
+                    <span>
+                      {activeCoupon.code} (
+                      {activeCoupon.discountType === "PERCENTAGE"
+                        ? `-${activeCoupon.discountValue}%`
+                        : activeCoupon.discountType === "FIXED"
+                        ? `-৳${activeCoupon.discountValue}`
+                        : "Free Shipping"}
+                      )
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={removeCoupon}
+                    className="text-[11px] underline text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={couponInput}
+                    onChange={(e) => setCouponInput(e.target.value)}
+                    placeholder="Privilege / Coupon code (e.g. BUY2)"
+                    className="flex-1 h-10 px-3 text-xs font-sans bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 text-neutral-950 dark:text-neutral-100 focus:outline-none focus:border-black dark:focus:border-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    className="h-10 px-4 border border-neutral-900 dark:border-neutral-300 text-xs font-sans font-medium uppercase text-neutral-950 dark:text-white hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Loyalty Points Redemption (For Logged-In Customers with Points) */}
+            {initialUser && userPoints > 0 && pointValueBdt > 0 && (
+              <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800">
+                <label className="flex items-center justify-between gap-3 p-3 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 cursor-pointer">
+                  <div className="flex items-center gap-2.5">
+                    <input
+                      type="checkbox"
+                      checked={useLoyaltyPoints}
+                      onChange={(e) => setUseLoyaltyPoints(e.target.checked)}
+                      disabled={maxRedeemablePoints === 0}
+                      className="accent-black dark:accent-white"
+                    />
+                    <div className="text-xs font-sans">
+                      <p className="font-medium text-neutral-950 dark:text-white">
+                        Redeem Loyalty Points ({userPoints} pts available)
+                      </p>
+                      <p className="text-[11px] text-neutral-500">
+                        Use {maxRedeemablePoints} pts for ৳
+                        {formatFragrancePrice(maxRedeemablePoints * pointValueBdt)}{" "}
+                        instant discount
+                      </p>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            )}
+
+            {/* Totals Breakdown */}
+            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800 space-y-2.5 text-xs font-sans">
+              <div className="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
+                <span>Subtotal</span>
+                <span className="text-neutral-950 dark:text-neutral-100">
+                  ৳{formatFragrancePrice(subtotal)}
+                </span>
+              </div>
+
+              {discountAmount > 0 && (
+                <div className="flex items-center justify-between text-[#9d8354] dark:text-[#cfb98f]">
+                  <span>Privilege Discount</span>
+                  <span>-৳{formatFragrancePrice(discountAmount)}</span>
+                </div>
+              )}
+
+              {loyaltyDiscount > 0 && (
+                <div className="flex items-center justify-between text-[#9d8354] dark:text-[#cfb98f]">
+                  <span>Loyalty Points ({redeemedPoints} pts)</span>
+                  <span>-৳{formatFragrancePrice(loyaltyDiscount)}</span>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
+                <span>Delivery Fee</span>
+                <span>
+                  {selectedZoneCharge === 0 ? (
+                    <span className="text-neutral-950 dark:text-white">
+                      Complimentary
+                    </span>
+                  ) : (
+                    `৳${formatFragrancePrice(selectedZoneCharge)}`
+                  )}
+                </span>
+              </div>
+
+              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+                <span className="font-heading font-serif text-lg uppercase text-neutral-950 dark:text-white">
+                  Total Payable
+                </span>
+                <span className="text-lg font-sans font-medium text-neutral-950 dark:text-white">
+                  ৳{formatFragrancePrice(grandTotal)}
+                </span>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-12 px-6 bg-[#232323] hover:bg-black disabled:opacity-60 text-white dark:bg-white dark:text-black dark:hover:bg-neutral-200 text-xs font-sans font-medium uppercase tracking-normal transition-colors cursor-pointer flex items-center justify-center gap-2"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Confirming Order...</span>
+                </>
+              ) : (
+                <>
+                  <span>Confirm Order — ৳{formatFragrancePrice(grandTotal)}</span>
+                  <ArrowRight className="size-3.5" />
+                </>
+              )}
+            </button>
+
+            <div className="space-y-2 pt-2 text-[11px] font-sans text-neutral-500 dark:text-neutral-400">
+              <div className="flex items-center gap-2">
+                <Truck className="size-3.5 text-[#c5a059] shrink-0" />
+                <span>Complimentary shipping on orders above ৳{formatFragrancePrice(freeShippingThreshold)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="size-3.5 text-[#c5a059] shrink-0" />
+                <span>100% Authentic artisanal perfumes &amp; sealed packaging</span>
+              </div>
+              {initialUser && estimatedEarnPoints > 0 && (
+                <div className="flex items-center gap-2 text-[#9d8354] dark:text-[#cfb98f]">
+                  <Sparkles className="size-3.5 shrink-0" />
+                  <span>
+                    You will earn +{estimatedEarnPoints} loyalty pts upon delivery
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
