@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { getPlatformSettings } from "@/services/system.services";
 import { IPlatformSettings } from "@/types/system.types";
+import Script from "next/script";
 
 // Body Font: Clean, modern sans-serif from Figma
 const inter = Inter({
@@ -91,6 +92,11 @@ export default async function RootLayout({
           <BrandProvider initialSettings={settings}>
             <TooltipProvider>
               {children}
+              <Script
+                src="https://api.labtoai.com/widget.js"
+                data-api-key="aiw_live_917919d5683399735c2756cc769055c9259f7e7c8e1efa2a"
+                strategy="afterInteractive"
+              />
             </TooltipProvider>
           </BrandProvider>
           <Toaster
