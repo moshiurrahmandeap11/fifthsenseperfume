@@ -300,5 +300,90 @@
   background: var(--muted) !important;
 }
 
+/* ==========================================================================
+   Luxury Sheet / Cart Drawer Smooth Slide-in & Slide-out Animation
+   ========================================================================== */
+[data-slot="sheet-overlay"] {
+  transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+[data-slot="sheet-overlay"][data-starting-style],
+[data-slot="sheet-overlay"][data-ending-style] {
+  opacity: 0;
+}
+
+[data-slot="sheet-content"] {
+  will-change: transform, opacity;
+  box-shadow: -12px 0 40px -10px rgba(0, 0, 0, 0.35);
+}
+
+[data-slot="sheet-content"][data-side="right"] {
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease;
+  transform: translateX(0);
+  opacity: 1;
+
+  @starting-style {
+    transform: translateX(100%);
+    opacity: 0.5;
+  }
+}
+[data-slot="sheet-content"][data-side="right"][data-starting-style],
+[data-slot="sheet-content"][data-side="right"][data-ending-style] {
+  transform: translateX(100%);
+  opacity: 0.5;
+}
+
+[data-slot="sheet-content"][data-side="left"] {
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease;
+  transform: translateX(0);
+  opacity: 1;
+
+  @starting-style {
+    transform: translateX(-100%);
+    opacity: 0.5;
+  }
+}
+[data-slot="sheet-content"][data-side="left"][data-starting-style],
+[data-slot="sheet-content"][data-side="left"][data-ending-style] {
+  transform: translateX(-100%);
+  opacity: 0.5;
+}
+
+[data-slot="sheet-content"][data-side="bottom"] {
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease;
+  transform: translateY(0);
+  opacity: 1;
+
+  @starting-style {
+    transform: translateY(100%);
+    opacity: 0.5;
+  }
+}
+[data-slot="sheet-content"][data-side="bottom"][data-starting-style],
+[data-slot="sheet-content"][data-side="bottom"][data-ending-style] {
+  transform: translateY(100%);
+  opacity: 0.5;
+}
+
+[data-slot="sheet-content"][data-side="top"] {
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease;
+  transform: translateY(0);
+  opacity: 1;
+
+  @starting-style {
+    transform: translateY(-100%);
+    opacity: 0.5;
+  }
+}
+[data-slot="sheet-content"][data-side="top"][data-starting-style],
+[data-slot="sheet-content"][data-side="top"][data-ending-style] {
+  transform: translateY(-100%);
+  opacity: 0.5;
+}
+
 
 

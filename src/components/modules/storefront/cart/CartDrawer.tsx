@@ -49,7 +49,7 @@ export default function CartDrawer() {
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="w-full sm:max-w-[440px] p-0 bg-white dark:bg-neutral-950 border-l border-neutral-200 dark:border-neutral-800 flex flex-col gap-0 rounded-none shadow-none"
+        className="w-full sm:max-w-[440px] p-0 bg-white dark:bg-neutral-950 border-l border-neutral-200 dark:border-neutral-800 flex flex-col gap-0 rounded-none shadow-2xl"
       >
         {/* 1. Drawer Header */}
         <div className="px-6 py-4 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between bg-white dark:bg-neutral-950">
