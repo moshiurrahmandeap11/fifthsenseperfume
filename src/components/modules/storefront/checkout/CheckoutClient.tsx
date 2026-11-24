@@ -193,3 +193,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
         if (typeof draft.customerName === "string") setCustomerName(draft.customerName);
         if (typeof draft.customerPhone === "string") setCustomerPhone(draft.customerPhone);
         if (typeof draft.customerEmail === "string") setCustomerEmail(draft.customerEmail);
+        if (typeof draft.division === "string") setDivision(draft.division);
+        if (typeof draft.district === "string") setDistrict(draft.district);
+        if (typeof draft.thana === "string") setThana(draft.thana);
+        if (typeof draft.shippingAddress === "string") setShippingAddress(draft.shippingAddress);
+        if (typeof draft.customerNote === "string") setCustomerNote(draft.customerNote);
+        if (draft.paymentMethod) setPaymentMethod(draft.paymentMethod);
+        if (typeof draft.couponInput === "string") setCouponInput(draft.couponInput);
+      }
+    } catch {
+      // ignore storage read errors
+    } finally {
+      hasHydratedDraftRef.current = true;
+    }
+  }, []);
+
