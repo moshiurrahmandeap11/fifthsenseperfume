@@ -821,13 +821,95 @@ export default function SystemSettingsClient({
             </motion.div>
           )}
 
+          {activeTab === "LOYALTY" && (
+            <motion.div
+              key="loyalty-tab"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Card className="shadow-none border-border/50 bg-card">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                    Customer Loyalty &amp; Reward Points
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-5 space-y-6">
+                  {/* Loyalty Points Program */}
+                  <div className="space-y-3">
+                    <div>
+                      <Label className="text-xs font-normal uppercase tracking-wider text-muted-foreground">
+                        Loyalty Points Program
+                      </Label>
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
+                        Customers automatically earn points when an order is delivered, and can redeem them at checkout (set 0 to disable).
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Points Earned per ৳100 Spent
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={settings.loyaltyPointsPer100Bdt ?? 1}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              loyaltyPointsPer100Bdt: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label className="text-xs font-normal">
+                          Redeem Value (1 Point = ৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          step="0.5"
+                          value={settings.loyaltyPointValueBdt ?? 1}
+                          onChange={(e) =>
+                            setSettings({
+                              ...settings,
+                              loyaltyPointValueBdt: Number(e.target.value) || 0,
+                            })
+                          }
+                          className="text-xs h-9 font-normal"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex justify-end">
+                    <Button
+                      size="sm"
+                      onClick={handleSaveSettings}
+                      disabled={isPending}
+                      className="text-xs font-normal cursor-pointer gap-1.5"
+                    >
+                      <Save className="size-3.5" />
+                      <span>{isPending ? "Saving..." : "Save Settings"}</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
           {activeTab === "BANNERS" && (
             <motion.div
               key="banners-tab"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className="space-y-4"
             >
               <div className="flex justify-end">
@@ -920,10 +1002,10 @@ export default function SystemSettingsClient({
           {activeTab === "SHOWROOMS" && (
             <motion.div
               key="showrooms-tab"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className="space-y-4"
             >
               <div className="flex justify-end">
