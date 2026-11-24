@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { IUser } from "@/types/auth.types";
 import { useCart } from "@/providers/CartProvider";
 import { useBrand } from "@/providers/BrandProvider";
+import { motion } from "motion/react";
 import toast from "react-hot-toast";
 import TopBar from "./TopBar";
 import NavbarMobileMenu from "./navbar/NavbarMobileMenu";
