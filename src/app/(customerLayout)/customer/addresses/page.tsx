@@ -11,3 +11,17 @@ export const metadata: Metadata = {
 };
 
 export default async function CustomerAddressesPage() {
+  await connection();
+  const [user, addressesRes] = await Promise.all([
+    getMe(),
+    getMyAddresses().catch(() => ({ data: [] })),
+  ]);
+
+  return (
+    <CustomerAddressesClient
+      initialAddresses={addressesRes?.data || []}
+      defaultRecipientName={user?.name || ""}
+      defaultPhoneNumber={user?.phoneNumber || ""}
+    />
+  );
+}
