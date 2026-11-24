@@ -463,3 +463,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
             </div>
             <div>
               <span className="block text-[10px] uppercase text-neutral-400 mb-1">
+                Total Payable
+              </span>
+              <span className="font-medium text-neutral-950 dark:text-white">
+                ৳{formatFragrancePrice(completedOrder.totalAmount)}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+            <Link
+              href="/products"
+              className="w-full sm:w-auto px-7 py-3 bg-[#232323] hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-neutral-200 text-xs font-sans font-medium uppercase tracking-normal transition-colors flex items-center justify-center gap-2"
+            >
+              <span>Continue Shopping</span>
+              <ArrowRight className="size-3.5" />
