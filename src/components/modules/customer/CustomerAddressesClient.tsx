@@ -268,3 +268,33 @@ export default function CustomerAddressesClient({
               </label>
               <input
                 type="text"
+                required
+                value={recipientName}
+                onChange={(e) => setRecipientName(e.target.value)}
+                className="w-full h-10 px-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                required
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="01XXXXXXXXX"
+                className="w-full h-10 px-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+                Division <span className="text-red-500">*</span>
+              </label>
+              <Select
+                value={division}
+                onValueChange={(v) => {
