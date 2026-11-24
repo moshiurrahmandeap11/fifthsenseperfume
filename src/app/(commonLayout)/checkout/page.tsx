@@ -6,3 +6,12 @@ import CheckoutClient from "@/components/modules/storefront/checkout/CheckoutCli
 export const metadata: Metadata = {
   title: "Checkout | FIFTH SENSE",
   description:
+    "Complete your artisanal fragrance order with express delivery across Bangladesh.",
+};
+
+export default async function CheckoutPage() {
+  await connection();
+  const user = await getMe().catch(() => null);
+
+  return <CheckoutClient initialUser={user} />;
+}
