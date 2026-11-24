@@ -44,3 +44,26 @@ export default async function CustomerDashboardPage() {
         <div>
           <h1 className="font-heading font-serif text-2xl sm:text-3xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
             Account Overview
+          </h1>
+          <p className="text-xs font-sans text-neutral-500 mt-1">
+            Welcome back, {user?.name || "Customer"}. Manage your orders, addresses, and security.
+          </p>
+        </div>
+
+        <Link
+          href="/customer/settings"
+          className="inline-flex items-center gap-1.5 px-4 py-2 border border-neutral-300 dark:border-neutral-700 hover:border-black dark:hover:border-white text-xs font-sans text-neutral-900 dark:text-neutral-100 transition-colors"
+        >
+          <Settings className="size-3.5" />
+          <span>Edit Profile</span>
+        </Link>
+      </div>
+
+      {/* Key Metrics Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="border border-neutral-200 dark:border-neutral-800 p-5 bg-[#f9f6ed]/40 dark:bg-neutral-900/40">
+          <div className="flex items-center justify-between text-xs font-sans text-neutral-500 mb-2">
+            <span className="uppercase tracking-wider text-[10px]">
+              Total Orders
+            </span>
+            <Package className="size-4 text-[#c5a059]" />
