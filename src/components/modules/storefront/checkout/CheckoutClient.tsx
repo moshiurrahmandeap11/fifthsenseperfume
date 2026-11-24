@@ -928,3 +928,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                   {selectedZoneCharge === 0 ? (
                     <span className="text-neutral-950 dark:text-white">
                       Complimentary
+                    </span>
+                  ) : (
+                    `৳${formatFragrancePrice(selectedZoneCharge)}`
+                  )}
+                </span>
+              </div>
+
+              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+                <span className="font-heading font-serif text-lg uppercase text-neutral-950 dark:text-white">
+                  Total Payable
+                </span>
+                <span className="text-lg font-sans font-medium text-neutral-950 dark:text-white">
+                  ৳{formatFragrancePrice(grandTotal)}
+                </span>
+              </div>
