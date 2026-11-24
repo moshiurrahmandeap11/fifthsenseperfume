@@ -42,3 +42,25 @@ const NAV_ITEMS = [
     label: "Saved Addresses",
     href: "/customer/addresses",
     icon: MapPin,
+  },
+  {
+    label: "Profile & Security",
+    href: "/customer/settings",
+    icon: Settings,
+  },
+];
+
+export default function CustomerSidebar({ user }: CustomerSidebarProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const brand = useBrand();
+
+  const initials = (user.name || "C")
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  const handleLogout = async () => {
+    const confirmed = await confirmAction({
