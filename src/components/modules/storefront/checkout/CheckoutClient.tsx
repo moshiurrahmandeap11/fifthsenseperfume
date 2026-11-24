@@ -493,3 +493,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
               >
                 Need Help?
               </Link>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // 2. Empty Cart Guard
+  if (items.length === 0) {
+    return (
+      <section className="min-h-[65vh] bg-white dark:bg-neutral-950 flex flex-col items-center justify-center px-4 py-16 text-center">
+        <div className="size-16 flex items-center justify-center bg-[#f9f6ed] dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 mb-5">
+          <ShoppingBag className="size-7 stroke-[1.25] text-[#c6b189]" />
+        </div>
+        <h1 className="font-heading font-serif text-3xl font-normal text-neutral-950 dark:text-white mb-2">
