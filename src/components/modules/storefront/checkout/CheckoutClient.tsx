@@ -358,3 +358,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
     }
     if (cleanPhone.length < 10) {
       toast.error("Please enter a valid 10+ digit phone number.");
+      return;
+    }
+    if (division.trim().length < 2) {
+      toast.error("Please select a delivery division.");
+      return;
+    }
+    if (cleanDistrict.length < 2) {
+      toast.error("Please enter your district.");
+      return;
+    }
+    if (cleanThana.length < 2) {
+      toast.error("Please enter your thana / area.");
+      return;
+    }
+    if (cleanAddress.length < 5) {
