@@ -703,3 +703,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                         }
                       />
                     </SelectTrigger>
+                    <SelectContent className="max-h-64">
+                      {thanas.map((area) => (
+                        <SelectItem key={area} value={area}>
+                          {area}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Read-Only Auto-Detected Delivery Zone & Charge (Server-Authoritative) */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300">
