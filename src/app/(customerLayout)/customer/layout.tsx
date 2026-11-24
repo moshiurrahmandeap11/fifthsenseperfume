@@ -58,3 +58,23 @@ export default async function CustomerLayout({
               >
                 <Shield className="size-3.5" />
                 <span>Admin Portal</span>
+              </Link>
+            )}
+
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border/70 hover:border-foreground text-xs font-sans text-foreground transition-colors"
+            >
+              <ExternalLink className="size-3.5" />
+              <span>Storefront</span>
+            </Link>
+
+            <div className="flex items-center gap-2.5 pl-2 border-l border-border/60">
+              {user.image ? (
+                <div className="relative size-8 overflow-hidden rounded-full border border-border">
+                  <Image
+                    src={user.image}
+                    alt={user.name}
+                    fill
+                    sizes="32px"
+                    className="object-cover"
