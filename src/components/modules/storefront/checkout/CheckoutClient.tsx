@@ -538,3 +538,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
               <ArrowLeft className="size-3.5" />
               <span>Return to Bag</span>
             </Link>
+            <h1 className="font-heading font-serif text-3xl sm:text-4xl font-normal text-neutral-950 dark:text-white uppercase tracking-normal">
+              Express Checkout
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs font-sans text-neutral-500 dark:text-neutral-400">
+            <ShieldCheck className="size-4 text-[#c5a059]" />
+            <span>
+              {initialUser
+                ? `Signed in as ${initialUser.name}`
+                : "Guest Checkout Enabled — No Login Required"}
+            </span>
+          </div>
+        </div>
+
