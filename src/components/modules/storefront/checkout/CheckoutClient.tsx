@@ -898,3 +898,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
                   <button
                     type="button"
                     onClick={handleApplyCoupon}
+                    className="h-10 px-4 border border-neutral-900 dark:border-neutral-300 text-xs font-sans font-medium uppercase text-neutral-950 dark:text-white hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Totals Breakdown */}
+            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800 space-y-2.5 text-xs font-sans">
+              <div className="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
+                <span>Subtotal</span>
+                <span className="text-neutral-950 dark:text-neutral-100">
+                  ৳{formatFragrancePrice(subtotal)}
+                </span>
