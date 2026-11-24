@@ -48,6 +48,8 @@ const DEFAULT_BRAND: BrandContextValue = {
   outsideDhakaShipping: 120,
   freeShippingThreshold: 5000,
   enabledPaymentMethods: ["COD", "BKASH", "NAGAD", "SSLCOMMERZ"],
+  loyaltyPointsPer100Bdt: 1,
+  loyaltyPointValueBdt: 1,
 };
 
 const BrandContext = createContext<BrandContextValue>(DEFAULT_BRAND);
@@ -91,6 +93,12 @@ export function BrandProvider({
         initialSettings.enabledPaymentMethods.length > 0
           ? initialSettings.enabledPaymentMethods
           : DEFAULT_BRAND.enabledPaymentMethods,
+      loyaltyPointsPer100Bdt:
+        initialSettings.loyaltyPointsPer100Bdt ??
+        DEFAULT_BRAND.loyaltyPointsPer100Bdt,
+      loyaltyPointValueBdt:
+        initialSettings.loyaltyPointValueBdt ??
+        DEFAULT_BRAND.loyaltyPointValueBdt,
     };
   }, [initialSettings]);
 
