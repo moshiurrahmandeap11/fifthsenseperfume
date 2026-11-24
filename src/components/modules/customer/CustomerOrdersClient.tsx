@@ -152,3 +152,25 @@ export default function CustomerOrdersClient({
                       <ChevronUp className="size-4 text-neutral-500" />
                     ) : (
                       <ChevronDown className="size-4 text-neutral-500" />
+                    )}
+                  </div>
+                </button>
+
+                {/* Expanded Details */}
+                {isExpanded && (
+                  <div className="border-t border-neutral-200 dark:border-neutral-800 p-5 space-y-5 bg-[#f9f6ed]/25 dark:bg-neutral-900/20">
+                    {/* Items */}
+                    <div className="divide-y divide-neutral-200/70 dark:divide-neutral-800">
+                      {order.items?.map((item) => (
+                        <div
+                          key={item.id}
+                          className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-4"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="relative w-12 h-14 bg-neutral-100 dark:bg-neutral-900 shrink-0 overflow-hidden">
+                              {item.imageUrl && (
+                                <Image
+                                  src={item.imageUrl}
+                                  alt={item.productName}
+                                  fill
+                                  sizes="48px"
