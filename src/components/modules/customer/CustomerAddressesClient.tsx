@@ -358,3 +358,33 @@ export default function CustomerAddressesClient({
                 <SelectContent className="max-h-60">
                   {thanas.map((t) => (
                     <SelectItem key={t} value={t}>
+                      {t}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-sans text-neutral-700 dark:text-neutral-300 mb-1">
+              Full Address <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              rows={2}
+              required
+              value={fullAddress}
+              onChange={(e) => setFullAddress(e.target.value)}
+              placeholder="House #, Road #, Block, Flat..."
+              className="w-full p-3 text-xs bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 resize-none"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
+            <label className="inline-flex items-center gap-2 text-xs font-sans text-neutral-700 dark:text-neutral-300 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isDefault}
+                onChange={(e) => setIsDefault(e.target.checked)}
+                className="accent-black dark:accent-white"
+              />
