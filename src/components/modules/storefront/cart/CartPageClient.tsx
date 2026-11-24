@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ShoppingBag,
   Trash2,
@@ -40,6 +41,7 @@ export default function CartPageClient() {
     removeCoupon,
   } = useCart();
 
+  const router = useRouter();
   const [couponInput, setCouponInput] = useState("");
 
   const handleApplyCoupon = (e: React.FormEvent) => {
@@ -66,13 +68,7 @@ export default function CartPageClient() {
   };
 
   const handleCheckout = () => {
-    toast.success("Proceeding to Fifth Sense luxury checkout soon.", {
-      style: {
-        background: "#09090b",
-        color: "#ffffff",
-        border: "1px solid #27272a",
-      },
-    });
+    router.push("/checkout");
   };
 
   return (
