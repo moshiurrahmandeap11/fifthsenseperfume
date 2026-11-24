@@ -793,3 +793,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {availablePaymentOptions.map((opt) => {
                   const isSelected = paymentMethod === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setPaymentMethod(opt.value)}
+                      className={cn(
+                        "p-3.5 border text-left transition-colors cursor-pointer",
+                        isSelected
+                          ? "border-black dark:border-white bg-[#f9f6ed]/70 dark:bg-neutral-900"
+                          : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400"
+                      )}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-sans font-medium text-neutral-950 dark:text-white">
+                          {opt.label}
