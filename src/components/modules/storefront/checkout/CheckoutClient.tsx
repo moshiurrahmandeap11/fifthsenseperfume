@@ -58,3 +58,18 @@ interface CheckoutDraft {
   paymentMethod?: PaymentMethod;
   couponInput?: string;
 }
+
+const PAYMENT_OPTIONS: Array<{
+  value: PaymentMethod;
+  label: string;
+  subtitle: string;
+}> = [
+  {
+    value: "COD",
+    label: "Cash on Delivery",
+    subtitle: "Pay in cash upon receiving your fragrance parcel",
+  },
+  {
+    value: "BKASH",
+    label: "bKash",
+    subtitle: "Instant mobile wallet payment",
