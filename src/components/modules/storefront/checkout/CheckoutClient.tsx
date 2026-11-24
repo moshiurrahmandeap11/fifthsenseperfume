@@ -223,3 +223,18 @@ export default function CheckoutClient({ initialUser }: CheckoutClientProps) {
         customerNote,
         paymentMethod,
         couponInput,
+      };
+      window.localStorage.setItem(
+        CHECKOUT_DRAFT_STORAGE_KEY,
+        JSON.stringify(draft)
+      );
+    } catch {
+      // ignore storage write errors
+    }
+  }, [
+    customerName,
+    customerPhone,
+    customerEmail,
+    division,
+    district,
+    thana,
